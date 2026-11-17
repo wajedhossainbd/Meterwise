@@ -1,0 +1,8 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        options:
+          # Serialize nested objects via their own toJson so a single toJson()
+          # call produces a fully plain Map (used for billing snapshots).
+          explicit_to_json: true
