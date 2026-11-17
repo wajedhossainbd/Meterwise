@@ -222,10 +222,10 @@ class SettingsScreen extends ConsumerWidget {
   Widget _sectionLabel(BuildContext context, String text) => Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
         child: Text(
-          text.toUpperCase(),
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          text,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
         ),
       );
