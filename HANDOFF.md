@@ -4,8 +4,9 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v2.2.0+9 · DB schema v7 · 47/47 tests green · `flutter analyze`
-> clean · release APK `MeterWise-v2.2.0-bangla-invoice.apk` delivered.
+> **Last state:** v2.3.0+11 · DB schema v8 · 53/53 tests green · `flutter analyze`
+> clean · latest release APK `archive/apks/MeterWise-v2.3.0-billing-modes.apk`.
+> Revamp baseline committed to git (`1ba118a`). Read [README.md](README.md) first.
 
 ---
 
@@ -44,7 +45,7 @@ encoded as exact unit tests. His live data backups exist at
   export ANDROID_HOME="$HOME/Library/Android/sdk"
   export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
   ```
-- Project root: `/Volumes/Jetdrive/Claude/MeterWise` (NOT a git repo).
+- Project root: `/Volumes/Mac 500 SSD/Claude/MeterWise` (git repo since the revamp baseline, commit `1ba118a`).
 - Codegen: `dart run build_runner build` (the `--delete-conflicting-outputs`
   flag was removed from build_runner — don't pass it). If riverpod_generator
   throws `InvalidTypeException` on first pass after adding Drift tables, run it
@@ -53,8 +54,8 @@ encoded as exact unit tests. His live data backups exist at
 - Tests: `flutter test --timeout=90s`.
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
-  `MeterWise-vX.Y.Z-<slug>.apk` in project root. Bump `version:` in pubspec
-  first (currently `2.0.0+2`-style semantic + build number; now `2.2.0+9`).
+  `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
+  Phase 0). Bump `version:` in pubspec first (currently `2.3.0+11`).
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
 - No device usually attached (`adb devices` empty) → deliver APK file; user
@@ -167,7 +168,13 @@ whether the date's month is finalized. Foreign keys ON via `beforeOpen` PRAGMA.
 
 ## 5. Billing engine — FINAL semantics (spreadsheet-verified, do not change casually)
 
-Full formulas in `BILLING.md`. Summary (engine v2.2 / app v2.0.3+):
+Full formulas in `BILLING.md`. Summary (engine v3 / app v2.3+). The engine also
+supports three property-level calculation modes (`Properties.billingCalcMode`,
+schema v8): `sharedSlab` (default, below), `reconciled` (Σ tenant bills == main
+meter bill exactly, equal average rate for shared tenants) and `fixedRate`
+(fixed tenants pay their rate, shared tenants split the remainder). All modes
+are implemented in `billing_engine.dart` and covered by engine tests; the UI
+switch is in `billing_settings_screen.dart`.
 
 1. **Consumption**: `billedUnits_i = mainUnits × usageShare_i` (own units +
    proportional share of common area = main − Σ tenant units).
@@ -331,11 +338,11 @@ Android: `android/app/build.gradle.kts` → `compileSdk = 36` AND
 - Tests accompany every engine/repository/migration change; user-provided
   examples become exact regression tests.
 - Version bump per delivery: `pubspec.yaml` `version: X.Y.Z+N`, copy APK to
-  `MeterWise-vX.Y.Z-<slug>.apk`, update Settings footer string if minor/major.
+  `archive/apks/MeterWise-vX.Y.Z-<slug>.apk`, update Settings footer string if minor/major.
 
 ---
 
-## 10. Testing status (47 tests)
+## 10. Testing status (53 tests)
 
 - `billing_engine_test.dart` — v2 semantics: spreadsheet golden columns (T1/T2
   exact), shared-ladder shares for N=1/2/3/4, mixed contracts (divisor counts
@@ -388,7 +395,8 @@ migration tests + additive-only migrations).
 | 2.0 | Hybrid engine, per-tenant contracts, fee separation, provider selection, verified Jun-2026 tariff (schema v7) |
 | 2.0.1–2.0.3 | Shared-slab corrections → final spreadsheet-exact divide semantics; lifeline eligibility; VAT base incl. fees |
 | 2.1.0–2.1.1 | Colorful interactive UI, charts/tooltips, splash, tour, vector-PDF redesign |
-| 2.2.0 | **Bangla-capable HTML invoices** (WebView) + launcher icon + splash fixes |
+| 2.2.0–2.2.1 | **Bangla-capable HTML invoices** (WebView) + launcher icon + splash fixes + share fix |
+| 2.3.0 | Property-level calculation modes (sharedSlab / reconciled / fixedRate), schema v8 |
 
 ---
 
