@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../billing/data/period_guard.dart';
 import '../../main_meter/data/main_meter_repository.dart';
 import '../data/tenant_repository.dart';
 
@@ -73,16 +74,28 @@ class _TenantEditScreenState extends ConsumerState<TenantEditScreen> {
         : null;
 
     if (_isEditing) {
-      await repo.updateFields(
-        widget.tenant!.id,
-        name: _name.text.trim(),
-        phone: _nn(_phone),
-        email: _nn(_email),
-        apartment: _nn(_apartment),
-        meterNumber: _nn(_meterNumber),
-        billingMode: _billingMode,
-        fixedRate: fixedRate,
-      );
+      try {
+        await repo.updateFields(
+          widget.tenant!.id,
+          name: _name.text.trim(),
+          phone: _nn(_phone),
+          email: _nn(_email),
+          apartment: _nn(_apartment),
+          meterNumber: _nn(_meterNumber),
+          billingMode: _billingMode,
+          fixedRate: fixedRate,
+        );
+      } on FinalizedPeriodException {
+        if (mounted) {
+          setState(() => _saving = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content:
+                    Text(AppLocalizations.of(context).periodLockedMessage)),
+          );
+        }
+        return;
+      }
     } else {
       final meter = await ref.read(mainMeterRepositoryProvider).getFirst();
       if (meter == null) {

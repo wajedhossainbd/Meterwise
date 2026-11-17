@@ -4,12 +4,15 @@ import 'package:meterwise/core/database/app_database.dart';
 import 'package:meterwise/features/billing/data/billing_period_repository.dart';
 import 'package:meterwise/features/billing/data/period_guard.dart';
 import 'package:meterwise/features/billing/domain/billing_engine.dart';
+import 'package:meterwise/features/main_meter/data/main_meter_repository.dart';
+import 'package:meterwise/features/properties/data/property_repository.dart';
 import 'package:meterwise/features/readings/data/reading_repository.dart';
 import 'package:meterwise/features/recharge/data/recharge_repository.dart';
 import 'package:meterwise/features/billing/domain/models/billing_input.dart';
 import 'package:meterwise/features/billing/domain/models/billing_result.dart';
 import 'package:meterwise/features/billing/domain/models/tariff.dart';
 import 'package:meterwise/features/tariff/data/tariff_version_repository.dart';
+import 'package:meterwise/features/tenants/data/tenant_repository.dart';
 
 const _tariff = Tariff(
   slabs: [
@@ -242,6 +245,63 @@ void main() {
         tenantReadings: const {},
       );
       expect((await db.select(db.meterReadings).get()).length, 1);
+    });
+
+    test('finalized month freezes property/meter/tenant metadata', () async {
+      final propId = await makeProperty();
+      final providerId = await db
+          .into(db.electricityProviders)
+          .insert(ElectricityProvidersCompanion.insert(name: 'DPDC'));
+      final meterId = await db.into(db.mainMeters).insert(
+            MainMetersCompanion.insert(
+              propertyId: propId,
+              providerId: providerId,
+              name: 'M',
+            ),
+          );
+      final tenantId = await db.into(db.tenants).insert(
+            TenantsCompanion.insert(mainMeterId: meterId, name: 'A'),
+          );
+
+      final periodRepo = BillingPeriodRepository(db);
+      final period = await periodRepo.getOrCreate(propId, 2026, 6);
+      await periodRepo.finalize(
+        id: period.id,
+        bill: _sampleBill(),
+        billingMethod: 'usageBased',
+        currency: 'BDT',
+      );
+
+      final properties = PropertyRepository(db);
+      final meters = MainMeterRepository(db);
+      final tenants = TenantRepository(db);
+
+      // All of these values are printed on historical invoices.
+      await expectLater(
+        properties.upsertSingle(name: 'Renamed', currencyCode: 'USD'),
+        throwsA(isA<FinalizedPeriodException>()),
+      );
+      await expectLater(
+        properties.setCurrency('USD'),
+        throwsA(isA<FinalizedPeriodException>()),
+      );
+      await expectLater(
+        meters.upsertSingle(
+          propertyId: propId,
+          providerId: providerId,
+          name: 'Renamed',
+          providerName: 'DESCO',
+        ),
+        throwsA(isA<FinalizedPeriodException>()),
+      );
+      await expectLater(
+        tenants.updateFields(tenantId, name: 'Renamed'),
+        throwsA(isA<FinalizedPeriodException>()),
+      );
+
+      // No metadata actually changed.
+      expect((await properties.getFirst())!.name, 'P');
+      expect((await tenants.getAll()).single.name, 'A');
     });
 
     test('latestFinalizedBefore finds the prior finalized period', () async {

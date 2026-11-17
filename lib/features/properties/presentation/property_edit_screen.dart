@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../billing/data/period_guard.dart';
 import '../data/property_repository.dart';
 
 /// Create or edit the (single, for now) property.
@@ -34,13 +35,23 @@ class _PropertyEditScreenState extends ConsumerState<PropertyEditScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
 
-    await ref.read(propertyRepositoryProvider).upsertSingle(
-          name: _name.text.trim(),
-          address:
-              _address.text.trim().isEmpty ? null : _address.text.trim(),
-          currencyCode: _currency,
+    try {
+      await ref.read(propertyRepositoryProvider).upsertSingle(
+            name: _name.text.trim(),
+            address:
+                _address.text.trim().isEmpty ? null : _address.text.trim(),
+            currencyCode: _currency,
+          );
+      if (mounted) Navigator.of(context).pop();
+    } on FinalizedPeriodException {
+      if (mounted) {
+        setState(() => _saving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(AppLocalizations.of(context).periodLockedMessage)),
         );
-    if (mounted) Navigator.of(context).pop();
+      }
+    }
   }
 
   @override

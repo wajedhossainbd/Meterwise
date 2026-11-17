@@ -67,6 +67,26 @@ class PeriodGuard {
     }
   }
 
+  /// Throws if the property has ANY finalized month.
+  ///
+  /// Property/meter/tenant metadata (names, currency, provider, contract) is
+  /// printed on historical invoices, so changing it after finalization would
+  /// silently rewrite a permanent record.
+  Future<void> ensureNoFinalizedPeriods(int propertyId) async {
+    final row = await (_db.select(_db.billingPeriods)
+          ..where((t) =>
+              t.propertyId.equals(propertyId) & t.status.equals('finalized'))
+          ..limit(1))
+        .getSingleOrNull();
+    if (row != null) throw const FinalizedPeriodException();
+  }
+
+  /// Throws if the tenant's property has any finalized month.
+  Future<void> ensureTenantMetadataEditable(int tenantId) async {
+    final pid = await _propertyForTenant(tenantId);
+    if (pid != null) await ensureNoFinalizedPeriods(pid);
+  }
+
   /// Throws if any reading recorded on [date] belongs to a finalized month.
   Future<void> ensureReadingsOnDateEditable(DateTime date) async {
     final rows = await (_db.select(_db.meterReadings)

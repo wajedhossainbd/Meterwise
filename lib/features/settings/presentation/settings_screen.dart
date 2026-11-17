@@ -7,6 +7,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/theme_controller.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../billing/data/period_guard.dart';
 import '../../main_meter/data/main_meter_repository.dart';
 import '../../properties/data/property_repository.dart';
 import '../../tenants/data/tenant_repository.dart';
@@ -137,6 +138,34 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ),
           const Divider(),
+          _sectionLabel(context, l.invoiceLanguage),
+          RadioGroup<String>(
+            groupValue: settings?.invoiceLanguage ?? 'auto',
+            onChanged: (v) {
+              if (v != null) {
+                ref
+                    .read(settingsRepositoryProvider)
+                    .update(invoiceLanguage: v);
+              }
+            },
+            child: Column(
+              children: [
+                RadioListTile<String>(
+                  value: 'auto',
+                  title: Text(l.invoiceLanguageAuto),
+                ),
+                RadioListTile<String>(
+                  value: 'en',
+                  title: Text(l.invoiceLanguageEn),
+                ),
+                RadioListTile<String>(
+                  value: 'bn',
+                  title: Text(l.invoiceLanguageBn),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
           _sectionLabel(context, l.settingsCurrency),
           ListTile(
             leading: const Icon(Icons.payments_outlined),
@@ -147,9 +176,19 @@ class SettingsScreen extends ConsumerWidget {
               underline: const SizedBox.shrink(),
               onChanged: property == null
                   ? null
-                  : (v) {
-                      if (v != null) {
-                        ref.read(propertyRepositoryProvider).setCurrency(v);
+                  : (v) async {
+                      if (v == null) return;
+                      try {
+                        await ref
+                            .read(propertyRepositoryProvider)
+                            .setCurrency(v);
+                      } on FinalizedPeriodException {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(l.periodLockedMessage)),
+                          );
+                        }
                       }
                     },
               items: [

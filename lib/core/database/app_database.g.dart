@@ -4467,6 +4467,19 @@ class $AppSettingsTable extends AppSettings
     requiredDuringInsert: false,
     defaultValue: const Constant('system'),
   );
+  static const VerificationMeta _invoiceLanguageMeta = const VerificationMeta(
+    'invoiceLanguage',
+  );
+  @override
+  late final GeneratedColumn<String> invoiceLanguage = GeneratedColumn<String>(
+    'invoice_language',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 5),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('auto'),
+  );
   static const VerificationMeta _onboardedMeta = const VerificationMeta(
     'onboarded',
   );
@@ -4492,6 +4505,7 @@ class $AppSettingsTable extends AppSettings
     billingCalcMode,
     languageCode,
     themeMode,
+    invoiceLanguage,
     onboarded,
   ];
   @override
@@ -4566,6 +4580,15 @@ class $AppSettingsTable extends AppSettings
         themeMode.isAcceptableOrUnknown(data['theme_mode']!, _themeModeMeta),
       );
     }
+    if (data.containsKey('invoice_language')) {
+      context.handle(
+        _invoiceLanguageMeta,
+        invoiceLanguage.isAcceptableOrUnknown(
+          data['invoice_language']!,
+          _invoiceLanguageMeta,
+        ),
+      );
+    }
     if (data.containsKey('onboarded')) {
       context.handle(
         _onboardedMeta,
@@ -4613,6 +4636,10 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.string,
         data['${effectivePrefix}theme_mode'],
       )!,
+      invoiceLanguage: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}invoice_language'],
+      )!,
       onboarded: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}onboarded'],
@@ -4659,6 +4686,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   /// Persisted so a choice made in Settings survives a restart (v9).
   final String themeMode;
 
+  /// Invoice rendering language: 'auto' (follow app language) | 'en' | 'bn'.
+  /// Lets a device with a broken HTML→PDF converter stay on the reliable
+  /// English vector renderer without changing the app language (v10).
+  final String invoiceLanguage;
+
   /// Marks that the first-run setup wizard has been completed.
   final bool onboarded;
   const AppSetting({
@@ -4670,6 +4702,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     required this.billingCalcMode,
     required this.languageCode,
     required this.themeMode,
+    required this.invoiceLanguage,
     required this.onboarded,
   });
   @override
@@ -4685,6 +4718,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     map['billing_calc_mode'] = Variable<String>(billingCalcMode);
     map['language_code'] = Variable<String>(languageCode);
     map['theme_mode'] = Variable<String>(themeMode);
+    map['invoice_language'] = Variable<String>(invoiceLanguage);
     map['onboarded'] = Variable<bool>(onboarded);
     return map;
   }
@@ -4699,6 +4733,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       billingCalcMode: Value(billingCalcMode),
       languageCode: Value(languageCode),
       themeMode: Value(themeMode),
+      invoiceLanguage: Value(invoiceLanguage),
       onboarded: Value(onboarded),
     );
   }
@@ -4719,6 +4754,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       billingCalcMode: serializer.fromJson<String>(json['billingCalcMode']),
       languageCode: serializer.fromJson<String>(json['languageCode']),
       themeMode: serializer.fromJson<String>(json['themeMode']),
+      invoiceLanguage: serializer.fromJson<String>(json['invoiceLanguage']),
       onboarded: serializer.fromJson<bool>(json['onboarded']),
     );
   }
@@ -4736,6 +4772,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       'billingCalcMode': serializer.toJson<String>(billingCalcMode),
       'languageCode': serializer.toJson<String>(languageCode),
       'themeMode': serializer.toJson<String>(themeMode),
+      'invoiceLanguage': serializer.toJson<String>(invoiceLanguage),
       'onboarded': serializer.toJson<bool>(onboarded),
     };
   }
@@ -4749,6 +4786,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     String? billingCalcMode,
     String? languageCode,
     String? themeMode,
+    String? invoiceLanguage,
     bool? onboarded,
   }) => AppSetting(
     id: id ?? this.id,
@@ -4760,6 +4798,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     billingCalcMode: billingCalcMode ?? this.billingCalcMode,
     languageCode: languageCode ?? this.languageCode,
     themeMode: themeMode ?? this.themeMode,
+    invoiceLanguage: invoiceLanguage ?? this.invoiceLanguage,
     onboarded: onboarded ?? this.onboarded,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
@@ -4782,6 +4821,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ? data.languageCode.value
           : this.languageCode,
       themeMode: data.themeMode.present ? data.themeMode.value : this.themeMode,
+      invoiceLanguage: data.invoiceLanguage.present
+          ? data.invoiceLanguage.value
+          : this.invoiceLanguage,
       onboarded: data.onboarded.present ? data.onboarded.value : this.onboarded,
     );
   }
@@ -4797,6 +4839,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ..write('billingCalcMode: $billingCalcMode, ')
           ..write('languageCode: $languageCode, ')
           ..write('themeMode: $themeMode, ')
+          ..write('invoiceLanguage: $invoiceLanguage, ')
           ..write('onboarded: $onboarded')
           ..write(')'))
         .toString();
@@ -4812,6 +4855,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     billingCalcMode,
     languageCode,
     themeMode,
+    invoiceLanguage,
     onboarded,
   );
   @override
@@ -4826,6 +4870,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           other.billingCalcMode == this.billingCalcMode &&
           other.languageCode == this.languageCode &&
           other.themeMode == this.themeMode &&
+          other.invoiceLanguage == this.invoiceLanguage &&
           other.onboarded == this.onboarded);
 }
 
@@ -4838,6 +4883,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<String> billingCalcMode;
   final Value<String> languageCode;
   final Value<String> themeMode;
+  final Value<String> invoiceLanguage;
   final Value<bool> onboarded;
   const AppSettingsCompanion({
     this.id = const Value.absent(),
@@ -4848,6 +4894,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.billingCalcMode = const Value.absent(),
     this.languageCode = const Value.absent(),
     this.themeMode = const Value.absent(),
+    this.invoiceLanguage = const Value.absent(),
     this.onboarded = const Value.absent(),
   });
   AppSettingsCompanion.insert({
@@ -4859,6 +4906,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.billingCalcMode = const Value.absent(),
     this.languageCode = const Value.absent(),
     this.themeMode = const Value.absent(),
+    this.invoiceLanguage = const Value.absent(),
     this.onboarded = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
@@ -4870,6 +4918,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Expression<String>? billingCalcMode,
     Expression<String>? languageCode,
     Expression<String>? themeMode,
+    Expression<String>? invoiceLanguage,
     Expression<bool>? onboarded,
   }) {
     return RawValuesInsertable({
@@ -4882,6 +4931,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       if (billingCalcMode != null) 'billing_calc_mode': billingCalcMode,
       if (languageCode != null) 'language_code': languageCode,
       if (themeMode != null) 'theme_mode': themeMode,
+      if (invoiceLanguage != null) 'invoice_language': invoiceLanguage,
       if (onboarded != null) 'onboarded': onboarded,
     });
   }
@@ -4895,6 +4945,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<String>? billingCalcMode,
     Value<String>? languageCode,
     Value<String>? themeMode,
+    Value<String>? invoiceLanguage,
     Value<bool>? onboarded,
   }) {
     return AppSettingsCompanion(
@@ -4907,6 +4958,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       billingCalcMode: billingCalcMode ?? this.billingCalcMode,
       languageCode: languageCode ?? this.languageCode,
       themeMode: themeMode ?? this.themeMode,
+      invoiceLanguage: invoiceLanguage ?? this.invoiceLanguage,
       onboarded: onboarded ?? this.onboarded,
     );
   }
@@ -4940,6 +4992,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     if (themeMode.present) {
       map['theme_mode'] = Variable<String>(themeMode.value);
     }
+    if (invoiceLanguage.present) {
+      map['invoice_language'] = Variable<String>(invoiceLanguage.value);
+    }
     if (onboarded.present) {
       map['onboarded'] = Variable<bool>(onboarded.value);
     }
@@ -4957,6 +5012,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           ..write('billingCalcMode: $billingCalcMode, ')
           ..write('languageCode: $languageCode, ')
           ..write('themeMode: $themeMode, ')
+          ..write('invoiceLanguage: $invoiceLanguage, ')
           ..write('onboarded: $onboarded')
           ..write(')'))
         .toString();
@@ -10869,6 +10925,7 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<String> billingCalcMode,
       Value<String> languageCode,
       Value<String> themeMode,
+      Value<String> invoiceLanguage,
       Value<bool> onboarded,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
@@ -10881,6 +10938,7 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<String> billingCalcMode,
       Value<String> languageCode,
       Value<String> themeMode,
+      Value<String> invoiceLanguage,
       Value<bool> onboarded,
     });
 
@@ -10930,6 +10988,11 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<String> get themeMode => $composableBuilder(
     column: $table.themeMode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get invoiceLanguage => $composableBuilder(
+    column: $table.invoiceLanguage,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10988,6 +11051,11 @@ class $$AppSettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get invoiceLanguage => $composableBuilder(
+    column: $table.invoiceLanguage,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get onboarded => $composableBuilder(
     column: $table.onboarded,
     builder: (column) => ColumnOrderings(column),
@@ -11037,6 +11105,11 @@ class $$AppSettingsTableAnnotationComposer
   GeneratedColumn<String> get themeMode =>
       $composableBuilder(column: $table.themeMode, builder: (column) => column);
 
+  GeneratedColumn<String> get invoiceLanguage => $composableBuilder(
+    column: $table.invoiceLanguage,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<bool> get onboarded =>
       $composableBuilder(column: $table.onboarded, builder: (column) => column);
 }
@@ -11080,6 +11153,7 @@ class $$AppSettingsTableTableManager
                 Value<String> billingCalcMode = const Value.absent(),
                 Value<String> languageCode = const Value.absent(),
                 Value<String> themeMode = const Value.absent(),
+                Value<String> invoiceLanguage = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
               }) => AppSettingsCompanion(
                 id: id,
@@ -11090,6 +11164,7 @@ class $$AppSettingsTableTableManager
                 billingCalcMode: billingCalcMode,
                 languageCode: languageCode,
                 themeMode: themeMode,
+                invoiceLanguage: invoiceLanguage,
                 onboarded: onboarded,
               ),
           createCompanionCallback:
@@ -11102,6 +11177,7 @@ class $$AppSettingsTableTableManager
                 Value<String> billingCalcMode = const Value.absent(),
                 Value<String> languageCode = const Value.absent(),
                 Value<String> themeMode = const Value.absent(),
+                Value<String> invoiceLanguage = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 id: id,
@@ -11112,6 +11188,7 @@ class $$AppSettingsTableTableManager
                 billingCalcMode: billingCalcMode,
                 languageCode: languageCode,
                 themeMode: themeMode,
+                invoiceLanguage: invoiceLanguage,
                 onboarded: onboarded,
               ),
           withReferenceMapper: (p0) => p0

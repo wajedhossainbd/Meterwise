@@ -28,7 +28,8 @@ class AppConstants {
   /// v8: property-level billing calculation mode (sharedSlab | reconciled |
   ///     fixedRate).
   /// v9: persisted theme mode (AppSettings.themeMode).
-  static const int databaseSchemaVersion = 9;
+  /// v10: invoice language preference (AppSettings.invoiceLanguage).
+  static const int databaseSchemaVersion = 10;
 
   /// Fallback currency used when a property does not specify one.
   static const String defaultCurrencyCode = 'BDT';

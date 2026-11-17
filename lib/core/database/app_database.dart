@@ -100,6 +100,10 @@ class AppDatabase extends _$AppDatabase {
             // Persisted theme choice; 'system' preserves the old behaviour.
             await m.addColumn(appSettings, appSettings.themeMode);
           }
+          if (from < 10) {
+            // 'auto' preserves the existing "follow app language" behaviour.
+            await m.addColumn(appSettings, appSettings.invoiceLanguage);
+          }
         },
         beforeOpen: (details) async {
           // Enforce foreign-key constraints (off by default in SQLite).

@@ -42,6 +42,12 @@ class AppSettings extends Table {
   TextColumn get themeMode =>
       text().withLength(max: 10).withDefault(const Constant('system'))();
 
+  /// Invoice rendering language: 'auto' (follow app language) | 'en' | 'bn'.
+  /// Lets a device with a broken HTML→PDF converter stay on the reliable
+  /// English vector renderer without changing the app language (v10).
+  TextColumn get invoiceLanguage =>
+      text().withLength(max: 5).withDefault(const Constant('auto'))();
+
   /// Marks that the first-run setup wizard has been completed.
   BoolColumn get onboarded => boolean().withDefault(const Constant(false))();
 

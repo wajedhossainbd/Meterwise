@@ -400,5 +400,11 @@
   "invoiceTariff": "ট্যারিফ",
   "invoiceGenerated": "তৈরি হয়েছে",
   "invoiceBilledTo": "বিল প্রাপক",
-  "invoiceFooter": "MeterWise দ্বারা তৈরি"
+  "invoiceFooter": "MeterWise দ্বারা তৈরি",
+  "invoiceLanguage": "বিলের ভাষা",
+  "invoiceLanguageAuto": "অ্যাপের ভাষা অনুসরণ করুন",
+  "invoiceLanguageEn": "ইংরেজি",
+  "invoiceLanguageBn": "বাংলা",
+  "invoiceFallbackNotice": "এই ডিভাইসে বাংলা পিডিএফ পাওয়া যায়নি। পরিবর্তে ইংরেজি বিল তৈরি করা হয়েছে।",
+  "invoiceRetryBangla": "বাংলা আবার চেষ্টা করুন"
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../billing/data/period_guard.dart';
 import '../../properties/data/property_repository.dart';
 import '../../tariff/data/tariff_repository.dart';
 import '../data/main_meter_repository.dart';
@@ -53,16 +54,26 @@ class _MainMeterEditScreenState extends ConsumerState<MainMeterEditScreen> {
     final provider =
         await ref.read(tariffRepositoryProvider).getDefaultProvider();
 
-    await ref.read(mainMeterRepositoryProvider).upsertSingle(
-          propertyId: property.id,
-          providerId: provider.id,
-          name: _name.text.trim(),
-          meterNumber: _meterNumber.text.trim().isEmpty
-              ? null
-              : _meterNumber.text.trim(),
-          providerName: _provider,
+    try {
+      await ref.read(mainMeterRepositoryProvider).upsertSingle(
+            propertyId: property.id,
+            providerId: provider.id,
+            name: _name.text.trim(),
+            meterNumber: _meterNumber.text.trim().isEmpty
+                ? null
+                : _meterNumber.text.trim(),
+            providerName: _provider,
+          );
+      if (mounted) Navigator.of(context).pop();
+    } on FinalizedPeriodException {
+      if (mounted) {
+        setState(() => _saving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(AppLocalizations.of(context).periodLockedMessage)),
         );
-    if (mounted) Navigator.of(context).pop();
+      }
+    }
   }
 
   Future<void> _initProvider() async {

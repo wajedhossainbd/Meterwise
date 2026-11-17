@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../../core/database/database_provider.dart';
+import '../../billing/data/period_guard.dart';
 import '../../properties/data/property_repository.dart';
 
 /// Data access for [MainMeter] records.
@@ -10,6 +11,7 @@ class MainMeterRepository {
   MainMeterRepository(this._db);
 
   final AppDatabase _db;
+  late final PeriodGuard _guard = PeriodGuard(_db);
 
   Stream<MainMeter?> watchFirst() =>
       (_db.select(_db.mainMeters)..limit(1)).watchSingleOrNull();
@@ -55,6 +57,7 @@ class MainMeterRepository {
       );
       meterProviderId = providerId;
     } else {
+      await _guard.ensureNoFinalizedPeriods(existing.propertyId);
       await (_db.update(_db.mainMeters)..where((t) => t.id.equals(existing.id)))
           .write(
         MainMetersCompanion(
@@ -82,8 +85,16 @@ class MainMeterRepository {
     return provider?.name;
   }
 
-  Future<void> delete(int id) =>
-      (_db.delete(_db.mainMeters)..where((t) => t.id.equals(id))).go();
+  Future<void> delete(int id) async {
+    final meter = await (_db.select(_db.mainMeters)
+          ..where((t) => t.id.equals(id))
+          ..limit(1))
+        .getSingleOrNull();
+    if (meter != null) {
+      await _guard.ensureNoFinalizedPeriods(meter.propertyId);
+    }
+    await (_db.delete(_db.mainMeters)..where((t) => t.id.equals(id))).go();
+  }
 }
 
 final mainMeterRepositoryProvider = Provider<MainMeterRepository>(

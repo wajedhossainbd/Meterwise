@@ -51,6 +51,7 @@ void main() {
         'ALTER TABLE app_settings DROP COLUMN fixed_charge_distribution');
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
     raw.execute('PRAGMA user_version = 3');
 
     // 3. Re-open: drift runs onUpgrade(3 → 4), recreating the new tables.
@@ -109,6 +110,7 @@ void main() {
         'ALTER TABLE app_settings DROP COLUMN fixed_charge_distribution');
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
     raw.execute(
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, language_code, onboarded) '
         "VALUES (1, 1, 1, 9.5, 'en', 1)");
@@ -162,6 +164,7 @@ void main() {
         'ALTER TABLE app_settings DROP COLUMN fixed_charge_distribution');
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
     raw.execute('PRAGMA user_version = 4');
 
     final upgraded = AppDatabase.forTesting(
@@ -191,6 +194,7 @@ void main() {
     await v9.close();
 
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
     raw.execute(
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
         'language_code, onboarded, fixed_charge_distribution, billing_calc_mode) '
@@ -204,6 +208,37 @@ void main() {
     final settings = await upgraded.select(upgraded.appSettings).getSingle();
     expect(settings.themeMode, 'system');
     expect((await upgraded.select(upgraded.properties).getSingle()).name, 'P');
+
+    await upgraded.close();
+    raw.close();
+  });
+
+  test('v9 → v10 migration adds invoice language with the auto default',
+      () async {
+    final raw = sqlite3.openInMemory();
+
+    final v10 = AppDatabase.forTesting(
+      NativeDatabase.opened(raw, closeUnderlyingOnClose: false),
+    );
+    await v10.into(v10.properties).insert(
+          PropertiesCompanion.insert(name: 'P'),
+        );
+    await v10.close();
+
+    raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
+    raw.execute(
+        'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
+        'language_code, onboarded, fixed_charge_distribution, billing_calc_mode, theme_mode) '
+        "VALUES (1, 1, 0, 8, 'en', 1, 'equal', 'sharedSlab', 'system')");
+    raw.execute('PRAGMA user_version = 9');
+
+    final upgraded = AppDatabase.forTesting(
+      NativeDatabase.opened(raw, closeUnderlyingOnClose: false),
+    );
+
+    final settings = await upgraded.select(upgraded.appSettings).getSingle();
+    expect(settings.invoiceLanguage, 'auto');
+    expect(settings.themeMode, 'system');
 
     await upgraded.close();
     raw.close();

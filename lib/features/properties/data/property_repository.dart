@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/database/database_provider.dart';
+import '../../billing/data/period_guard.dart';
 
 /// Data access for [Property] records.
 ///
@@ -13,6 +14,7 @@ class PropertyRepository {
   PropertyRepository(this._db);
 
   final AppDatabase _db;
+  late final PeriodGuard _guard = PeriodGuard(_db);
 
   Stream<List<Property>> watchAll() => _db.select(_db.properties).watch();
 
@@ -47,6 +49,7 @@ class PropertyRepository {
       await create(name: name, address: address, currencyCode: currencyCode);
       return;
     }
+    await _guard.ensureNoFinalizedPeriods(existing.id);
     await (_db.update(_db.properties)..where((t) => t.id.equals(existing.id)))
         .write(
       PropertiesCompanion(
@@ -62,6 +65,7 @@ class PropertyRepository {
   Future<void> setCurrency(String currencyCode) async {
     final existing = await getFirst();
     if (existing == null) return;
+    await _guard.ensureNoFinalizedPeriods(existing.id);
     await (_db.update(_db.properties)..where((t) => t.id.equals(existing.id)))
         .write(
       PropertiesCompanion(
@@ -71,8 +75,10 @@ class PropertyRepository {
     );
   }
 
-  Future<void> delete(int id) =>
-      (_db.delete(_db.properties)..where((t) => t.id.equals(id))).go();
+  Future<void> delete(int id) async {
+    await _guard.ensureNoFinalizedPeriods(id);
+    await (_db.delete(_db.properties)..where((t) => t.id.equals(id))).go();
+  }
 }
 
 final propertyRepositoryProvider = Provider<PropertyRepository>(

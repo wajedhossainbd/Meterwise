@@ -51,8 +51,11 @@ class TenantRepository {
     String? meterNumber,
     String billingMode = 'shared',
     double? fixedRate,
-  }) {
-    return (_db.update(_db.tenants)..where((t) => t.id.equals(id))).write(
+  }) async {
+    // Names/phone/contract are printed on historical invoices — a finalized
+    // month must keep showing the details it was finalized with.
+    await _guard.ensureTenantMetadataEditable(id);
+    await (_db.update(_db.tenants)..where((t) => t.id.equals(id))).write(
       TenantsCompanion(
         name: Value(name),
         phone: Value(phone),

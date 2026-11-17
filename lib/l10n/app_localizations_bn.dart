@@ -1170,4 +1170,23 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get invoiceFooter => 'MeterWise দ্বারা তৈরি';
+
+  @override
+  String get invoiceLanguage => 'বিলের ভাষা';
+
+  @override
+  String get invoiceLanguageAuto => 'অ্যাপের ভাষা অনুসরণ করুন';
+
+  @override
+  String get invoiceLanguageEn => 'ইংরেজি';
+
+  @override
+  String get invoiceLanguageBn => 'বাংলা';
+
+  @override
+  String get invoiceFallbackNotice =>
+      'এই ডিভাইসে বাংলা পিডিএফ পাওয়া যায়নি। পরিবর্তে ইংরেজি বিল তৈরি করা হয়েছে।';
+
+  @override
+  String get invoiceRetryBangla => 'বাংলা আবার চেষ্টা করুন';
 }

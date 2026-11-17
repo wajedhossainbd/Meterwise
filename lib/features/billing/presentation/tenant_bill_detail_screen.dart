@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
@@ -19,6 +20,7 @@ import '../application/invoice_html.dart';
 import '../application/invoice_pdf.dart';
 import '../data/billing_period_repository.dart';
 import '../domain/models/billing_result.dart';
+import '../../settings/data/settings_repository.dart';
 
 /// Full invoice for one tenant for one month, with share / print actions.
 class TenantBillDetailScreen extends ConsumerWidget {
@@ -78,15 +80,26 @@ class TenantBillDetailScreen extends ConsumerWidget {
     );
   }
 
-  Future<Uint8List> _buildPdf(WidgetRef ref, AppLocalizations l) async {
+  /// The result of an export attempt. [usedFallback] is true when Bangla was
+  /// requested but the device produced an English invoice instead — the UI
+  /// must say so instead of silently changing the language.
+  ({Uint8List bytes, bool usedFallback}) _pdfResult(Uint8List bytes,
+          {required bool usedFallback}) =>
+      (bytes: bytes, usedFallback: usedFallback);
+
+  Future<({Uint8List bytes, bool usedFallback})> _buildPdf(
+    WidgetRef ref,
+    AppLocalizations l, {
+    required bool bangla,
+  }) async {
     // Primary path: HTML → PDF via the platform WebView, whose text engine
     // performs full complex-script shaping — so Bengali labels AND
     // user-entered Bangla names render correctly (the pure-Dart PDF engine
     // cannot shape Indic scripts). The converter can hang (see
     // [_htmlConverterBroken]), so it runs under a hard timeout; on ANY
-    // failure the English vector invoice is generated instead, so sharing
-    // always produces a document.
-    if (!_htmlConverterBroken) {
+    // failure the English vector invoice is generated instead, and the caller
+    // shows an explicit notice.
+    if (bangla && !_htmlConverterBroken) {
       try {
         final meta = await _meta(ref, l);
         final html = InvoiceHtml.build(
@@ -103,20 +116,36 @@ class TenantBillDetailScreen extends ConsumerWidget {
           html: html,
         ).timeout(const Duration(seconds: 10));
         // Sanity check: a real PDF is never this small.
-        if (bytes.length > 500) return bytes;
+        if (bytes.length > 500) return _pdfResult(bytes, usedFallback: false);
         _htmlConverterBroken = true;
-      } catch (_) {
+        developer.log('HTML invoice too small (${bytes.length} bytes)',
+            name: 'MeterWise');
+      } catch (e, stack) {
         _htmlConverterBroken = true;
+        developer.log('Bangla invoice conversion failed',
+            name: 'MeterWise', error: e, stackTrace: stack);
       }
     }
     final pdfL = lookupAppLocalizations(const Locale('en'));
     final meta = await _meta(ref, pdfL);
-    return InvoicePdf.build(
-      bill: bill,
-      monthLabel: _monthLabel,
-      meta: meta,
-      l: pdfL,
+    return _pdfResult(
+      await InvoicePdf.build(
+        bill: bill,
+        monthLabel: _monthLabel,
+        meta: meta,
+        l: pdfL,
+      ),
+      usedFallback: bangla,
     );
+  }
+
+  /// True when the invoice should be rendered in Bangla: an explicit 'bn'
+  /// preference, or 'auto' while the app UI is Bengali.
+  bool _wantsBangla(WidgetRef ref, BuildContext context) {
+    final pref = ref.read(appSettingsProvider).value?.invoiceLanguage ?? 'auto';
+    if (pref == 'en') return false;
+    if (pref == 'bn') return true;
+    return Localizations.localeOf(context).languageCode == 'bn';
   }
 
   String get _fileName =>
@@ -125,7 +154,7 @@ class TenantBillDetailScreen extends ConsumerWidget {
   /// Builds the PDF behind a blocking "preparing…" dialog. The dialog is
   /// dismissed BEFORE the native share/print sheet opens. Returns null (after
   /// showing a snackbar) if even the fallback failed — never fails silently.
-  Future<Uint8List?> _preparePdf(
+  Future<({Uint8List bytes, bool usedFallback})?> _preparePdf(
       BuildContext context, WidgetRef ref, AppLocalizations l) async {
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context, rootNavigator: true);
@@ -148,8 +177,29 @@ class TenantBillDetailScreen extends ConsumerWidget {
     ).whenComplete(() => dialogOpen = false));
 
     try {
-      return await _buildPdf(ref, l);
-    } catch (_) {
+      final result = await _buildPdf(
+        ref,
+        l,
+        bangla: _wantsBangla(ref, context),
+      );
+      if (result.usedFallback) {
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(l.invoiceFallbackNotice),
+            action: SnackBarAction(
+              label: l.invoiceRetryBangla,
+              onPressed: () {
+                _htmlConverterBroken = false;
+                if (context.mounted) _share(context, ref, l);
+              },
+            ),
+          ),
+        );
+      }
+      return result;
+    } catch (e, stack) {
+      developer.log('Invoice PDF build failed',
+          name: 'MeterWise', error: e, stackTrace: stack);
       messenger.showSnackBar(SnackBar(content: Text(l.invoiceShareFailed)));
       return null;
     } finally {
@@ -160,10 +210,10 @@ class TenantBillDetailScreen extends ConsumerWidget {
   Future<void> _share(
       BuildContext context, WidgetRef ref, AppLocalizations l) async {
     final messenger = ScaffoldMessenger.of(context);
-    final bytes = await _preparePdf(context, ref, l);
-    if (bytes == null) return;
+    final result = await _preparePdf(context, ref, l);
+    if (result == null) return;
     try {
-      await Printing.sharePdf(bytes: bytes, filename: _fileName);
+      await Printing.sharePdf(bytes: result.bytes, filename: _fileName);
     } catch (_) {
       messenger.showSnackBar(SnackBar(content: Text(l.invoiceShareFailed)));
     }
@@ -172,10 +222,10 @@ class TenantBillDetailScreen extends ConsumerWidget {
   Future<void> _print(
       BuildContext context, WidgetRef ref, AppLocalizations l) async {
     final messenger = ScaffoldMessenger.of(context);
-    final bytes = await _preparePdf(context, ref, l);
-    if (bytes == null) return;
+    final result = await _preparePdf(context, ref, l);
+    if (result == null) return;
     try {
-      await Printing.layoutPdf(onLayout: (_) async => bytes);
+      await Printing.layoutPdf(onLayout: (_) async => result.bytes);
     } catch (_) {
       messenger.showSnackBar(SnackBar(content: Text(l.invoiceShareFailed)));
     }
