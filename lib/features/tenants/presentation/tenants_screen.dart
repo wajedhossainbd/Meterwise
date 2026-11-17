@@ -45,6 +45,7 @@ class TenantsScreen extends ConsumerWidget {
           : null,
       body: AsyncValueView(
         value: tenants,
+        onRetry: () => ref.invalidate(tenantListProvider),
         data: (list) {
           if (!hasMeter) {
             return FeaturePlaceholder(

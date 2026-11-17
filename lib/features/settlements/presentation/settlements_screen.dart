@@ -50,6 +50,7 @@ class SettlementsScreen extends ConsumerWidget {
           : null,
       body: AsyncValueView(
         value: settlements,
+        onRetry: () => ref.invalidate(settlementListProvider),
         data: (list) {
           if (!canAdd) {
             return FeaturePlaceholder(

@@ -58,6 +58,7 @@ class TariffManagerScreen extends ConsumerWidget {
       ),
       body: AsyncValueView(
         value: versions,
+        onRetry: () => ref.invalidate(tariffVersionsProvider),
         data: (list) => ListView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
           children: [

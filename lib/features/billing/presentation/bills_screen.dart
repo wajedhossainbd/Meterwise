@@ -34,6 +34,7 @@ class BillsScreen extends ConsumerWidget {
           Expanded(
             child: AsyncValueView(
               value: viewAsync,
+              onRetry: () => ref.invalidate(periodViewProvider),
               data: (view) => ListView(
                 padding: const EdgeInsets.all(16),
                 children: [

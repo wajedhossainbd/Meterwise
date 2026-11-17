@@ -53,6 +53,7 @@ class RechargeScreen extends ConsumerWidget {
             )
           : AsyncValueView(
               value: recharges,
+              onRetry: () => ref.invalidate(rechargeListProvider),
               data: (list) {
                 if (list.isEmpty) {
                   return FeaturePlaceholder(

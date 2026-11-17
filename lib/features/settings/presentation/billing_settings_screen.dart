@@ -42,6 +42,7 @@ class _BillingSettingsScreenState
       appBar: AppBar(title: Text(l.billingTitle)),
       body: AsyncValueView(
         value: settings,
+        onRetry: () => ref.invalidate(appSettingsProvider),
         data: (s) {
           if (s == null) return const SizedBox.shrink();
 

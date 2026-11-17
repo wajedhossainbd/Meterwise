@@ -74,6 +74,10 @@ class _DashboardBody extends ConsumerWidget {
 
     return AsyncValueView(
       value: viewAsync,
+      onRetry: () {
+        ref.invalidate(periodViewProvider);
+        ref.invalidate(monthlyHistoryProvider);
+      },
       data: (view) {
         final monthly = view.bill;
         String money(num v) => Formatters.money(v, currencyCode: currency);
