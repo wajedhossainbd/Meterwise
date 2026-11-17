@@ -1252,4 +1252,40 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tenantCodeMismatch =>
       'That meter code was not found on this device';
+
+  @override
+  String get tenantAddReading => 'Add my reading';
+
+  @override
+  String get tenantAddRecharge => 'Add my recharge';
+
+  @override
+  String get tenantMarkPayment => 'Record payment';
+
+  @override
+  String get tenantReadingValue => 'Sub-meter reading';
+
+  @override
+  String get tenantAmount => 'Amount';
+
+  @override
+  String get tenantPaidTo => 'Paid to';
+
+  @override
+  String get tenantReceivedFrom => 'Received from';
+
+  @override
+  String get tenantSaveEntry => 'Save entry';
+
+  @override
+  String get tenantEntrySaved => 'Entry saved';
+
+  @override
+  String get tenantSelectTenant => 'Select tenant';
+
+  @override
+  String get tenantReadingTooLow => 'Reading must be higher than the last one';
+
+  @override
+  String get tenantSelfEntry => 'My entries';
 }

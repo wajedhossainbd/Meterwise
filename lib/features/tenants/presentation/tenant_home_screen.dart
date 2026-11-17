@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/section_card.dart';
@@ -152,6 +154,12 @@ class TenantHomeScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              OutlinedButton.icon(
+                onPressed: () => context.pushNamed(AppRoutes.tenantEntryName),
+                icon: const Icon(Icons.edit_outlined),
+                label: Text(l.tenantSelfEntry),
+              ),
+              const SizedBox(height: 12),
               FilledButton.icon(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(

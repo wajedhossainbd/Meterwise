@@ -1257,4 +1257,40 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tenantCodeMismatch => 'এই ডিভাইসে ওই মিটার কোড পাওয়া যায়নি';
+
+  @override
+  String get tenantAddReading => 'আমার রিডিং যোগ করুন';
+
+  @override
+  String get tenantAddRecharge => 'আমার রিচার্জ যোগ করুন';
+
+  @override
+  String get tenantMarkPayment => 'পরিশোধ রেকর্ড করুন';
+
+  @override
+  String get tenantReadingValue => 'সাব-মিটার রিডিং';
+
+  @override
+  String get tenantAmount => 'অর্থ';
+
+  @override
+  String get tenantPaidTo => 'কে দিয়েছেন';
+
+  @override
+  String get tenantReceivedFrom => 'কাছ থেকে পেয়েছেন';
+
+  @override
+  String get tenantSaveEntry => 'এন্ট্রি সংরক্ষণ';
+
+  @override
+  String get tenantEntrySaved => 'এন্ট্রি সংরক্ষিত';
+
+  @override
+  String get tenantSelectTenant => 'ভাড়াটে বেছে নিন';
+
+  @override
+  String get tenantReadingTooLow => 'রিডিং আগের চেয়ে বেশি হতে হবে';
+
+  @override
+  String get tenantSelfEntry => 'আমার এন্ট্রি';
 }

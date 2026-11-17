@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/database/app_database.dart';
 import '../../features/billing/presentation/bills_screen.dart';
-import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/dashboard/presentation/dashboard_gate.dart';
 import '../../features/main_meter/presentation/main_meter_edit_screen.dart';
 import '../../features/properties/presentation/property_edit_screen.dart';
 import '../../features/readings/presentation/add_reading_screen.dart';
@@ -18,6 +18,7 @@ import '../../features/tariff/presentation/tariff_manager_screen.dart';
 import '../../features/tenants/presentation/invite_tenant_screen.dart';
 import '../../features/tenants/presentation/join_meter_screen.dart';
 import '../../features/tenants/presentation/tenant_home_screen.dart';
+import '../../features/tenants/presentation/tenant_self_entry_screen.dart';
 import '../../features/tenants/presentation/tenant_edit_screen.dart';
 import '../../features/tenants/presentation/tenants_screen.dart';
 import '../widgets/app_shell.dart';
@@ -57,7 +58,7 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: AppRoutes.dashboard,
               name: AppRoutes.dashboardName,
-              builder: (context, state) => const DashboardScreen(),
+              builder: (context, state) => const DashboardGate(),
             ),
           ],
         ),
@@ -163,6 +164,11 @@ final GoRouter appRouter = GoRouter(
                   path: AppRoutes.tenantHome,
                   name: AppRoutes.tenantHomeName,
                   builder: (context, state) => const TenantHomeScreen(),
+                ),
+                _fullScreen(
+                  path: AppRoutes.tenantEntry,
+                  name: AppRoutes.tenantEntryName,
+                  builder: (context, state) => const TenantSelfEntryScreen(),
                 ),
                 _fullScreen(
                   path: AppRoutes.tenants,

@@ -61,6 +61,23 @@ class ReadingRepository {
     });
   }
 
+  /// Records a single tenant sub-meter reading without touching the main meter.
+  /// Used by tenant self-service; the same finalized-month guard applies.
+  Future<void> addTenantReading({
+    required int tenantId,
+    required DateTime date,
+    required double readingValue,
+  }) async {
+    await _guard.ensureTenantEditable(tenantId, date);
+    await _db.into(_db.meterReadings).insert(
+          MeterReadingsCompanion.insert(
+            tenantId: Value(tenantId),
+            readingDate: date,
+            readingValue: readingValue,
+          ),
+        );
+  }
+
   /// Deletes every reading taken on [date] (the whole session).
   Future<void> deleteSession(DateTime date) async {
     await _guard.ensureReadingsOnDateEditable(date);

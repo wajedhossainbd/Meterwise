@@ -97,7 +97,7 @@ Gradle picks it up automatically; without the file, local builds still work.
 
 ## Status
 
-- Version **3.1.0+17**, database schema **v11**
+- Version **3.1.1+18**, database schema **v11**
 - `flutter analyze`: clean · `flutter test`: **58 tests passing**
 - Android only. Release APKs are signed with the keystore configured in
   `android/key.properties` (both git-ignored — back them up).
@@ -108,7 +108,7 @@ Gradle picks it up automatically; without the file, local builds still work.
   The deprecated plugin converter and the English vector PDF remain as fallbacks,
   with a visible notice and retry if Bangla cannot be produced.
 - Invoice language is configurable (auto / English / Bangla).
-- **Tenant access (prototype):** landlord generates a meter code + QR from Settings → Invite a tenant; a tenant joins by scanning/entering the code and picking their roster name, then sees a scoped home with their usage, bill, balance, recharge history, invoices and an equal-split explanation. Approval happens on the landlord's device. Drive-based packet sync is the next step.
+- **Tenant access (prototype):** landlord generates a meter code + QR from Settings → Invite a tenant; a tenant joins by scanning/entering the code and picking their roster name, then sees a scoped home with their usage, bill, balance, recharge history, invoices and an equal-split explanation. Approval happens on the landlord's device. Once joined, the first tab is the tenant's own home. Tenants can add their own sub-meter reading, log their own recharge, and record a manual payment or reimbursement to another tenant — all into the same ledger. Drive-based packet sync is the next step.
 - Google Drive sync is an acknowledged "coming soon" stub; local backup/restore works
 
 This project is not published to pub.dev.

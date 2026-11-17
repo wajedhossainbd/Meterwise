@@ -2407,6 +2407,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'That meter code was not found on this device'**
   String get tenantCodeMismatch;
+
+  /// No description provided for @tenantAddReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Add my reading'**
+  String get tenantAddReading;
+
+  /// No description provided for @tenantAddRecharge.
+  ///
+  /// In en, this message translates to:
+  /// **'Add my recharge'**
+  String get tenantAddRecharge;
+
+  /// No description provided for @tenantMarkPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Record payment'**
+  String get tenantMarkPayment;
+
+  /// No description provided for @tenantReadingValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Sub-meter reading'**
+  String get tenantReadingValue;
+
+  /// No description provided for @tenantAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount'**
+  String get tenantAmount;
+
+  /// No description provided for @tenantPaidTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid to'**
+  String get tenantPaidTo;
+
+  /// No description provided for @tenantReceivedFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Received from'**
+  String get tenantReceivedFrom;
+
+  /// No description provided for @tenantSaveEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Save entry'**
+  String get tenantSaveEntry;
+
+  /// No description provided for @tenantEntrySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Entry saved'**
+  String get tenantEntrySaved;
+
+  /// No description provided for @tenantSelectTenant.
+  ///
+  /// In en, this message translates to:
+  /// **'Select tenant'**
+  String get tenantSelectTenant;
+
+  /// No description provided for @tenantReadingTooLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading must be higher than the last one'**
+  String get tenantReadingTooLow;
+
+  /// No description provided for @tenantSelfEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'My entries'**
+  String get tenantSelfEntry;
 }
 
 class _AppLocalizationsDelegate

@@ -54,4 +54,6 @@ class AppRoutes {
   static const String joinMeterName = 'joinMeter';
   static const String tenantHome = 'tenant-home';
   static const String tenantHomeName = 'tenantHome';
+  static const String tenantEntry = 'tenant-entry';
+  static const String tenantEntryName = 'tenantEntry';
 }

@@ -427,5 +427,17 @@
   "tenantNotApproved": "মিটার মালিক এখনো আপনার যোগদান অনুমোদন করেননি।",
   "tenantNoSubMeter": "কোনো সাব-মিটার নেই — খরচ সমান ভাগে বণ্টন হবে",
   "tenantHomeTitle": "আমার মিটার",
-  "tenantCodeMismatch": "এই ডিভাইসে ওই মিটার কোড পাওয়া যায়নি"
+  "tenantCodeMismatch": "এই ডিভাইসে ওই মিটার কোড পাওয়া যায়নি",
+  "tenantAddReading": "আমার রিডিং যোগ করুন",
+  "tenantAddRecharge": "আমার রিচার্জ যোগ করুন",
+  "tenantMarkPayment": "পরিশোধ রেকর্ড করুন",
+  "tenantReadingValue": "সাব-মিটার রিডিং",
+  "tenantAmount": "অর্থ",
+  "tenantPaidTo": "কে দিয়েছেন",
+  "tenantReceivedFrom": "কাছ থেকে পেয়েছেন",
+  "tenantSaveEntry": "এন্ট্রি সংরক্ষণ",
+  "tenantEntrySaved": "এন্ট্রি সংরক্ষিত",
+  "tenantSelectTenant": "ভাড়াটে বেছে নিন",
+  "tenantReadingTooLow": "রিডিং আগের চেয়ে বেশি হতে হবে",
+  "tenantSelfEntry": "আমার এন্ট্রি"
 }

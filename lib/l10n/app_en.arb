@@ -427,5 +427,17 @@
   "tenantNotApproved": "Your meter owner has not approved your join yet.",
   "tenantNoSubMeter": "No sub-meter — your share is split equally",
   "tenantHomeTitle": "My meter",
-  "tenantCodeMismatch": "That meter code was not found on this device"
+  "tenantCodeMismatch": "That meter code was not found on this device",
+  "tenantAddReading": "Add my reading",
+  "tenantAddRecharge": "Add my recharge",
+  "tenantMarkPayment": "Record payment",
+  "tenantReadingValue": "Sub-meter reading",
+  "tenantAmount": "Amount",
+  "tenantPaidTo": "Paid to",
+  "tenantReceivedFrom": "Received from",
+  "tenantSaveEntry": "Save entry",
+  "tenantEntrySaved": "Entry saved",
+  "tenantSelectTenant": "Select tenant",
+  "tenantReadingTooLow": "Reading must be higher than the last one",
+  "tenantSelfEntry": "My entries"
 }
