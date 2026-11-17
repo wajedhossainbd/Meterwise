@@ -15,7 +15,7 @@ class NativeInvoicePdf {
   static const MethodChannel _channel =
       MethodChannel('com.meterwise.app/invoice_pdf');
 
-  static Future<Uint8List?> convert(String html) async {
+  static Future<Uint8List?> convert(String html, {String? title}) async {
     final dir = await getTemporaryDirectory();
     final path = '${dir.path}/invoice_${DateTime.now().microsecondsSinceEpoch}.pdf';
     try {
@@ -23,6 +23,7 @@ class NativeInvoicePdf {
           await _channel.invokeMethod<String>('htmlToPdf', <String, Object?>{
         'html': html,
         'path': path,
+        'title': title ?? 'MeterWise Invoice',
       });
       if (written == null) return null;
       final file = File(written);

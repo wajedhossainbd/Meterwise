@@ -118,7 +118,10 @@ class TenantBillDetailScreen extends ConsumerWidget {
     // there is no dangling reference to hang the conversion.
     if (html != null && !_nativeConverterBroken) {
       try {
-        final bytes = await NativeInvoicePdf.convert(html);
+        final bytes = await NativeInvoicePdf.convert(
+          html,
+          title: _fileName.replaceAll('.pdf', ''),
+        );
         if (bytes != null) return _pdfResult(bytes, usedFallback: false);
         _nativeConverterBroken = true;
         developer.log('Native invoice PDF failed; trying plugin fallback',

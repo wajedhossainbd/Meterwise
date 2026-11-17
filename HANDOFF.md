@@ -4,8 +4,9 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v3.0.1+13 · DB schema v10 · 58/58 tests green ·
-> `flutter analyze` clean · signed release APK built and verified with apksigner.
+> **Last state:** v3.0.4+16 · DB schema v10 · 58/58 tests green ·
+> `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
+> (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
 
 ---
@@ -55,7 +56,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `3.0.0+12`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `3.0.4+16`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -378,7 +379,7 @@ migration tests + additive-only migrations).
 | Google Drive backup sync | Stub ("coming soon"). Blocked on user's Google Cloud OAuth client + app SHA-1. Local zip backup/restore works. |
 | Release signing | Real keystore generated at `android/app/upload-keystore.jks` with config in `android/key.properties` (both git-ignored). APK verified signed via apksigner. **Back up both files and the password** — losing them means you cannot publish updates. |
 | Settlement transaction list inside PDF | Not embedded; invoice shows settlement paid/received totals, full list lives in Settlements screen. |
-| WebView Bangla PDF | v3.0.1: native Android channel (`com.meterwise.app/invoice_pdf`, `MainActivity.kt` + `android.print/MeterWisePrintCallbacks.java`) owns a transparent WebView for the whole job, with 20s layout/write timeouts and teardown in `finally`. Dart wrapper: `features/billing/application/native_invoice_pdf.dart`. Fallbacks: deprecated plugin converter (10s) → English vector PDF, with visible notice + Retry. Invoice language is a persisted setting (auto/en/bn). Native path still needs on-device verification. |
+| WebView Bangla PDF | v3.0.4: native Android channel (`com.meterwise.app/invoice_pdf`, `MainActivity.kt` + `android.print/MeterWisePrintCallbacks.java`) owns a transparent WebView for the whole job. Runs on a background thread (MethodChannel handlers are on the main thread — waiting there froze the UI), 20s layout/write timeouts, teardown in `finally`, explicit `ISO_A4` + 300 DPI print attributes (missing resolution caused `attributes must specify print resolution`). `stampTitle()` appends an `/Info /Title` so sharing apps don't show "Untitled". Device-verified on S9+. Fallbacks: plugin converter (10s) → English vector PDF, with visible notice + Retry. Invoice language is a persisted setting (auto/en/bn). |
 | In-order finalize | Not hard-enforced (carry-forward walks drafts correctly); could add strict ordering if user asks. |
 | User's on-device tariff version | May still carry lifeline-as-slab-row (see gotcha #12) — remind if math complaints resurface. |
 | iOS | Untouched (CocoaPods not installed; Android-only so far). |
@@ -402,6 +403,7 @@ migration tests + additive-only migrations).
 | 2.3.0 | Property-level calculation modes (sharedSlab / reconciled / fixedRate), schema v8 |
 | 3.0.0 | Core-first revamp: persisted theme + invoice language, full en/bn coverage, working error Retry, finalized metadata freeze, dashboard split, quiet visual refresh (schema v10) |
 | 3.0.1 | Native WebView-owned Bangla PDF channel + real signed release keystore |
+| 3.0.2–3.0.4 | Device debugging on S9+: background thread fix, print resolution fix, PDF title stamping; Bangla invoices verified on-device |
 
 ---
 

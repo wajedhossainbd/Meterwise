@@ -1,5 +1,7 @@
 package android.print;
 
+import android.util.Log;
+
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -21,11 +23,13 @@ public final class MeterWisePrintCallbacks {
         return new PrintDocumentAdapter.LayoutResultCallback() {
             @Override
             public void onLayoutFinished(PrintDocumentInfo info, boolean changed) {
+                Log.d("MWPDF", "onLayoutFinished");
                 done.countDown();
             }
 
             @Override
             public void onLayoutFailed(CharSequence error) {
+                Log.w("MWPDF", "onLayoutFailed: " + error);
                 onFail.fail(error == null ? "print layout failed" : error.toString());
             }
 
@@ -41,6 +45,7 @@ public final class MeterWisePrintCallbacks {
         return new PrintDocumentAdapter.WriteResultCallback() {
             @Override
             public void onWriteFinished(PageRange[] pages) {
+                Log.d("MWPDF", "onWriteFinished");
                 done.countDown();
             }
 

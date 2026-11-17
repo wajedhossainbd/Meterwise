@@ -7,6 +7,7 @@ import android.print.MeterWisePrintCallbacks
 import android.print.PageRange
 import android.print.PrintAttributes
 import android.print.PrintDocumentAdapter
+import android.util.Log
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -30,15 +31,56 @@ class MainActivity : FlutterActivity() {
                     "htmlToPdf" -> {
                         val html = call.argument<String>("html")
                         val path = call.argument<String>("path")
+                        val title = call.argument<String>("title")
                         if (html == null || path == null) {
                             result.error("INVALID_ARGS", "html and path are required", null)
                         } else {
-                            convert(html, path, result)
+                            convert(html, path, title ?: "MeterWise Invoice", result)
                         }
                     }
                     else -> result.notImplemented()
                 }
             }
+    }
+
+    /**
+     * Appends a small incremental update that adds an /Info dictionary with a
+     * document title. WebView's print PDF has no /Title, so sharing apps show
+     * "Untitled" instead of the invoice name.
+     */
+    private fun stampTitle(path: String, title: String) {
+        try {
+            val file = File(path)
+            val original = file.readBytes()
+            val text = original.toString(Charsets.ISO_8859_1)
+            val root = Regex("/Root\\s+\\d+\\s+\\d+\\s+R").find(text)?.value ?: return
+            val size = Regex("/Size\\s+(\\d+)")
+                .findAll(text).lastOrNull()?.groupValues?.get(1)?.toInt() ?: return
+            val previousStart = Regex("startxref\\s+(\\d+)")
+                .findAll(text).lastOrNull()?.groupValues?.get(1)?.toLong() ?: return
+
+            val objectNumber = size
+            // PDF literal strings here are Latin-1; keep the title ASCII-safe.
+            val escaped = title
+                .map { if (it.code in 32..126) it else '?' }
+                .joinToString("")
+                .replace("\\", "\\\\")
+                .replace("(", "\\(")
+                .replace(")", "\\)")
+            val objectPart = "$objectNumber 0 obj\n<< /Title ($escaped) >>\nendobj\n"
+            val trailerPart =
+                "trailer\n<< /Size ${objectNumber + 1} /Root $root " +
+                    "/Info $objectNumber 0 R /Prev $previousStart >>\n"
+            val startXrefPart =
+                "startxref\n${original.size.toLong() + objectPart.length}\n%%EOF\n"
+            file.appendBytes(
+                (objectPart + trailerPart + startXrefPart)
+                    .toByteArray(Charsets.ISO_8859_1)
+            )
+            Log.d("MWPDF", "stamped title: $title")
+        } catch (t: Throwable) {
+            Log.w("MWPDF", "stampTitle failed: ${t.message}")
+        }
     }
 
     /**
@@ -49,36 +91,51 @@ class MainActivity : FlutterActivity() {
      * The job runs WebView/print work on the UI thread; only the calling
      * (background) thread waits on latches, so the main thread never blocks.
      */
-    private fun convert(html: String, path: String, result: MethodChannel.Result) {
-        val job = PdfJob(html, path)
-        try {
-            job.start()
-            if (!job.awaitLayout(20)) job.fail("print layout timed out")
-            if (job.failure == null) {
-                job.beginWrite()
-                if (!job.awaitWrite(20)) job.fail("print write timed out")
+    private fun convert(html: String, path: String, title: String, result: MethodChannel.Result) {
+        // MethodChannel handlers are invoked on the platform (main) thread.
+        // Waiting on the print latches there would freeze the whole app, so the
+        // job runs on its own thread; WebView work is posted back to the UI
+        // thread by PdfJob, and cleanup is posted there too.
+        Thread {
+            Log.d("MWPDF", "convert start, html=${html.length} chars, path=$path")
+            val job = PdfJob(html, path, title)
+            try {
+                job.start()
+                if (!job.awaitLayout(20)) job.fail("print layout timed out")
+                if (job.failure == null) {
+                    job.beginWrite()
+                    if (!job.awaitWrite(20)) job.fail("print write timed out")
+                }
+                val error = job.failure
+                val size = if (error == null) runCatching { File(path).length() }.getOrDefault(0) else 0
+                Log.d("MWPDF", "job done: error=$error size=$size")
+                if (error == null && size > 500) stampTitle(path, title)
+                when {
+                    error != null -> result.error("PDF_FAILED", error, null)
+                    size <= 500 -> result.error("PDF_FAILED", "PDF too small ($size bytes)", null)
+                    else -> result.success(path)
+                }
+            } catch (t: Throwable) {
+                Log.e("MWPDF", "convert threw", t)
+                result.error("PDF_FAILED", t.message ?: "unknown error", null)
+            } finally {
+                job.cleanup()
             }
-            val error = job.failure
-            val size = if (error == null) runCatching { File(path).length() }.getOrDefault(0) else 0
-            when {
-                error != null -> result.error("PDF_FAILED", error, null)
-                size <= 500 -> result.error("PDF_FAILED", "PDF too small ($size bytes)", null)
-                else -> result.success(path)
-            }
-        } catch (t: Throwable) {
-            result.error("PDF_FAILED", t.message ?: "unknown error", null)
-        } finally {
-            job.cleanup()
-        }
+        }.apply { name = "MeterWise-PDF" }.start()
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private inner class PdfJob(private val html: String, private val path: String) {
+    private inner class PdfJob(
+        private val html: String,
+        private val path: String,
+        private val title: String,
+    ) {
         private val layoutLatch = CountDownLatch(1)
         private val writeLatch = CountDownLatch(1)
         private val attributes = PrintAttributes.Builder()
             .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
             .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
+            .setResolution(PrintAttributes.Resolution("default", "300dpi", 300, 300))
             .build()
 
         @Volatile
@@ -126,9 +183,11 @@ class MainActivity : FlutterActivity() {
 
                     wv.webViewClient = object : WebViewClient() {
                         override fun onPageFinished(view: WebView?, url: String?) {
+                            Log.d("MWPDF", "onPageFinished")
                             beginLayout(wv)
                         }
                     }
+                    Log.d("MWPDF", "loading html into WebView")
                     wv.loadDataWithBaseURL(null, html, "text/html", "utf-8", null)
                 } catch (t: Throwable) {
                     fail(t.message ?: "WebView setup failed")
@@ -138,8 +197,9 @@ class MainActivity : FlutterActivity() {
 
         private fun beginLayout(wv: WebView) {
             try {
-                val printAdapter = wv.createPrintDocumentAdapter("MeterWiseInvoice")
+                val printAdapter = wv.createPrintDocumentAdapter(title)
                 adapter = printAdapter
+                Log.d("MWPDF", "onLayout started")
                 printAdapter.onLayout(
                     null,
                     attributes,
@@ -185,6 +245,7 @@ class MainActivity : FlutterActivity() {
             writeLatch.await(seconds, TimeUnit.SECONDS)
 
         fun fail(message: String) {
+            Log.w("MWPDF", "fail: $message")
             if (failure == null) failure = message
             layoutLatch.countDown()
             writeLatch.countDown()
