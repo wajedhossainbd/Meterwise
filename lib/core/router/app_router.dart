@@ -7,7 +7,7 @@ import '../../features/dashboard/presentation/dashboard_gate.dart';
 import '../../features/main_meter/presentation/main_meter_edit_screen.dart';
 import '../../features/properties/presentation/property_edit_screen.dart';
 import '../../features/readings/presentation/add_reading_screen.dart';
-import '../../features/readings/presentation/readings_screen.dart';
+import '../../features/readings/presentation/readings_gate.dart';
 import '../../features/recharge/presentation/recharge_edit_screen.dart';
 import '../../features/recharge/presentation/recharge_screen.dart';
 import '../../features/settings/presentation/backup_screen.dart';
@@ -68,7 +68,7 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: AppRoutes.readings,
               name: AppRoutes.readingsName,
-              builder: (context, state) => const ReadingsScreen(),
+              builder: (context, state) => const ReadingsGate(),
               routes: [
                 _fullScreen(
                   path: AppRoutes.addReading,

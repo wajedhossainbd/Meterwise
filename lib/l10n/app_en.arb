@@ -439,5 +439,6 @@
   "tenantEntrySaved": "Entry saved",
   "tenantSelectTenant": "Select tenant",
   "tenantReadingTooLow": "Reading must be higher than the last one",
-  "tenantSelfEntry": "My entries"
+  "tenantSelfEntry": "My entries",
+  "tenantBuildingTotal": "Building total"
 }

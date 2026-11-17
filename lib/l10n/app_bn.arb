@@ -439,5 +439,6 @@
   "tenantEntrySaved": "এন্ট্রি সংরক্ষিত",
   "tenantSelectTenant": "ভাড়াটে বেছে নিন",
   "tenantReadingTooLow": "রিডিং আগের চেয়ে বেশি হতে হবে",
-  "tenantSelfEntry": "আমার এন্ট্রি"
+  "tenantSelfEntry": "আমার এন্ট্রি",
+  "tenantBuildingTotal": "বিল্ডিং মোট"
 }

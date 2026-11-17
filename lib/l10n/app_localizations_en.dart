@@ -1288,4 +1288,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tenantSelfEntry => 'My entries';
+
+  @override
+  String get tenantBuildingTotal => 'Building total';
 }

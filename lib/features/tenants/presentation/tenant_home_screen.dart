@@ -118,7 +118,7 @@ class TenantHomeScreen extends ConsumerWidget {
                 title: l.tenantHomeTitle,
                 child: Column(
                   children: [
-                    _row(l.dashMainUnits,
+                    _row(l.tenantBuildingTotal,
                         '${Formatters.units(view.bill?.mainMeterUnits ?? 0)} kWh'),
                     _row(l.invoiceOwnConsumption,
                         '${Formatters.units(bill.ownUnits)} kWh'),

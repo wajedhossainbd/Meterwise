@@ -1293,4 +1293,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tenantSelfEntry => 'আমার এন্ট্রি';
+
+  @override
+  String get tenantBuildingTotal => 'বিল্ডিং মোট';
 }

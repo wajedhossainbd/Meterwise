@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/settings/data/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
 
-/// Persistent navigation chrome wrapping the five top-level destinations.
+/// Persistent navigation chrome wrapping the top-level destinations.
 ///
 /// Driven by GoRouter's [StatefulNavigationShell] so each branch keeps its own
 /// navigation stack and state across tab switches. Uses a [NavigationBar] on
-/// compact widths and a [NavigationRail] on wider screens (tablets / landscape)
-/// to satisfy the adaptive-layout requirement.
-class AppShell extends StatelessWidget {
+/// compact widths and a [NavigationRail] on wider screens (tablets / landscape).
+/// Tenants get a smaller, scoped set of destinations — no landlord controls.
+class AppShell extends ConsumerWidget {
   const AppShell({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
-  static const List<_Destination> _destinations = [
-    _Destination(Icons.dashboard_outlined, Icons.dashboard),
-    _Destination(Icons.speed_outlined, Icons.speed),
-    _Destination(Icons.bolt_outlined, Icons.bolt),
-    _Destination(Icons.receipt_long_outlined, Icons.receipt_long),
-    _Destination(Icons.settings_outlined, Icons.settings),
+  static const List<_Destination> _landlordDestinations = [
+    _Destination(Icons.dashboard_outlined, Icons.dashboard, 0),
+    _Destination(Icons.speed_outlined, Icons.speed, 1),
+    _Destination(Icons.bolt_outlined, Icons.bolt, 2),
+    _Destination(Icons.receipt_long_outlined, Icons.receipt_long, 3),
+    _Destination(Icons.settings_outlined, Icons.settings, 4),
+  ];
+
+  static const List<_Destination> _tenantDestinations = [
+    _Destination(Icons.home_outlined, Icons.home, 0),
+    _Destination(Icons.history_outlined, Icons.history, 1),
   ];
 
   void _onTap(int index) {
-    // initialLocation: re-tap on the active tab pops to its branch root.
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,
@@ -31,16 +37,20 @@ class AppShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isWide = MediaQuery.sizeOf(context).width >= 720;
     final l = AppLocalizations.of(context);
-    final labels = [
-      l.navDashboard,
-      l.navReadings,
-      l.navRecharge,
-      l.navBills,
-      l.navSettings,
-    ];
+    final isTenant = ref.watch(appRoleProvider) == 'tenant';
+    final destinations = isTenant ? _tenantDestinations : _landlordDestinations;
+    final labels = isTenant
+        ? [l.tenantHomeTitle, l.tenantSelfEntry]
+        : [
+            l.navDashboard,
+            l.navReadings,
+            l.navRecharge,
+            l.navBills,
+            l.navSettings,
+          ];
 
     if (isWide) {
       return Scaffold(
@@ -51,10 +61,10 @@ class AppShell extends StatelessWidget {
               onDestinationSelected: _onTap,
               labelType: NavigationRailLabelType.all,
               destinations: [
-                for (var i = 0; i < _destinations.length; i++)
+                for (var i = 0; i < destinations.length; i++)
                   NavigationRailDestination(
-                    icon: Icon(_destinations[i].icon),
-                    selectedIcon: Icon(_destinations[i].selectedIcon),
+                    icon: Icon(destinations[i].icon),
+                    selectedIcon: Icon(destinations[i].selectedIcon),
                     label: Text(labels[i]),
                   ),
               ],
@@ -72,10 +82,10 @@ class AppShell extends StatelessWidget {
         selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: _onTap,
         destinations: [
-          for (var i = 0; i < _destinations.length; i++)
+          for (var i = 0; i < destinations.length; i++)
             NavigationDestination(
-              icon: Icon(_destinations[i].icon),
-              selectedIcon: Icon(_destinations[i].selectedIcon),
+              icon: Icon(destinations[i].icon),
+              selectedIcon: Icon(destinations[i].selectedIcon),
               label: labels[i],
             ),
         ],
@@ -85,7 +95,8 @@ class AppShell extends StatelessWidget {
 }
 
 class _Destination {
-  const _Destination(this.icon, this.selectedIcon);
+  const _Destination(this.icon, this.selectedIcon, this.index);
   final IconData icon;
   final IconData selectedIcon;
+  final int index;
 }

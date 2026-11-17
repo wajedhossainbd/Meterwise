@@ -2479,6 +2479,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'My entries'**
   String get tenantSelfEntry;
+
+  /// No description provided for @tenantBuildingTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Building total'**
+  String get tenantBuildingTotal;
 }
 
 class _AppLocalizationsDelegate

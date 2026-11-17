@@ -4,7 +4,7 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v3.1.1+18 · DB schema v11 · 59/59 tests green ·
+> **Last state:** v3.1.2+19 · DB schema v11 · 59/59 tests green ·
 > `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
 > (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
@@ -56,7 +56,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `3.1.1+18`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `3.1.2+19`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -407,6 +407,7 @@ migration tests + additive-only migrations).
 | 3.0.2–3.0.4 | Device debugging on S9+: background thread fix, print resolution fix, PDF title stamping; Bangla invoices verified on-device |
 | 3.1.0 | Tenant access prototype: meter code + QR invite, scan/manual join with roster-name selection, landlord approval, tenant-scoped home with usage/bill/balance (schema v11) |
 | 3.1.1 | Tenant mode becomes the first tab; tenant self-entry for own readings, recharges and payments/reimbursements |
+| 3.1.2 | Tenant-scoped bottom nav (Home + My entries), entry history list, building-total label |
 
 ---
 
