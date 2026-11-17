@@ -3,12 +3,25 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'theme_controller.g.dart';
 
-/// Holds the user's selected [ThemeMode].
+/// Parses the persisted theme string; unknown values fall back to system.
+ThemeMode themeModeFromStorage(String value) => switch (value) {
+      'light' => ThemeMode.light,
+      'dark' => ThemeMode.dark,
+      _ => ThemeMode.system,
+    };
+
+/// Storage form of a [ThemeMode], written to `AppSettings.themeMode`.
+String themeModeToStorage(ThemeMode mode) => switch (mode) {
+      ThemeMode.light => 'light',
+      ThemeMode.dark => 'dark',
+      ThemeMode.system => 'system',
+    };
+
+/// Holds the user's selected [ThemeMode] for the running session.
 ///
-/// Kept intentionally simple for Phase 1 (in-memory only). Phase 5 / Settings
-/// will persist this to local storage and hydrate it on startup; because the UI
-/// only ever reads/writes through this controller, that change will not touch
-/// any widget code.
+/// `main()` hydrates this from `AppSettings.themeMode` at startup and the
+/// Settings screen writes every change back, so the in-memory state is simply
+/// the live mirror of the persisted preference. No widget reads storage directly.
 @Riverpod(keepAlive: true)
 class ThemeModeController extends _$ThemeModeController {
   @override

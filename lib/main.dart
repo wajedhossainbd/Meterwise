@@ -24,6 +24,11 @@ Future<void> main() async {
   // Snapshot the current tariff as "Version 1" so historical months resolve to
   // a versioned tariff (no-op once versions exist).
   await container.read(tariffVersionRepositoryProvider).ensureSeeded();
+  // Restore the appearance choice before the first frame.
+  final settings = await container.read(settingsRepositoryProvider).get();
+  container
+      .read(themeModeControllerProvider.notifier)
+      .setThemeMode(themeModeFromStorage(settings.themeMode));
 
   runApp(
     UncontrolledProviderScope(

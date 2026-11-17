@@ -4454,6 +4454,19 @@ class $AppSettingsTable extends AppSettings
     requiredDuringInsert: false,
     defaultValue: const Constant('en'),
   );
+  static const VerificationMeta _themeModeMeta = const VerificationMeta(
+    'themeMode',
+  );
+  @override
+  late final GeneratedColumn<String> themeMode = GeneratedColumn<String>(
+    'theme_mode',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('system'),
+  );
   static const VerificationMeta _onboardedMeta = const VerificationMeta(
     'onboarded',
   );
@@ -4478,6 +4491,7 @@ class $AppSettingsTable extends AppSettings
     fixedChargeDistribution,
     billingCalcMode,
     languageCode,
+    themeMode,
     onboarded,
   ];
   @override
@@ -4546,6 +4560,12 @@ class $AppSettingsTable extends AppSettings
         ),
       );
     }
+    if (data.containsKey('theme_mode')) {
+      context.handle(
+        _themeModeMeta,
+        themeMode.isAcceptableOrUnknown(data['theme_mode']!, _themeModeMeta),
+      );
+    }
     if (data.containsKey('onboarded')) {
       context.handle(
         _onboardedMeta,
@@ -4589,6 +4609,10 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.string,
         data['${effectivePrefix}language_code'],
       )!,
+      themeMode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}theme_mode'],
+      )!,
       onboarded: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}onboarded'],
@@ -4630,6 +4654,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   /// UI / invoice language code ('en' or 'bn').
   final String languageCode;
 
+  /// Selected theme mode: 'system' | 'light' | 'dark'.
+  ///
+  /// Persisted so a choice made in Settings survives a restart (v9).
+  final String themeMode;
+
   /// Marks that the first-run setup wizard has been completed.
   final bool onboarded;
   const AppSetting({
@@ -4640,6 +4669,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     required this.fixedChargeDistribution,
     required this.billingCalcMode,
     required this.languageCode,
+    required this.themeMode,
     required this.onboarded,
   });
   @override
@@ -4654,6 +4684,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     );
     map['billing_calc_mode'] = Variable<String>(billingCalcMode);
     map['language_code'] = Variable<String>(languageCode);
+    map['theme_mode'] = Variable<String>(themeMode);
     map['onboarded'] = Variable<bool>(onboarded);
     return map;
   }
@@ -4667,6 +4698,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       fixedChargeDistribution: Value(fixedChargeDistribution),
       billingCalcMode: Value(billingCalcMode),
       languageCode: Value(languageCode),
+      themeMode: Value(themeMode),
       onboarded: Value(onboarded),
     );
   }
@@ -4686,6 +4718,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       ),
       billingCalcMode: serializer.fromJson<String>(json['billingCalcMode']),
       languageCode: serializer.fromJson<String>(json['languageCode']),
+      themeMode: serializer.fromJson<String>(json['themeMode']),
       onboarded: serializer.fromJson<bool>(json['onboarded']),
     );
   }
@@ -4702,6 +4735,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       ),
       'billingCalcMode': serializer.toJson<String>(billingCalcMode),
       'languageCode': serializer.toJson<String>(languageCode),
+      'themeMode': serializer.toJson<String>(themeMode),
       'onboarded': serializer.toJson<bool>(onboarded),
     };
   }
@@ -4714,6 +4748,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     String? fixedChargeDistribution,
     String? billingCalcMode,
     String? languageCode,
+    String? themeMode,
     bool? onboarded,
   }) => AppSetting(
     id: id ?? this.id,
@@ -4724,6 +4759,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
         fixedChargeDistribution ?? this.fixedChargeDistribution,
     billingCalcMode: billingCalcMode ?? this.billingCalcMode,
     languageCode: languageCode ?? this.languageCode,
+    themeMode: themeMode ?? this.themeMode,
     onboarded: onboarded ?? this.onboarded,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
@@ -4745,6 +4781,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       languageCode: data.languageCode.present
           ? data.languageCode.value
           : this.languageCode,
+      themeMode: data.themeMode.present ? data.themeMode.value : this.themeMode,
       onboarded: data.onboarded.present ? data.onboarded.value : this.onboarded,
     );
   }
@@ -4759,6 +4796,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ..write('fixedChargeDistribution: $fixedChargeDistribution, ')
           ..write('billingCalcMode: $billingCalcMode, ')
           ..write('languageCode: $languageCode, ')
+          ..write('themeMode: $themeMode, ')
           ..write('onboarded: $onboarded')
           ..write(')'))
         .toString();
@@ -4773,6 +4811,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     fixedChargeDistribution,
     billingCalcMode,
     languageCode,
+    themeMode,
     onboarded,
   );
   @override
@@ -4786,6 +4825,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           other.fixedChargeDistribution == this.fixedChargeDistribution &&
           other.billingCalcMode == this.billingCalcMode &&
           other.languageCode == this.languageCode &&
+          other.themeMode == this.themeMode &&
           other.onboarded == this.onboarded);
 }
 
@@ -4797,6 +4837,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<String> fixedChargeDistribution;
   final Value<String> billingCalcMode;
   final Value<String> languageCode;
+  final Value<String> themeMode;
   final Value<bool> onboarded;
   const AppSettingsCompanion({
     this.id = const Value.absent(),
@@ -4806,6 +4847,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.fixedChargeDistribution = const Value.absent(),
     this.billingCalcMode = const Value.absent(),
     this.languageCode = const Value.absent(),
+    this.themeMode = const Value.absent(),
     this.onboarded = const Value.absent(),
   });
   AppSettingsCompanion.insert({
@@ -4816,6 +4858,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.fixedChargeDistribution = const Value.absent(),
     this.billingCalcMode = const Value.absent(),
     this.languageCode = const Value.absent(),
+    this.themeMode = const Value.absent(),
     this.onboarded = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
@@ -4826,6 +4869,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Expression<String>? fixedChargeDistribution,
     Expression<String>? billingCalcMode,
     Expression<String>? languageCode,
+    Expression<String>? themeMode,
     Expression<bool>? onboarded,
   }) {
     return RawValuesInsertable({
@@ -4837,6 +4881,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
         'fixed_charge_distribution': fixedChargeDistribution,
       if (billingCalcMode != null) 'billing_calc_mode': billingCalcMode,
       if (languageCode != null) 'language_code': languageCode,
+      if (themeMode != null) 'theme_mode': themeMode,
       if (onboarded != null) 'onboarded': onboarded,
     });
   }
@@ -4849,6 +4894,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<String>? fixedChargeDistribution,
     Value<String>? billingCalcMode,
     Value<String>? languageCode,
+    Value<String>? themeMode,
     Value<bool>? onboarded,
   }) {
     return AppSettingsCompanion(
@@ -4860,6 +4906,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           fixedChargeDistribution ?? this.fixedChargeDistribution,
       billingCalcMode: billingCalcMode ?? this.billingCalcMode,
       languageCode: languageCode ?? this.languageCode,
+      themeMode: themeMode ?? this.themeMode,
       onboarded: onboarded ?? this.onboarded,
     );
   }
@@ -4890,6 +4937,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     if (languageCode.present) {
       map['language_code'] = Variable<String>(languageCode.value);
     }
+    if (themeMode.present) {
+      map['theme_mode'] = Variable<String>(themeMode.value);
+    }
     if (onboarded.present) {
       map['onboarded'] = Variable<bool>(onboarded.value);
     }
@@ -4906,6 +4956,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           ..write('fixedChargeDistribution: $fixedChargeDistribution, ')
           ..write('billingCalcMode: $billingCalcMode, ')
           ..write('languageCode: $languageCode, ')
+          ..write('themeMode: $themeMode, ')
           ..write('onboarded: $onboarded')
           ..write(')'))
         .toString();
@@ -10817,6 +10868,7 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<String> fixedChargeDistribution,
       Value<String> billingCalcMode,
       Value<String> languageCode,
+      Value<String> themeMode,
       Value<bool> onboarded,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
@@ -10828,6 +10880,7 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<String> fixedChargeDistribution,
       Value<String> billingCalcMode,
       Value<String> languageCode,
+      Value<String> themeMode,
       Value<bool> onboarded,
     });
 
@@ -10872,6 +10925,11 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<String> get languageCode => $composableBuilder(
     column: $table.languageCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get themeMode => $composableBuilder(
+    column: $table.themeMode,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10925,6 +10983,11 @@ class $$AppSettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get themeMode => $composableBuilder(
+    column: $table.themeMode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get onboarded => $composableBuilder(
     column: $table.onboarded,
     builder: (column) => ColumnOrderings(column),
@@ -10971,6 +11034,9 @@ class $$AppSettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get themeMode =>
+      $composableBuilder(column: $table.themeMode, builder: (column) => column);
+
   GeneratedColumn<bool> get onboarded =>
       $composableBuilder(column: $table.onboarded, builder: (column) => column);
 }
@@ -11013,6 +11079,7 @@ class $$AppSettingsTableTableManager
                 Value<String> fixedChargeDistribution = const Value.absent(),
                 Value<String> billingCalcMode = const Value.absent(),
                 Value<String> languageCode = const Value.absent(),
+                Value<String> themeMode = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
               }) => AppSettingsCompanion(
                 id: id,
@@ -11022,6 +11089,7 @@ class $$AppSettingsTableTableManager
                 fixedChargeDistribution: fixedChargeDistribution,
                 billingCalcMode: billingCalcMode,
                 languageCode: languageCode,
+                themeMode: themeMode,
                 onboarded: onboarded,
               ),
           createCompanionCallback:
@@ -11033,6 +11101,7 @@ class $$AppSettingsTableTableManager
                 Value<String> fixedChargeDistribution = const Value.absent(),
                 Value<String> billingCalcMode = const Value.absent(),
                 Value<String> languageCode = const Value.absent(),
+                Value<String> themeMode = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 id: id,
@@ -11042,6 +11111,7 @@ class $$AppSettingsTableTableManager
                 fixedChargeDistribution: fixedChargeDistribution,
                 billingCalcMode: billingCalcMode,
                 languageCode: languageCode,
+                themeMode: themeMode,
                 onboarded: onboarded,
               ),
           withReferenceMapper: (p0) => p0

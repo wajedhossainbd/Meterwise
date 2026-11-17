@@ -96,6 +96,10 @@ class AppDatabase extends _$AppDatabase {
             // keeps existing users' billing behavior unchanged).
             await m.addColumn(appSettings, appSettings.billingCalcMode);
           }
+          if (from < 9) {
+            // Persisted theme choice; 'system' preserves the old behaviour.
+            await m.addColumn(appSettings, appSettings.themeMode);
+          }
         },
         beforeOpen: (details) async {
           // Enforce foreign-key constraints (off by default in SQLite).

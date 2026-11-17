@@ -94,7 +94,11 @@ class SettingsScreen extends ConsumerWidget {
           RadioGroup<ThemeMode>(
             groupValue: themeMode,
             onChanged: (m) {
-              if (m != null) themeController.setThemeMode(m);
+              if (m == null) return;
+              themeController.setThemeMode(m);
+              ref
+                  .read(settingsRepositoryProvider)
+                  .update(themeMode: themeModeToStorage(m));
             },
             child: Column(
               children: [

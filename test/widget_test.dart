@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:meterwise/core/theme/theme_controller.dart';
 import 'package:meterwise/core/widgets/feature_placeholder.dart';
 import 'package:meterwise/core/widgets/section_card.dart';
 import 'package:meterwise/features/dashboard/presentation/widgets/stat_card.dart';
@@ -44,5 +45,12 @@ void main() {
 
     expect(find.text('Total'), findsOneWidget);
     expect(find.text('৳500'), findsOneWidget);
+  });
+
+  test('theme mode round-trips through its persisted form', () {
+    for (final mode in ThemeMode.values) {
+      expect(themeModeFromStorage(themeModeToStorage(mode)), mode);
+    }
+    expect(themeModeFromStorage('unknown-old-value'), ThemeMode.system);
   });
 }

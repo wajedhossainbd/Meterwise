@@ -8,30 +8,27 @@ part of 'theme_controller.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Holds the user's selected [ThemeMode].
+/// Holds the user's selected [ThemeMode] for the running session.
 ///
-/// Kept intentionally simple for Phase 1 (in-memory only). Phase 5 / Settings
-/// will persist this to local storage and hydrate it on startup; because the UI
-/// only ever reads/writes through this controller, that change will not touch
-/// any widget code.
+/// `main()` hydrates this from `AppSettings.themeMode` at startup and the
+/// Settings screen writes every change back, so the in-memory state is simply
+/// the live mirror of the persisted preference. No widget reads storage directly.
 
 @ProviderFor(ThemeModeController)
 final themeModeControllerProvider = ThemeModeControllerProvider._();
 
-/// Holds the user's selected [ThemeMode].
+/// Holds the user's selected [ThemeMode] for the running session.
 ///
-/// Kept intentionally simple for Phase 1 (in-memory only). Phase 5 / Settings
-/// will persist this to local storage and hydrate it on startup; because the UI
-/// only ever reads/writes through this controller, that change will not touch
-/// any widget code.
+/// `main()` hydrates this from `AppSettings.themeMode` at startup and the
+/// Settings screen writes every change back, so the in-memory state is simply
+/// the live mirror of the persisted preference. No widget reads storage directly.
 final class ThemeModeControllerProvider
     extends $NotifierProvider<ThemeModeController, ThemeMode> {
-  /// Holds the user's selected [ThemeMode].
+  /// Holds the user's selected [ThemeMode] for the running session.
   ///
-  /// Kept intentionally simple for Phase 1 (in-memory only). Phase 5 / Settings
-  /// will persist this to local storage and hydrate it on startup; because the UI
-  /// only ever reads/writes through this controller, that change will not touch
-  /// any widget code.
+  /// `main()` hydrates this from `AppSettings.themeMode` at startup and the
+  /// Settings screen writes every change back, so the in-memory state is simply
+  /// the live mirror of the persisted preference. No widget reads storage directly.
   ThemeModeControllerProvider._()
     : super(
         from: null,
@@ -62,12 +59,11 @@ final class ThemeModeControllerProvider
 String _$themeModeControllerHash() =>
     r'2af83a4e290dae323a22d1a5727ca50f70886b5b';
 
-/// Holds the user's selected [ThemeMode].
+/// Holds the user's selected [ThemeMode] for the running session.
 ///
-/// Kept intentionally simple for Phase 1 (in-memory only). Phase 5 / Settings
-/// will persist this to local storage and hydrate it on startup; because the UI
-/// only ever reads/writes through this controller, that change will not touch
-/// any widget code.
+/// `main()` hydrates this from `AppSettings.themeMode` at startup and the
+/// Settings screen writes every change back, so the in-memory state is simply
+/// the live mirror of the persisted preference. No widget reads storage directly.
 
 abstract class _$ThemeModeController extends $Notifier<ThemeMode> {
   ThemeMode build();

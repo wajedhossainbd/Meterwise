@@ -50,6 +50,7 @@ void main() {
     raw.execute(
         'ALTER TABLE app_settings DROP COLUMN fixed_charge_distribution');
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
     raw.execute('PRAGMA user_version = 3');
 
     // 3. Re-open: drift runs onUpgrade(3 → 4), recreating the new tables.
@@ -107,6 +108,7 @@ void main() {
     raw.execute(
         'ALTER TABLE app_settings DROP COLUMN fixed_charge_distribution');
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
     raw.execute(
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, language_code, onboarded) '
         "VALUES (1, 1, 1, 9.5, 'en', 1)");
@@ -159,6 +161,7 @@ void main() {
     raw.execute(
         'ALTER TABLE app_settings DROP COLUMN fixed_charge_distribution');
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
     raw.execute('PRAGMA user_version = 4');
 
     final upgraded = AppDatabase.forTesting(
@@ -171,6 +174,36 @@ void main() {
     expect(versions.first.archived, isFalse); // new column, default value
     // Resolution still works after the upgrade.
     expect((await repo.tariffForDate(DateTime(2026, 1, 1))).demandCharge, 84);
+
+    await upgraded.close();
+    raw.close();
+  });
+
+  test('v8 → v9 migration adds persisted theme mode with the default', () async {
+    final raw = sqlite3.openInMemory();
+
+    final v9 = AppDatabase.forTesting(
+      NativeDatabase.opened(raw, closeUnderlyingOnClose: false),
+    );
+    await v9.into(v9.properties).insert(
+          PropertiesCompanion.insert(name: 'P'),
+        );
+    await v9.close();
+
+    raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
+    raw.execute(
+        'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
+        'language_code, onboarded, fixed_charge_distribution, billing_calc_mode) '
+        "VALUES (1, 1, 0, 8, 'en', 1, 'equal', 'sharedSlab')");
+    raw.execute('PRAGMA user_version = 8');
+
+    final upgraded = AppDatabase.forTesting(
+      NativeDatabase.opened(raw, closeUnderlyingOnClose: false),
+    );
+
+    final settings = await upgraded.select(upgraded.appSettings).getSingle();
+    expect(settings.themeMode, 'system');
+    expect((await upgraded.select(upgraded.properties).getSingle()).name, 'P');
 
     await upgraded.close();
     raw.close();

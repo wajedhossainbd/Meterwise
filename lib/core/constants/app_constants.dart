@@ -27,7 +27,8 @@ class AppConstants {
   ///     setting (legacy global fixed rate migrated to tenants).
   /// v8: property-level billing calculation mode (sharedSlab | reconciled |
   ///     fixedRate).
-  static const int databaseSchemaVersion = 8;
+  /// v9: persisted theme mode (AppSettings.themeMode).
+  static const int databaseSchemaVersion = 9;
 
   /// Fallback currency used when a property does not specify one.
   static const String defaultCurrencyCode = 'BDT';

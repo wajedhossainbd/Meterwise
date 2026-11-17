@@ -157,7 +157,7 @@ final class PeriodViewProvider
   }
 }
 
-String _$periodViewHash() => r'00343aa4a1b7bd892338e013adaf22bcfa6b2b8c';
+String _$periodViewHash() => r'cbafd6b639e7cf5e74501365aed82d20a844fc21';
 
 @ProviderFor(billingMonthData)
 final billingMonthDataProvider = BillingMonthDataProvider._();
@@ -307,7 +307,7 @@ final class MonthlyHistoryProvider
   }
 }
 
-String _$monthlyHistoryHash() => r'5c92172bf60c09734aa9914887062b4bb7e2cd52';
+String _$monthlyHistoryHash() => r'b0e1b86146d0f766fdddbe6e0b3d9cda74124c13';
 
 /// Last [count] months of headline figures (oldest first) for the charts.
 /// Finalized months use their snapshot; drafts compute live.

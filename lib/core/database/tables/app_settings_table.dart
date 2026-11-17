@@ -36,6 +36,12 @@ class AppSettings extends Table {
   TextColumn get languageCode =>
       text().withLength(max: 5).withDefault(const Constant('en'))();
 
+  /// Selected theme mode: 'system' | 'light' | 'dark'.
+  ///
+  /// Persisted so a choice made in Settings survives a restart (v9).
+  TextColumn get themeMode =>
+      text().withLength(max: 10).withDefault(const Constant('system'))();
+
   /// Marks that the first-run setup wizard has been completed.
   BoolColumn get onboarded => boolean().withDefault(const Constant(false))();
 

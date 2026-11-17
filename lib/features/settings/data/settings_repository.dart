@@ -40,6 +40,7 @@ class SettingsRepository {
     bool? onboarded,
     String? fixedChargeDistribution,
     String? billingCalcMode,
+    String? themeMode,
   }) async {
     await _ensureRow();
     await (_db.update(_db.appSettings)..where((t) => t.id.equals(1))).write(
@@ -59,6 +60,7 @@ class SettingsRepository {
         billingCalcMode: billingCalcMode == null
             ? const Value.absent()
             : Value(billingCalcMode),
+        themeMode: themeMode == null ? const Value.absent() : Value(themeMode),
       ),
     );
   }
