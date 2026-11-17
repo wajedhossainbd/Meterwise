@@ -1069,4 +1069,105 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get invoiceAmountDue => 'বকেয়া পরিমাণ';
+
+  @override
+  String billsCreditAmount(Object amount) {
+    return 'ক্রেডিট $amount';
+  }
+
+  @override
+  String billsDueAmount(Object amount) {
+    return 'বকেয়া $amount';
+  }
+
+  @override
+  String billsRecharged(Object amount) {
+    return 'রিচার্জ $amount';
+  }
+
+  @override
+  String get chartUnitsPerMonth => 'প্রতি মাসে ইউনিট (kWh)';
+
+  @override
+  String chartAmountPerMonth(Object symbol) {
+    return 'প্রতি মাসে অর্থ ($symbol)';
+  }
+
+  @override
+  String tenantOpenFailed(Object scheme) {
+    return '$scheme খোলা যায়নি';
+  }
+
+  @override
+  String get validationRequired => 'আবশ্যক';
+
+  @override
+  String get validationInteger => 'পূর্ণসংখ্যা লিখুন';
+
+  @override
+  String get validationNumber => 'সঠিক সংখ্যা লিখুন';
+
+  @override
+  String get validateNoProperty => 'এখনো কোনো প্রপার্টি সেট করা হয়নি।';
+
+  @override
+  String get validateNoMeter => 'এখনো কোনো প্রধান মিটার সেট করা হয়নি।';
+
+  @override
+  String get validateNoClosingReading =>
+      'এই মাসের জন্য কোনো ক্লোজিং মিটার রিডিং নেই।';
+
+  @override
+  String get validateDuplicateReading =>
+      'একই তারিখে প্রধান মিটারের একাধিক রিডিং আছে।';
+
+  @override
+  String get validateNoOpeningReading =>
+      'এই মাসের আগে কোনো ওপেনিং রিডিং পাওয়া যায়নি — আগের মাসে একটি বেসলাইন রিডিং দিন।';
+
+  @override
+  String validateClosingNotGreater(Object closing, Object opening) {
+    return 'ক্লোজিং রিডিং ($closing) অবশ্যই ওপেনিং রিডিং ($opening) এর চেয়ে বেশি হতে হবে।';
+  }
+
+  @override
+  String validateTenantLowerReading(Object tenant) {
+    return 'ভাড়াটে \"$tenant\": ক্লোজিং রিডিং আগের রিডিংয়ের চেয়ে কম।';
+  }
+
+  @override
+  String get validateRechargeAmount =>
+      'এই মাসের একটি রিচার্জের অর্থ শূন্য বা ঋণাত্মক।';
+
+  @override
+  String validateFixedRateMissing(Object tenant) {
+    return 'ভাড়াটে \"$tenant\" ফিক্সড রেটে আছেন কিন্তু প্রতি ইউনিট মূল্য নেই। ভাড়াটে সম্পাদনা করে মূল্য সেট করুন।';
+  }
+
+  @override
+  String get validateBillCompute => 'এই মাসের বিল গণনা করা যায়নি।';
+
+  @override
+  String get invoiceTitle => 'বিদ্যুৎ বিল';
+
+  @override
+  String get invoiceDraftBanner => 'খসড়া';
+
+  @override
+  String get invoiceStatus => 'অবস্থা';
+
+  @override
+  String get invoiceProvider => 'বিদ্যুৎ সরবরাহকারী';
+
+  @override
+  String get invoiceTariff => 'ট্যারিফ';
+
+  @override
+  String get invoiceGenerated => 'তৈরি হয়েছে';
+
+  @override
+  String get invoiceBilledTo => 'বিল প্রাপক';
+
+  @override
+  String get invoiceFooter => 'MeterWise দ্বারা তৈরি';
 }

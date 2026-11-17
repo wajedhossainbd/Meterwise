@@ -99,7 +99,8 @@ class _TenantCard extends ConsumerWidget {
     final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!ok && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not open ${uri.scheme}')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context).tenantOpenFailed(uri.scheme))),
       );
     }
   }

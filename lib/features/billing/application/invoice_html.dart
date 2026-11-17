@@ -135,26 +135,26 @@ class InvoiceHtml {
   <div class="banner">
     <div class="logo">M</div>
     <div class="app"><b>${_esc(AppConstants.appName)}</b>
-      <span>Electricity Invoice</span></div>
+      <span>${_esc(l.invoiceTitle)}</span></div>
     <div class="prop"><b>${_esc(meta.propertyName)}</b>
       ${meta.propertyAddress != null && meta.propertyAddress!.isNotEmpty ? '<span class="addr">${_esc(meta.propertyAddress!)}</span><br>' : ''}
       <span class="month">${_esc(monthLabel)}</span></div>
   </div>
 
-  ${meta.finalized ? '' : '<div class="draft">DRAFT — ${_esc(l.statusDraft)}</div>'}
+  ${meta.finalized ? '' : '<div class="draft">${_esc(l.invoiceDraftBanner)} — ${_esc(l.statusDraft)}</div>'}
 
   <div class="chips">
-    ${chip('Status', meta.finalized ? l.statusFinalized : l.statusDraft, meta.finalized ? '#2E9E5B' : '#8A6D00')}
-    ${meta.providerName != null ? chip('Provider', meta.providerName!) : ''}
-    ${meta.tariffVersionLabel != null ? chip('Tariff', meta.tariffVersionLabel!) : ''}
+    ${chip(l.invoiceStatus, meta.finalized ? l.statusFinalized : l.statusDraft, meta.finalized ? '#2E9E5B' : '#8A6D00')}
+    ${meta.providerName != null ? chip(l.invoiceProvider, meta.providerName!) : ''}
+    ${meta.tariffVersionLabel != null ? chip(l.invoiceTariff, meta.tariffVersionLabel!) : ''}
     ${chip(l.invoiceBillingMode, meta.billingMethodLabel)}
-    ${chip('Generated', Formatters.date(DateTime.now()))}
+    ${chip(l.invoiceGenerated, Formatters.date(DateTime.now()))}
     ${meta.finalizedAt != null ? chip(l.statusFinalized, Formatters.date(meta.finalizedAt!)) : ''}
   </div>
 
   <div class="billed">
     <div class="who">
-      <div class="cap">BILLED TO</div>
+      <div class="cap">${_esc(l.invoiceBilledTo)}</div>
       <b>${_esc(bill.tenantName)}</b>
       ${meta.tenantPhone != null && meta.tenantPhone!.isNotEmpty ? '<span class="ph">${_esc(meta.tenantPhone!)}</span>' : ''}
     </div>
@@ -219,7 +219,7 @@ class InvoiceHtml {
     <div class="qr">QR</div>
     <div class="sig"><div class="line"></div>${_esc(l.invoiceSignature)}</div>
   </div>
-  <div class="gen">${_esc(AppConstants.defaultPdfFooter)}</div>
+  <div class="gen">${_esc(l.invoiceFooter)}</div>
 </body>
 </html>''';
   }

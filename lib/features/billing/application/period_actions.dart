@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/utils/formatters.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../main_meter/data/main_meter_repository.dart';
 import '../../properties/data/property_repository.dart';
 import '../../readings/data/reading_repository.dart';
@@ -23,16 +24,16 @@ class PeriodActions {
 
   /// Returns a list of human-readable problems blocking finalization. Empty
   /// means the month is ready to finalize.
-  Future<List<String>> validate() async {
+  Future<List<String>> validate(AppLocalizations l) async {
     final errors = <String>[];
     final month = _ref.read(billingMonthProvider);
     final start = DateTime(month.year, month.month, 1);
     final end = DateTime(month.year, month.month + 1, 1);
 
     final property = await _ref.read(currentPropertyProvider.future);
-    if (property == null) return ['No property has been set up yet.'];
+    if (property == null) return [l.validateNoProperty];
     final mainMeter = await _ref.read(currentMainMeterProvider.future);
-    if (mainMeter == null) return ['No main meter has been set up yet.'];
+    if (mainMeter == null) return [l.validateNoMeter];
 
     final readings = await _ref.read(readingListProvider.future);
     final recharges = await _ref.read(rechargeListProvider.future);
@@ -47,12 +48,12 @@ class PeriodActions {
       ..sort((a, b) => a.readingDate.compareTo(b.readingDate));
 
     if (mainInMonth.isEmpty) {
-      errors.add('No closing meter reading recorded for this month.');
+      errors.add(l.validateNoClosingReading);
     } else {
       // Duplicate readings (same date twice).
       final dates = mainInMonth.map((r) => r.readingDate).toList();
       if (dates.toSet().length != dates.length) {
-        errors.add('Duplicate main-meter readings on the same date.');
+        errors.add(l.validateDuplicateReading);
       }
 
       final closing = mainInMonth.last;
@@ -64,14 +65,12 @@ class PeriodActions {
         ..sort((a, b) => a.readingDate.compareTo(b.readingDate));
 
       if (beforeClosing.isEmpty) {
-        errors.add(
-            'No opening reading found before this month — record a baseline '
-            'reading in a prior month first.');
+        errors.add(l.validateNoOpeningReading);
       } else if (closing.readingValue <= beforeClosing.last.readingValue) {
-        errors.add(
-            'Closing reading (${Formatters.units(closing.readingValue)}) must '
-            'be greater than the opening reading '
-            '(${Formatters.units(beforeClosing.last.readingValue)}).');
+        errors.add(l.validateClosingNotGreater(
+          Formatters.units(closing.readingValue),
+          Formatters.units(beforeClosing.last.readingValue),
+        ));
       }
     }
 
@@ -91,9 +90,7 @@ class PeriodActions {
           ..sort((a, b) => a.readingDate.compareTo(b.readingDate));
         if (before.isNotEmpty &&
             closing.readingValue < before.last.readingValue) {
-          errors.add(
-              'Tenant "${t.name}": closing reading is lower than the previous '
-              'reading.');
+          errors.add(l.validateTenantLowerReading(t.name));
         }
       }
     }
@@ -101,7 +98,7 @@ class PeriodActions {
     final monthRecharges = recharges.where(
         (r) => r.mainMeterId == mainMeter.id && inMonth(r.rechargeDate));
     if (monthRecharges.any((r) => r.amount <= 0)) {
-      errors.add('A recharge in this month has a zero or negative amount.');
+      errors.add(l.validateRechargeAmount);
     }
 
     // Fixed-rate tenants must actually have a rate.
@@ -109,9 +106,7 @@ class PeriodActions {
       for (final t in tenants) {
         if (t.billingMode == 'fixed' &&
             (t.fixedRate == null || t.fixedRate! <= 0)) {
-          errors.add(
-              'Tenant "${t.name}" is on a fixed unit rate but has no per-unit '
-              'price set. Edit the tenant to set it.');
+          errors.add(l.validateFixedRateMissing(t.name));
         }
       }
     }
@@ -119,21 +114,21 @@ class PeriodActions {
     // Calculation must succeed.
     final view = await _ref.read(periodViewProvider.future);
     if (view.bill == null && errors.isEmpty) {
-      errors.add('Could not compute a bill for this month.');
+      errors.add(l.validateBillCompute);
     }
 
     return errors;
   }
 
   /// Validates then finalizes. Returns blocking errors (empty ⇒ finalized).
-  Future<List<String>> finalize() async {
-    final errors = await validate();
+  Future<List<String>> finalize(AppLocalizations l) async {
+    final errors = await validate(l);
     if (errors.isNotEmpty) return errors;
 
     final month = _ref.read(billingMonthProvider);
     final property = (await _ref.read(currentPropertyProvider.future))!;
     final view = await _ref.read(periodViewProvider.future);
-    if (view.bill == null) return ['Could not compute a bill for this month.'];
+    if (view.bill == null) return [l.validateBillCompute];
 
     final periodRepo = _ref.read(billingPeriodRepositoryProvider);
     final period =

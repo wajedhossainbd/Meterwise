@@ -714,8 +714,9 @@ class _TrendCardState extends ConsumerState<_TrendCard> {
             const SizedBox(height: 4),
             Text(
               _series == _Series.usage
-                  ? 'Units (kWh) per month'
-                  : 'Amount (${Formatters.currencySymbol(currency).trim()}) per month',
+                  ? l.chartUnitsPerMonth
+                  : l.chartAmountPerMonth(
+                      Formatters.currencySymbol(currency).trim()),
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],

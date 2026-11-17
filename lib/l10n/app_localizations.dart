@@ -2083,6 +2083,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Amount due'**
   String get invoiceAmountDue;
+
+  /// No description provided for @billsCreditAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit {amount}'**
+  String billsCreditAmount(Object amount);
+
+  /// No description provided for @billsDueAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Due {amount}'**
+  String billsDueAmount(Object amount);
+
+  /// No description provided for @billsRecharged.
+  ///
+  /// In en, this message translates to:
+  /// **'Recharged {amount}'**
+  String billsRecharged(Object amount);
+
+  /// No description provided for @chartUnitsPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Units (kWh) per month'**
+  String get chartUnitsPerMonth;
+
+  /// No description provided for @chartAmountPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount ({symbol}) per month'**
+  String chartAmountPerMonth(Object symbol);
+
+  /// No description provided for @tenantOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open {scheme}'**
+  String tenantOpenFailed(Object scheme);
+
+  /// No description provided for @validationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get validationRequired;
+
+  /// No description provided for @validationInteger.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a whole number'**
+  String get validationInteger;
+
+  /// No description provided for @validationNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid number'**
+  String get validationNumber;
+
+  /// No description provided for @validateNoProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'No property has been set up yet.'**
+  String get validateNoProperty;
+
+  /// No description provided for @validateNoMeter.
+  ///
+  /// In en, this message translates to:
+  /// **'No main meter has been set up yet.'**
+  String get validateNoMeter;
+
+  /// No description provided for @validateNoClosingReading.
+  ///
+  /// In en, this message translates to:
+  /// **'No closing meter reading recorded for this month.'**
+  String get validateNoClosingReading;
+
+  /// No description provided for @validateDuplicateReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate main-meter readings on the same date.'**
+  String get validateDuplicateReading;
+
+  /// No description provided for @validateNoOpeningReading.
+  ///
+  /// In en, this message translates to:
+  /// **'No opening reading found before this month — record a baseline reading in a prior month first.'**
+  String get validateNoOpeningReading;
+
+  /// No description provided for @validateClosingNotGreater.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing reading ({closing}) must be greater than the opening reading ({opening}).'**
+  String validateClosingNotGreater(Object closing, Object opening);
+
+  /// No description provided for @validateTenantLowerReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Tenant \"{tenant}\": closing reading is lower than the previous reading.'**
+  String validateTenantLowerReading(Object tenant);
+
+  /// No description provided for @validateRechargeAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'A recharge in this month has a zero or negative amount.'**
+  String get validateRechargeAmount;
+
+  /// No description provided for @validateFixedRateMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Tenant \"{tenant}\" is on a fixed unit rate but has no per-unit price set. Edit the tenant to set it.'**
+  String validateFixedRateMissing(Object tenant);
+
+  /// No description provided for @validateBillCompute.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not compute a bill for this month.'**
+  String get validateBillCompute;
+
+  /// No description provided for @invoiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Electricity Invoice'**
+  String get invoiceTitle;
+
+  /// No description provided for @invoiceDraftBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'DRAFT'**
+  String get invoiceDraftBanner;
+
+  /// No description provided for @invoiceStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get invoiceStatus;
+
+  /// No description provided for @invoiceProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Provider'**
+  String get invoiceProvider;
+
+  /// No description provided for @invoiceTariff.
+  ///
+  /// In en, this message translates to:
+  /// **'Tariff'**
+  String get invoiceTariff;
+
+  /// No description provided for @invoiceGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated'**
+  String get invoiceGenerated;
+
+  /// No description provided for @invoiceBilledTo.
+  ///
+  /// In en, this message translates to:
+  /// **'BILLED TO'**
+  String get invoiceBilledTo;
+
+  /// No description provided for @invoiceFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated by MeterWise'**
+  String get invoiceFooter;
 }
 
 class _AppLocalizationsDelegate

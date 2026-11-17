@@ -55,6 +55,10 @@ void main() {
     expect(html, contains('রহমান ভিলা')); // property
     expect(html, contains(l.invoiceCharges)); // bn label from ARB
     expect(html, contains(l.invoiceCarryForward)); // in credit → carry forward
+    expect(html, contains(l.invoiceTitle)); // localized invoice title
+    expect(html, contains(l.invoiceBilledTo)); // localized section captions
+    expect(html, contains(l.invoiceFooter));
+    expect(html, isNot(contains('Electricity Invoice'))); // no English title
     expect(html, contains('Noto Sans Bengali')); // shaping-capable font stack
     expect(html, contains('204')); // figures present
     expect(html, isNot(contains('DRAFT —'))); // finalized: no draft banner

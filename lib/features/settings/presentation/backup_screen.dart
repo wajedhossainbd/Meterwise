@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -32,8 +33,9 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
           text: 'MeterWise backup',
         ),
       );
-    } catch (e) {
-      _snack(l.backupFailed('$e'));
+    } catch (e, stack) {
+      developer.log('Backup failed', name: 'MeterWise', error: e, stackTrace: stack);
+      _snack(l.backupFailed(l.commonSomethingWrong));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -42,7 +44,9 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
   Future<void> _restore() async {
     final l = AppLocalizations.of(context);
     final picked = await FilePicker.platform.pickFiles(type: FileType.any);
-    final path = picked?.files.single.path;
+    final path = (picked == null || picked.files.isEmpty)
+        ? null
+        : picked.files.first.path;
     if (path == null) return;
     if (!path.toLowerCase().endsWith('.zip')) {
       _snack(l.backupChooseZip);
@@ -88,8 +92,9 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
           ],
         ),
       );
-    } catch (e) {
-      _snack(l.backupRestoreFailed('$e'));
+    } catch (e, stack) {
+      developer.log('Restore failed', name: 'MeterWise', error: e, stackTrace: stack);
+      _snack(l.backupRestoreFailed(l.commonSomethingWrong));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

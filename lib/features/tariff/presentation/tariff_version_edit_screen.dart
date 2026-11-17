@@ -313,13 +313,14 @@ class _TariffVersionEditScreenState
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Expanded(child: _slabCell(row.from, l.tariffSlabFrom, isInt: true)),
+          Expanded(
+              child: _slabCell(row.from, l.tariffSlabFrom, l: l, isInt: true)),
           const SizedBox(width: 8),
           Expanded(
               child: _slabCell(row.to, l.tariffSlabTo,
-                  isInt: true, optional: true)),
+                  l: l, isInt: true, optional: true)),
           const SizedBox(width: 8),
-          Expanded(child: _slabCell(row.rate, l.tariffSlabRate)),
+          Expanded(child: _slabCell(row.rate, l.tariffSlabRate, l: l)),
           IconButton(
             onPressed: _slabs.length > 1 ? () => _removeSlab(i) : null,
             icon: const Icon(Icons.remove_circle_outline),
@@ -331,7 +332,7 @@ class _TariffVersionEditScreenState
   }
 
   Widget _slabCell(TextEditingController c, String hint,
-      {bool isInt = false, bool optional = false}) {
+      {required AppLocalizations l, bool isInt = false, bool optional = false}) {
     return TextFormField(
       controller: c,
       keyboardType: TextInputType.numberWithOptions(decimal: !isInt),
@@ -347,9 +348,9 @@ class _TariffVersionEditScreenState
       ),
       validator: (v) {
         if (optional && (v == null || v.trim().isEmpty)) return null;
-        if (v == null || v.trim().isEmpty) return '!';
-        if (isInt && int.tryParse(v.trim()) == null) return '!';
-        if (!isInt && double.tryParse(v.trim()) == null) return '!';
+        if (v == null || v.trim().isEmpty) return l.validationRequired;
+        if (isInt && int.tryParse(v.trim()) == null) return l.validationInteger;
+        if (!isInt && double.tryParse(v.trim()) == null) return l.validationNumber;
         return null;
       },
     );

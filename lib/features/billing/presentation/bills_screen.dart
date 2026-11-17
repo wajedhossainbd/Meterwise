@@ -172,10 +172,10 @@ class _PeriodHeaderState extends ConsumerState<_PeriodHeader> {
 
   Future<void> _finalize() async {
     setState(() => _busy = true);
-    final errors = await ref.read(periodActionsProvider).finalize();
+    final l = AppLocalizations.of(context);
+    final errors = await ref.read(periodActionsProvider).finalize(l);
     if (!mounted) return;
     setState(() => _busy = false);
-    final l = AppLocalizations.of(context);
     if (errors.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l.periodFinalizedToast)),
@@ -351,12 +351,12 @@ class _TenantBillCard extends ConsumerWidget {
       statusLabel = l.billsPaid;
     } else if (isCredit) {
       statusColor = AppColors.credit;
-      statusLabel =
-          'Credit ${Formatters.money(bill.balance.abs(), currencyCode: currency)}';
+      statusLabel = l.billsCreditAmount(
+          Formatters.money(bill.balance.abs(), currencyCode: currency));
     } else {
       statusColor = AppColors.due;
-      statusLabel =
-          'Due ${Formatters.money(bill.balance.abs(), currencyCode: currency)}';
+      statusLabel = l.billsDueAmount(
+          Formatters.money(bill.balance.abs(), currencyCode: currency));
     }
 
     return Card(
@@ -405,7 +405,7 @@ class _TenantBillCard extends ConsumerWidget {
               const SizedBox(height: 4),
               Text(
                 '${Formatters.units(bill.billedUnits)} kWh • '
-                'paid ${Formatters.money(bill.rechargePaid, currencyCode: currency)}',
+                '${l.billsRecharged(Formatters.money(bill.rechargePaid, currencyCode: currency))}',
                 style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant),
               ),
