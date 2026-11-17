@@ -81,11 +81,28 @@ flutter gen-l10n                     # after editing l10n/app_*.arb
 Release APKs are copied to `archive/apks/` (kept on disk, git-ignored).
 Before installing an upgrade on a device, back up from Settings → Backup.
 
+## Release signing
+
+Local release builds fall back to the debug key. For a Play Store upload, create
+`android/key.properties` (git-ignored) and put the keystore in `android/app/`:
+
+```
+storeFile=app/upload-keystore.jks
+storePassword=<password>
+keyAlias=upload
+keyPassword=<password>
+```
+
+Gradle picks it up automatically; without the file, local builds still work.
+
 ## Status
 
-- Version **2.3.0+11**, database schema **v8**
-- `flutter analyze`: clean · `flutter test`: **53 tests passing**
-- Android only; release signing is still the debug key (set up a real keystore before Play Store)
+- Version **3.0.0+12**, database schema **v10**
+- `flutter analyze`: clean · `flutter test`: **58 tests passing**
+- Android only. Release signing uses the debug key unless `android/key.properties` is present.
+- Invoice language is configurable (auto / English / Bangla); a device with a broken
+  HTML→PDF converter shows a visible notice and offers a retry instead of silently
+  switching to English.
 - Google Drive sync is an acknowledged "coming soon" stub; local backup/restore works
 
 This project is not published to pub.dev.

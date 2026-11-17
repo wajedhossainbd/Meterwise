@@ -9,6 +9,9 @@ class AppConstants {
   /// Public-facing application name. Used in titles, PDF footers, etc.
   static const String appName = 'MeterWise';
 
+  /// User-facing version. Keep in sync with `version:` in pubspec.yaml.
+  static const String appVersion = '3.0.0';
+
   /// Tagline shown on splash / about screens.
   static const String appTagline = 'Smart Multi-Tenant Electricity Billing';
 

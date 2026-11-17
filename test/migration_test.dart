@@ -182,6 +182,38 @@ void main() {
     raw.close();
   });
 
+  test('v7 → v8 migration adds billing calculation mode with the default',
+      () async {
+    final raw = sqlite3.openInMemory();
+
+    final v8 = AppDatabase.forTesting(
+      NativeDatabase.opened(raw, closeUnderlyingOnClose: false),
+    );
+    await v8.into(v8.properties).insert(
+          PropertiesCompanion.insert(name: 'P'),
+        );
+    await v8.close();
+
+    raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
+    raw.execute(
+        'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
+        'language_code, onboarded, fixed_charge_distribution) '
+        "VALUES (1, 1, 0, 8, 'en', 1, 'equal')");
+    raw.execute('PRAGMA user_version = 7');
+
+    final upgraded = AppDatabase.forTesting(
+      NativeDatabase.opened(raw, closeUnderlyingOnClose: false),
+    );
+
+    final settings = await upgraded.select(upgraded.appSettings).getSingle();
+    expect(settings.billingCalcMode, 'sharedSlab');
+
+    await upgraded.close();
+    raw.close();
+  });
+
   test('v8 → v9 migration adds persisted theme mode with the default', () async {
     final raw = sqlite3.openInMemory();
 

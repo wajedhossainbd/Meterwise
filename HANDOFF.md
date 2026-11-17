@@ -4,9 +4,9 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v2.3.0+11 · DB schema v8 · 53/53 tests green · `flutter analyze`
-> clean · latest release APK `archive/apks/MeterWise-v2.3.0-billing-modes.apk`.
-> Revamp baseline committed to git (`1ba118a`). Read [README.md](README.md) first.
+> **Last state:** v3.0.0+12 (revamp) · DB schema v10 · 58/58 tests green ·
+> `flutter analyze` clean. Git history holds the revamp phases; baseline `1ba118a`.
+> Read [README.md](README.md) first.
 
 ---
 
@@ -55,7 +55,8 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `2.3.0+11`).
+  Phase 0). Bump `version:` in pubspec first (currently `3.0.0+12`) **and**
+  `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
 - No device usually attached (`adb devices` empty) → deliver APK file; user
@@ -135,7 +136,7 @@ test/  # billing_engine_test, billing_periods_test, migration_test,
 
 ---
 
-## 4. Database schema (v7)
+## 4. Database schema (v10)
 
 All migrations are **additive** (createTable/addColumn only). Migration code in
 `app_database.dart onUpgrade`; version history in `app_constants.dart`.
@@ -159,7 +160,9 @@ All migrations are **additive** (createTable/addColumn only). Migration code in
 BillPayments · v4 TariffVersions+BillingPeriods · v5 archived (`if (from == 4)`
 — NOT `< 5`, because `from < 4`'s createTable already includes it) · v6
 Settlements · v7 tenant contracts + distribution + SQL migrating legacy global
-fixed-rate to per-tenant.
+fixed-rate to per-tenant. v8 property `billingCalcMode`. v9 `AppSettings.themeMode`
+(persisted appearance). v10 `AppSettings.invoiceLanguage` (auto/en/bn). All additive;
+migration tests cover v3/v4/v6/v7/v8/v9 upgrade paths.
 
 **Readings/recharges belong to a period BY DATE** (no FK): locking checks
 whether the date's month is finalized. Foreign keys ON via `beforeOpen` PRAGMA.
@@ -342,7 +345,7 @@ Android: `android/app/build.gradle.kts` → `compileSdk = 36` AND
 
 ---
 
-## 10. Testing status (53 tests)
+## 10. Testing status (58 tests)
 
 - `billing_engine_test.dart` — v2 semantics: spreadsheet golden columns (T1/T2
   exact), shared-ladder shares for N=1/2/3/4, mixed contracts (divisor counts
@@ -373,9 +376,9 @@ migration tests + additive-only migrations).
 | Item | Status |
 |---|---|
 | Google Drive backup sync | Stub ("coming soon"). Blocked on user's Google Cloud OAuth client + app SHA-1. Local zip backup/restore works. |
-| Release signing | Debug keys (Gradle template TODO). Needed before Play Store. |
+| Release signing | Optional `android/key.properties` + keystore; local builds still use debug keys. Add the real keystore before Play Store (see README). |
 | Settlement transaction list inside PDF | Not embedded; invoice shows settlement paid/received totals, full list lives in Settlements screen. |
-| WebView Bangla PDF | v2.2.1: convertHtml can HANG (plugin holds no WebView ref, no error path) → now guarded by 10s timeout + session skip-flag + progress dialog + error snackbar; falls back to English vector PDF. If Bangla invoices silently come out English on a device, its WebView converter is broken. |
+| WebView Bangla PDF | v3.0: convertHtml can HANG on some devices → 10s timeout + session skip-flag + visible fallback notice with Retry action + logged root cause. Invoice language is a persisted setting (auto/en/bn) so a broken device can stay on the English vector renderer. A native WebView-owned PDF channel remains a device-verification follow-up. |
 | In-order finalize | Not hard-enforced (carry-forward walks drafts correctly); could add strict ordering if user asks. |
 | User's on-device tariff version | May still carry lifeline-as-slab-row (see gotcha #12) — remind if math complaints resurface. |
 | iOS | Untouched (CocoaPods not installed; Android-only so far). |
@@ -397,6 +400,7 @@ migration tests + additive-only migrations).
 | 2.1.0–2.1.1 | Colorful interactive UI, charts/tooltips, splash, tour, vector-PDF redesign |
 | 2.2.0–2.2.1 | **Bangla-capable HTML invoices** (WebView) + launcher icon + splash fixes + share fix |
 | 2.3.0 | Property-level calculation modes (sharedSlab / reconciled / fixedRate), schema v8 |
+| 3.0.0 | Core-first revamp: persisted theme + invoice language, full en/bn coverage, working error Retry, finalized metadata freeze, dashboard split, quiet visual refresh (schema v10) |
 
 ---
 

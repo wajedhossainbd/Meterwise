@@ -200,7 +200,7 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           Center(
             child: Text(
-              '${AppConstants.appName} • v2.3.0',
+              '${AppConstants.appName} • v${AppConstants.appVersion}',
               style: theme.textTheme.bodySmall,
             ),
           ),
