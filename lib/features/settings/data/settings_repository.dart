@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:drift/drift.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,6 +44,11 @@ class SettingsRepository {
     String? billingCalcMode,
     String? themeMode,
     String? invoiceLanguage,
+    String? appRole,
+    String? meterCode,
+    String? joinedMeterCode,
+    String? tenantName,
+    bool? tenantApproved,
   }) async {
     await _ensureRow();
     await (_db.update(_db.appSettings)..where((t) => t.id.equals(1))).write(
@@ -65,9 +72,60 @@ class SettingsRepository {
         invoiceLanguage: invoiceLanguage == null
             ? const Value.absent()
             : Value(invoiceLanguage),
+        appRole: appRole == null ? const Value.absent() : Value(appRole),
+        meterCode: meterCode == null ? const Value.absent() : Value(meterCode),
+        joinedMeterCode: joinedMeterCode == null
+            ? const Value.absent()
+            : Value(joinedMeterCode),
+        tenantName:
+            tenantName == null ? const Value.absent() : Value(tenantName),
+        tenantApproved: tenantApproved == null
+            ? const Value.absent()
+            : Value(tenantApproved),
       ),
     );
   }
+
+  /// Returns the landlord's shareable meter code, generating one on first use.
+  /// Format `MW-XXXX-XXXX` — unambiguous to read aloud and QR-friendly.
+  Future<String> ensureMeterCode() async {
+    final current = await get();
+    if (current.meterCode != null && current.meterCode!.isNotEmpty) {
+      return current.meterCode!;
+    }
+    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    final random = Random();
+    String block(int length) => List.generate(
+          length,
+          (_) => alphabet[random.nextInt(alphabet.length)],
+        ).join();
+    final code = 'MW-${block(4)}-${block(4)}';
+    await update(meterCode: code);
+    return code;
+  }
+
+  /// Switch this install between landlord and tenant views (local prototype).
+  Future<void> setRole(String role) => update(appRole: role);
+
+  /// Tenant joins a meter by code and picks their name from the landlord's roster.
+  Future<void> joinMeter({required String code, required String name}) =>
+      update(
+        appRole: 'tenant',
+        joinedMeterCode: code.trim().toUpperCase(),
+        tenantName: name.trim(),
+        tenantApproved: false,
+      );
+
+  /// Landlord approves a pending tenant join.
+  Future<void> approveTenant() => update(tenantApproved: true);
+
+  /// Leave the joined meter and return to landlord mode.
+  Future<void> leaveMeter() => update(
+        appRole: 'landlord',
+        joinedMeterCode: null,
+        tenantName: null,
+        tenantApproved: false,
+      );
 }
 
 final settingsRepositoryProvider = Provider<SettingsRepository>(
@@ -82,6 +140,23 @@ final appSettingsProvider = StreamProvider<AppSetting?>(
 /// Convenience: are we in multi-tenant mode? Defaults to true while loading.
 final isMultiTenantProvider = Provider<bool>(
   (ref) => ref.watch(appSettingsProvider).value?.multiTenant ?? true,
+);
+
+/// 'landlord' or 'tenant' — scoped UI is chosen from this.
+final appRoleProvider = Provider<String>(
+  (ref) => ref.watch(appSettingsProvider).value?.appRole ?? 'landlord',
+);
+
+/// The tenant identity chosen after joining a meter.
+final tenantIdentityProvider = Provider<({String? code, String? name, bool approved})>(
+  (ref) {
+    final s = ref.watch(appSettingsProvider).value;
+    return (
+      code: s?.joinedMeterCode,
+      name: s?.tenantName,
+      approved: s?.tenantApproved ?? false,
+    );
+  },
 );
 
 /// Current app locale derived from the stored language code (defaults to en).

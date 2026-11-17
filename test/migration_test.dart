@@ -52,6 +52,11 @@ void main() {
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN app_role');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN joined_meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_name');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_approved');
     raw.execute('PRAGMA user_version = 3');
 
     // 3. Re-open: drift runs onUpgrade(3 → 4), recreating the new tables.
@@ -111,6 +116,11 @@ void main() {
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN app_role');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN joined_meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_name');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_approved');
     raw.execute(
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, language_code, onboarded) '
         "VALUES (1, 1, 1, 9.5, 'en', 1)");
@@ -165,6 +175,11 @@ void main() {
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN app_role');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN joined_meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_name');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_approved');
     raw.execute('PRAGMA user_version = 4');
 
     final upgraded = AppDatabase.forTesting(
@@ -197,6 +212,11 @@ void main() {
     raw.execute('ALTER TABLE app_settings DROP COLUMN billing_calc_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN app_role');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN joined_meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_name');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_approved');
     raw.execute(
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
         'language_code, onboarded, fixed_charge_distribution) '
@@ -227,6 +247,11 @@ void main() {
 
     raw.execute('ALTER TABLE app_settings DROP COLUMN theme_mode');
     raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN app_role');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN joined_meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_name');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_approved');
     raw.execute(
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
         'language_code, onboarded, fixed_charge_distribution, billing_calc_mode) '
@@ -258,6 +283,11 @@ void main() {
     await v10.close();
 
     raw.execute('ALTER TABLE app_settings DROP COLUMN invoice_language');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN app_role');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN joined_meter_code');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_name');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_approved');
     raw.execute(
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
         'language_code, onboarded, fixed_charge_distribution, billing_calc_mode, theme_mode) '
@@ -271,6 +301,49 @@ void main() {
     final settings = await upgraded.select(upgraded.appSettings).getSingle();
     expect(settings.invoiceLanguage, 'auto');
     expect(settings.themeMode, 'system');
+
+    await upgraded.close();
+    raw.close();
+  });
+
+  test('v10 → v11 migration adds tenant role fields with landlord defaults',
+      () async {
+    final raw = sqlite3.openInMemory();
+
+    final v11 = AppDatabase.forTesting(
+      NativeDatabase.opened(raw, closeUnderlyingOnClose: false),
+    );
+    await v11.into(v11.properties).insert(
+          PropertiesCompanion.insert(name: 'P'),
+        );
+    await v11.close();
+
+    for (final column in [
+      'app_role',
+      'meter_code',
+      'joined_meter_code',
+      'tenant_name',
+      'tenant_approved',
+    ]) {
+      raw.execute('ALTER TABLE app_settings DROP COLUMN $column');
+    }
+    raw.execute(
+        'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
+        'language_code, onboarded, fixed_charge_distribution, billing_calc_mode, '
+        'theme_mode, invoice_language) '
+        "VALUES (1, 1, 0, 8, 'en', 1, 'equal', 'sharedSlab', 'system', 'auto')");
+    raw.execute('PRAGMA user_version = 10');
+
+    final upgraded = AppDatabase.forTesting(
+      NativeDatabase.opened(raw, closeUnderlyingOnClose: false),
+    );
+
+    final settings = await upgraded.select(upgraded.appSettings).getSingle();
+    expect(settings.appRole, 'landlord');
+    expect(settings.meterCode, isNull);
+    expect(settings.joinedMeterCode, isNull);
+    expect(settings.tenantName, isNull);
+    expect(settings.tenantApproved, isFalse);
 
     await upgraded.close();
     raw.close();

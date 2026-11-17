@@ -4480,6 +4480,67 @@ class $AppSettingsTable extends AppSettings
     requiredDuringInsert: false,
     defaultValue: const Constant('auto'),
   );
+  static const VerificationMeta _appRoleMeta = const VerificationMeta(
+    'appRole',
+  );
+  @override
+  late final GeneratedColumn<String> appRole = GeneratedColumn<String>(
+    'app_role',
+    aliasedName,
+    false,
+    additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('landlord'),
+  );
+  static const VerificationMeta _meterCodeMeta = const VerificationMeta(
+    'meterCode',
+  );
+  @override
+  late final GeneratedColumn<String> meterCode = GeneratedColumn<String>(
+    'meter_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _joinedMeterCodeMeta = const VerificationMeta(
+    'joinedMeterCode',
+  );
+  @override
+  late final GeneratedColumn<String> joinedMeterCode = GeneratedColumn<String>(
+    'joined_meter_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _tenantNameMeta = const VerificationMeta(
+    'tenantName',
+  );
+  @override
+  late final GeneratedColumn<String> tenantName = GeneratedColumn<String>(
+    'tenant_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _tenantApprovedMeta = const VerificationMeta(
+    'tenantApproved',
+  );
+  @override
+  late final GeneratedColumn<bool> tenantApproved = GeneratedColumn<bool>(
+    'tenant_approved',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("tenant_approved" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   static const VerificationMeta _onboardedMeta = const VerificationMeta(
     'onboarded',
   );
@@ -4506,6 +4567,11 @@ class $AppSettingsTable extends AppSettings
     languageCode,
     themeMode,
     invoiceLanguage,
+    appRole,
+    meterCode,
+    joinedMeterCode,
+    tenantName,
+    tenantApproved,
     onboarded,
   ];
   @override
@@ -4589,6 +4655,42 @@ class $AppSettingsTable extends AppSettings
         ),
       );
     }
+    if (data.containsKey('app_role')) {
+      context.handle(
+        _appRoleMeta,
+        appRole.isAcceptableOrUnknown(data['app_role']!, _appRoleMeta),
+      );
+    }
+    if (data.containsKey('meter_code')) {
+      context.handle(
+        _meterCodeMeta,
+        meterCode.isAcceptableOrUnknown(data['meter_code']!, _meterCodeMeta),
+      );
+    }
+    if (data.containsKey('joined_meter_code')) {
+      context.handle(
+        _joinedMeterCodeMeta,
+        joinedMeterCode.isAcceptableOrUnknown(
+          data['joined_meter_code']!,
+          _joinedMeterCodeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('tenant_name')) {
+      context.handle(
+        _tenantNameMeta,
+        tenantName.isAcceptableOrUnknown(data['tenant_name']!, _tenantNameMeta),
+      );
+    }
+    if (data.containsKey('tenant_approved')) {
+      context.handle(
+        _tenantApprovedMeta,
+        tenantApproved.isAcceptableOrUnknown(
+          data['tenant_approved']!,
+          _tenantApprovedMeta,
+        ),
+      );
+    }
     if (data.containsKey('onboarded')) {
       context.handle(
         _onboardedMeta,
@@ -4639,6 +4741,26 @@ class $AppSettingsTable extends AppSettings
       invoiceLanguage: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}invoice_language'],
+      )!,
+      appRole: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}app_role'],
+      )!,
+      meterCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}meter_code'],
+      ),
+      joinedMeterCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}joined_meter_code'],
+      ),
+      tenantName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}tenant_name'],
+      ),
+      tenantApproved: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}tenant_approved'],
       )!,
       onboarded: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
@@ -4691,6 +4813,22 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
   /// English vector renderer without changing the app language (v10).
   final String invoiceLanguage;
 
+  /// Who is using this install: 'landlord' (manages the meter) or 'tenant'
+  /// (joined a meter with a code). Tenant mode is a scoped view of shared data.
+  final String appRole;
+
+  /// Short code generated by the landlord and shared via QR with tenants.
+  final String? meterCode;
+
+  /// The code a tenant joined with (null until joined).
+  final String? joinedMeterCode;
+
+  /// Which roster entry this tenant chose as their identity.
+  final String? tenantName;
+
+  /// Landlord's approval of a join request (v11).
+  final bool tenantApproved;
+
   /// Marks that the first-run setup wizard has been completed.
   final bool onboarded;
   const AppSetting({
@@ -4703,6 +4841,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     required this.languageCode,
     required this.themeMode,
     required this.invoiceLanguage,
+    required this.appRole,
+    this.meterCode,
+    this.joinedMeterCode,
+    this.tenantName,
+    required this.tenantApproved,
     required this.onboarded,
   });
   @override
@@ -4719,6 +4862,17 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     map['language_code'] = Variable<String>(languageCode);
     map['theme_mode'] = Variable<String>(themeMode);
     map['invoice_language'] = Variable<String>(invoiceLanguage);
+    map['app_role'] = Variable<String>(appRole);
+    if (!nullToAbsent || meterCode != null) {
+      map['meter_code'] = Variable<String>(meterCode);
+    }
+    if (!nullToAbsent || joinedMeterCode != null) {
+      map['joined_meter_code'] = Variable<String>(joinedMeterCode);
+    }
+    if (!nullToAbsent || tenantName != null) {
+      map['tenant_name'] = Variable<String>(tenantName);
+    }
+    map['tenant_approved'] = Variable<bool>(tenantApproved);
     map['onboarded'] = Variable<bool>(onboarded);
     return map;
   }
@@ -4734,6 +4888,17 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       languageCode: Value(languageCode),
       themeMode: Value(themeMode),
       invoiceLanguage: Value(invoiceLanguage),
+      appRole: Value(appRole),
+      meterCode: meterCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(meterCode),
+      joinedMeterCode: joinedMeterCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(joinedMeterCode),
+      tenantName: tenantName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tenantName),
+      tenantApproved: Value(tenantApproved),
       onboarded: Value(onboarded),
     );
   }
@@ -4755,6 +4920,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       languageCode: serializer.fromJson<String>(json['languageCode']),
       themeMode: serializer.fromJson<String>(json['themeMode']),
       invoiceLanguage: serializer.fromJson<String>(json['invoiceLanguage']),
+      appRole: serializer.fromJson<String>(json['appRole']),
+      meterCode: serializer.fromJson<String?>(json['meterCode']),
+      joinedMeterCode: serializer.fromJson<String?>(json['joinedMeterCode']),
+      tenantName: serializer.fromJson<String?>(json['tenantName']),
+      tenantApproved: serializer.fromJson<bool>(json['tenantApproved']),
       onboarded: serializer.fromJson<bool>(json['onboarded']),
     );
   }
@@ -4773,6 +4943,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       'languageCode': serializer.toJson<String>(languageCode),
       'themeMode': serializer.toJson<String>(themeMode),
       'invoiceLanguage': serializer.toJson<String>(invoiceLanguage),
+      'appRole': serializer.toJson<String>(appRole),
+      'meterCode': serializer.toJson<String?>(meterCode),
+      'joinedMeterCode': serializer.toJson<String?>(joinedMeterCode),
+      'tenantName': serializer.toJson<String?>(tenantName),
+      'tenantApproved': serializer.toJson<bool>(tenantApproved),
       'onboarded': serializer.toJson<bool>(onboarded),
     };
   }
@@ -4787,6 +4962,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     String? languageCode,
     String? themeMode,
     String? invoiceLanguage,
+    String? appRole,
+    Value<String?> meterCode = const Value.absent(),
+    Value<String?> joinedMeterCode = const Value.absent(),
+    Value<String?> tenantName = const Value.absent(),
+    bool? tenantApproved,
     bool? onboarded,
   }) => AppSetting(
     id: id ?? this.id,
@@ -4799,6 +4979,13 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     languageCode: languageCode ?? this.languageCode,
     themeMode: themeMode ?? this.themeMode,
     invoiceLanguage: invoiceLanguage ?? this.invoiceLanguage,
+    appRole: appRole ?? this.appRole,
+    meterCode: meterCode.present ? meterCode.value : this.meterCode,
+    joinedMeterCode: joinedMeterCode.present
+        ? joinedMeterCode.value
+        : this.joinedMeterCode,
+    tenantName: tenantName.present ? tenantName.value : this.tenantName,
+    tenantApproved: tenantApproved ?? this.tenantApproved,
     onboarded: onboarded ?? this.onboarded,
   );
   AppSetting copyWithCompanion(AppSettingsCompanion data) {
@@ -4824,6 +5011,17 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       invoiceLanguage: data.invoiceLanguage.present
           ? data.invoiceLanguage.value
           : this.invoiceLanguage,
+      appRole: data.appRole.present ? data.appRole.value : this.appRole,
+      meterCode: data.meterCode.present ? data.meterCode.value : this.meterCode,
+      joinedMeterCode: data.joinedMeterCode.present
+          ? data.joinedMeterCode.value
+          : this.joinedMeterCode,
+      tenantName: data.tenantName.present
+          ? data.tenantName.value
+          : this.tenantName,
+      tenantApproved: data.tenantApproved.present
+          ? data.tenantApproved.value
+          : this.tenantApproved,
       onboarded: data.onboarded.present ? data.onboarded.value : this.onboarded,
     );
   }
@@ -4840,6 +5038,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ..write('languageCode: $languageCode, ')
           ..write('themeMode: $themeMode, ')
           ..write('invoiceLanguage: $invoiceLanguage, ')
+          ..write('appRole: $appRole, ')
+          ..write('meterCode: $meterCode, ')
+          ..write('joinedMeterCode: $joinedMeterCode, ')
+          ..write('tenantName: $tenantName, ')
+          ..write('tenantApproved: $tenantApproved, ')
           ..write('onboarded: $onboarded')
           ..write(')'))
         .toString();
@@ -4856,6 +5059,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     languageCode,
     themeMode,
     invoiceLanguage,
+    appRole,
+    meterCode,
+    joinedMeterCode,
+    tenantName,
+    tenantApproved,
     onboarded,
   );
   @override
@@ -4871,6 +5079,11 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           other.languageCode == this.languageCode &&
           other.themeMode == this.themeMode &&
           other.invoiceLanguage == this.invoiceLanguage &&
+          other.appRole == this.appRole &&
+          other.meterCode == this.meterCode &&
+          other.joinedMeterCode == this.joinedMeterCode &&
+          other.tenantName == this.tenantName &&
+          other.tenantApproved == this.tenantApproved &&
           other.onboarded == this.onboarded);
 }
 
@@ -4884,6 +5097,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<String> languageCode;
   final Value<String> themeMode;
   final Value<String> invoiceLanguage;
+  final Value<String> appRole;
+  final Value<String?> meterCode;
+  final Value<String?> joinedMeterCode;
+  final Value<String?> tenantName;
+  final Value<bool> tenantApproved;
   final Value<bool> onboarded;
   const AppSettingsCompanion({
     this.id = const Value.absent(),
@@ -4895,6 +5113,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.languageCode = const Value.absent(),
     this.themeMode = const Value.absent(),
     this.invoiceLanguage = const Value.absent(),
+    this.appRole = const Value.absent(),
+    this.meterCode = const Value.absent(),
+    this.joinedMeterCode = const Value.absent(),
+    this.tenantName = const Value.absent(),
+    this.tenantApproved = const Value.absent(),
     this.onboarded = const Value.absent(),
   });
   AppSettingsCompanion.insert({
@@ -4907,6 +5130,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.languageCode = const Value.absent(),
     this.themeMode = const Value.absent(),
     this.invoiceLanguage = const Value.absent(),
+    this.appRole = const Value.absent(),
+    this.meterCode = const Value.absent(),
+    this.joinedMeterCode = const Value.absent(),
+    this.tenantName = const Value.absent(),
+    this.tenantApproved = const Value.absent(),
     this.onboarded = const Value.absent(),
   });
   static Insertable<AppSetting> custom({
@@ -4919,6 +5147,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Expression<String>? languageCode,
     Expression<String>? themeMode,
     Expression<String>? invoiceLanguage,
+    Expression<String>? appRole,
+    Expression<String>? meterCode,
+    Expression<String>? joinedMeterCode,
+    Expression<String>? tenantName,
+    Expression<bool>? tenantApproved,
     Expression<bool>? onboarded,
   }) {
     return RawValuesInsertable({
@@ -4932,6 +5165,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       if (languageCode != null) 'language_code': languageCode,
       if (themeMode != null) 'theme_mode': themeMode,
       if (invoiceLanguage != null) 'invoice_language': invoiceLanguage,
+      if (appRole != null) 'app_role': appRole,
+      if (meterCode != null) 'meter_code': meterCode,
+      if (joinedMeterCode != null) 'joined_meter_code': joinedMeterCode,
+      if (tenantName != null) 'tenant_name': tenantName,
+      if (tenantApproved != null) 'tenant_approved': tenantApproved,
       if (onboarded != null) 'onboarded': onboarded,
     });
   }
@@ -4946,6 +5184,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<String>? languageCode,
     Value<String>? themeMode,
     Value<String>? invoiceLanguage,
+    Value<String>? appRole,
+    Value<String?>? meterCode,
+    Value<String?>? joinedMeterCode,
+    Value<String?>? tenantName,
+    Value<bool>? tenantApproved,
     Value<bool>? onboarded,
   }) {
     return AppSettingsCompanion(
@@ -4959,6 +5202,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       languageCode: languageCode ?? this.languageCode,
       themeMode: themeMode ?? this.themeMode,
       invoiceLanguage: invoiceLanguage ?? this.invoiceLanguage,
+      appRole: appRole ?? this.appRole,
+      meterCode: meterCode ?? this.meterCode,
+      joinedMeterCode: joinedMeterCode ?? this.joinedMeterCode,
+      tenantName: tenantName ?? this.tenantName,
+      tenantApproved: tenantApproved ?? this.tenantApproved,
       onboarded: onboarded ?? this.onboarded,
     );
   }
@@ -4995,6 +5243,21 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     if (invoiceLanguage.present) {
       map['invoice_language'] = Variable<String>(invoiceLanguage.value);
     }
+    if (appRole.present) {
+      map['app_role'] = Variable<String>(appRole.value);
+    }
+    if (meterCode.present) {
+      map['meter_code'] = Variable<String>(meterCode.value);
+    }
+    if (joinedMeterCode.present) {
+      map['joined_meter_code'] = Variable<String>(joinedMeterCode.value);
+    }
+    if (tenantName.present) {
+      map['tenant_name'] = Variable<String>(tenantName.value);
+    }
+    if (tenantApproved.present) {
+      map['tenant_approved'] = Variable<bool>(tenantApproved.value);
+    }
     if (onboarded.present) {
       map['onboarded'] = Variable<bool>(onboarded.value);
     }
@@ -5013,6 +5276,11 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           ..write('languageCode: $languageCode, ')
           ..write('themeMode: $themeMode, ')
           ..write('invoiceLanguage: $invoiceLanguage, ')
+          ..write('appRole: $appRole, ')
+          ..write('meterCode: $meterCode, ')
+          ..write('joinedMeterCode: $joinedMeterCode, ')
+          ..write('tenantName: $tenantName, ')
+          ..write('tenantApproved: $tenantApproved, ')
           ..write('onboarded: $onboarded')
           ..write(')'))
         .toString();
@@ -10926,6 +11194,11 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<String> languageCode,
       Value<String> themeMode,
       Value<String> invoiceLanguage,
+      Value<String> appRole,
+      Value<String?> meterCode,
+      Value<String?> joinedMeterCode,
+      Value<String?> tenantName,
+      Value<bool> tenantApproved,
       Value<bool> onboarded,
     });
 typedef $$AppSettingsTableUpdateCompanionBuilder =
@@ -10939,6 +11212,11 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<String> languageCode,
       Value<String> themeMode,
       Value<String> invoiceLanguage,
+      Value<String> appRole,
+      Value<String?> meterCode,
+      Value<String?> joinedMeterCode,
+      Value<String?> tenantName,
+      Value<bool> tenantApproved,
       Value<bool> onboarded,
     });
 
@@ -10993,6 +11271,31 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<String> get invoiceLanguage => $composableBuilder(
     column: $table.invoiceLanguage,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get appRole => $composableBuilder(
+    column: $table.appRole,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get meterCode => $composableBuilder(
+    column: $table.meterCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get joinedMeterCode => $composableBuilder(
+    column: $table.joinedMeterCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get tenantName => $composableBuilder(
+    column: $table.tenantName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get tenantApproved => $composableBuilder(
+    column: $table.tenantApproved,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -11056,6 +11359,31 @@ class $$AppSettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get appRole => $composableBuilder(
+    column: $table.appRole,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get meterCode => $composableBuilder(
+    column: $table.meterCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get joinedMeterCode => $composableBuilder(
+    column: $table.joinedMeterCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get tenantName => $composableBuilder(
+    column: $table.tenantName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get tenantApproved => $composableBuilder(
+    column: $table.tenantApproved,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get onboarded => $composableBuilder(
     column: $table.onboarded,
     builder: (column) => ColumnOrderings(column),
@@ -11110,6 +11438,27 @@ class $$AppSettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get appRole =>
+      $composableBuilder(column: $table.appRole, builder: (column) => column);
+
+  GeneratedColumn<String> get meterCode =>
+      $composableBuilder(column: $table.meterCode, builder: (column) => column);
+
+  GeneratedColumn<String> get joinedMeterCode => $composableBuilder(
+    column: $table.joinedMeterCode,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get tenantName => $composableBuilder(
+    column: $table.tenantName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get tenantApproved => $composableBuilder(
+    column: $table.tenantApproved,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<bool> get onboarded =>
       $composableBuilder(column: $table.onboarded, builder: (column) => column);
 }
@@ -11154,6 +11503,11 @@ class $$AppSettingsTableTableManager
                 Value<String> languageCode = const Value.absent(),
                 Value<String> themeMode = const Value.absent(),
                 Value<String> invoiceLanguage = const Value.absent(),
+                Value<String> appRole = const Value.absent(),
+                Value<String?> meterCode = const Value.absent(),
+                Value<String?> joinedMeterCode = const Value.absent(),
+                Value<String?> tenantName = const Value.absent(),
+                Value<bool> tenantApproved = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
               }) => AppSettingsCompanion(
                 id: id,
@@ -11165,6 +11519,11 @@ class $$AppSettingsTableTableManager
                 languageCode: languageCode,
                 themeMode: themeMode,
                 invoiceLanguage: invoiceLanguage,
+                appRole: appRole,
+                meterCode: meterCode,
+                joinedMeterCode: joinedMeterCode,
+                tenantName: tenantName,
+                tenantApproved: tenantApproved,
                 onboarded: onboarded,
               ),
           createCompanionCallback:
@@ -11178,6 +11537,11 @@ class $$AppSettingsTableTableManager
                 Value<String> languageCode = const Value.absent(),
                 Value<String> themeMode = const Value.absent(),
                 Value<String> invoiceLanguage = const Value.absent(),
+                Value<String> appRole = const Value.absent(),
+                Value<String?> meterCode = const Value.absent(),
+                Value<String?> joinedMeterCode = const Value.absent(),
+                Value<String?> tenantName = const Value.absent(),
+                Value<bool> tenantApproved = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
               }) => AppSettingsCompanion.insert(
                 id: id,
@@ -11189,6 +11553,11 @@ class $$AppSettingsTableTableManager
                 languageCode: languageCode,
                 themeMode: themeMode,
                 invoiceLanguage: invoiceLanguage,
+                appRole: appRole,
+                meterCode: meterCode,
+                joinedMeterCode: joinedMeterCode,
+                tenantName: tenantName,
+                tenantApproved: tenantApproved,
                 onboarded: onboarded,
               ),
           withReferenceMapper: (p0) => p0

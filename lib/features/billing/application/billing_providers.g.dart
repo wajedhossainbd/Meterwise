@@ -307,7 +307,7 @@ final class MonthlyHistoryProvider
   }
 }
 
-String _$monthlyHistoryHash() => r'b0e1b86146d0f766fdddbe6e0b3d9cda74124c13';
+String _$monthlyHistoryHash() => r'dbef6f998b55b35b8f2189b742c4751e0dab5cef';
 
 /// Last [count] months of headline figures (oldest first) for the charts.
 /// Finalized months use their snapshot; drafts compute live.

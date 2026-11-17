@@ -32,7 +32,8 @@ class AppConstants {
   ///     fixedRate).
   /// v9: persisted theme mode (AppSettings.themeMode).
   /// v10: invoice language preference (AppSettings.invoiceLanguage).
-  static const int databaseSchemaVersion = 10;
+  /// v11: tenant roles + meter code join (AppSettings app role/code fields).
+  static const int databaseSchemaVersion = 11;
 
   /// Fallback currency used when a property does not specify one.
   static const String defaultCurrencyCode = 'BDT';

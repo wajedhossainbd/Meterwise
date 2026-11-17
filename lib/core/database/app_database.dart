@@ -104,6 +104,14 @@ class AppDatabase extends _$AppDatabase {
             // 'auto' preserves the existing "follow app language" behaviour.
             await m.addColumn(appSettings, appSettings.invoiceLanguage);
           }
+          if (from < 11) {
+            // Existing installs stay in landlord mode with no meter code yet.
+            await m.addColumn(appSettings, appSettings.appRole);
+            await m.addColumn(appSettings, appSettings.meterCode);
+            await m.addColumn(appSettings, appSettings.joinedMeterCode);
+            await m.addColumn(appSettings, appSettings.tenantName);
+            await m.addColumn(appSettings, appSettings.tenantApproved);
+          }
         },
         beforeOpen: (details) async {
           // Enforce foreign-key constraints (off by default in SQLite).
