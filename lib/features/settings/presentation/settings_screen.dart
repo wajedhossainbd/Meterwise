@@ -91,6 +91,35 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () => context.pushNamed(AppRoutes.backupName),
           ),
           const Divider(),
+          _sectionLabel(context, l.tenantSwitchView),
+          ListTile(
+            leading: _iconBadge(Icons.qr_code_2, AppColors.seed),
+            title: Text(l.tenantInviteTitle),
+            subtitle: Text(settings?.meterCode ?? '—'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(AppRoutes.inviteTenantName),
+          ),
+          ListTile(
+            leading: _iconBadge(Icons.group_add_outlined, AppColors.teal),
+            title: Text(l.tenantJoinTitle),
+            subtitle: Text(settings?.tenantName ?? l.tenantRoleTenant),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              if (settings?.joinedMeterCode == null) {
+                await context.pushNamed(AppRoutes.joinMeterName);
+              } else {
+                await context.pushNamed(AppRoutes.tenantHomeName);
+              }
+            },
+          ),
+          if (settings?.appRole == 'tenant')
+            ListTile(
+              leading: _iconBadge(Icons.logout, AppColors.due),
+              title: Text(l.tenantLeave),
+              onTap: () =>
+                  ref.read(settingsRepositoryProvider).leaveMeter(),
+            ),
+          const Divider(),
           _sectionLabel(context, l.settingsAppearance),
           RadioGroup<ThemeMode>(
             groupValue: themeMode,

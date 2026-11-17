@@ -1197,4 +1197,64 @@ class AppLocalizationsBn extends AppLocalizations {
   String chartRateValue(Object value) {
     return '$value / ইউনিট';
   }
+
+  @override
+  String get tenantInviteTitle => 'ভাড়াটিয়াকে আমন্ত্রণ';
+
+  @override
+  String get tenantMeterCode => 'মিটার কোড';
+
+  @override
+  String get tenantInviteHint =>
+      'এই কোড বা কিউআর ভাড়াটিয়ার সাথে শেয়ার করুন। তারা মিটার অ্যাকাউন্টে যোগ দিতে পারবেন।';
+
+  @override
+  String get tenantJoinTitle => 'মিটার অ্যাকাউন্টে যোগ দিন';
+
+  @override
+  String get tenantScanQr => 'QR কোড স্ক্যান করুন';
+
+  @override
+  String get tenantEnterCode => 'মিটার কোড লিখুন';
+
+  @override
+  String get tenantChooseName => 'আপনার নাম বেছে নিন';
+
+  @override
+  String get tenantJoinRequest => 'যোগদানের অনুরোধ';
+
+  @override
+  String get tenantPendingApproval =>
+      'মিটার মালিক আপনার যোগদানের অনুমোদনের অপেক্ষায়।';
+
+  @override
+  String get tenantApprove => 'অনুমোদন';
+
+  @override
+  String get tenantJoined => 'মিটারে যোগ দিয়েছেন';
+
+  @override
+  String get tenantRoleLandlord => 'আমি মিটার পরিচালনা করি';
+
+  @override
+  String get tenantRoleTenant => 'আমি ভাড়াটে';
+
+  @override
+  String get tenantSwitchView => 'ভিউ বদলান';
+
+  @override
+  String get tenantLeave => 'মিটার ছেড়ে দিন';
+
+  @override
+  String get tenantNotApproved =>
+      'মিটার মালিক এখনো আপনার যোগদান অনুমোদন করেননি।';
+
+  @override
+  String get tenantNoSubMeter => 'কোনো সাব-মিটার নেই — খরচ সমান ভাগে বণ্টন হবে';
+
+  @override
+  String get tenantHomeTitle => 'আমার মিটার';
+
+  @override
+  String get tenantCodeMismatch => 'এই ডিভাইসে ওই মিটার কোড পাওয়া যায়নি';
 }

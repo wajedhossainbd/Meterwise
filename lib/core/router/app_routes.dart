@@ -48,4 +48,10 @@ class AppRoutes {
   static const String backupName = 'backup';
   static const String settlements = 'settlements';
   static const String settlementsName = 'settlements';
+  static const String inviteTenant = 'invite-tenant';
+  static const String inviteTenantName = 'inviteTenant';
+  static const String joinMeter = 'join-meter';
+  static const String joinMeterName = 'joinMeter';
+  static const String tenantHome = 'tenant-home';
+  static const String tenantHomeName = 'tenantHome';
 }

@@ -142,6 +142,11 @@ final isMultiTenantProvider = Provider<bool>(
   (ref) => ref.watch(appSettingsProvider).value?.multiTenant ?? true,
 );
 
+/// The landlord's shareable code, created on first open of the invite screen.
+final meterCodeProvider = FutureProvider<String>(
+  (ref) => ref.watch(settingsRepositoryProvider).ensureMeterCode(),
+);
+
 /// 'landlord' or 'tenant' — scoped UI is chosen from this.
 final appRoleProvider = Provider<String>(
   (ref) => ref.watch(appSettingsProvider).value?.appRole ?? 'landlord',

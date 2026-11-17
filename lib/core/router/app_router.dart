@@ -15,6 +15,9 @@ import '../../features/settings/presentation/billing_settings_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import '../../features/settlements/presentation/settlements_screen.dart';
 import '../../features/tariff/presentation/tariff_manager_screen.dart';
+import '../../features/tenants/presentation/invite_tenant_screen.dart';
+import '../../features/tenants/presentation/join_meter_screen.dart';
+import '../../features/tenants/presentation/tenant_home_screen.dart';
 import '../../features/tenants/presentation/tenant_edit_screen.dart';
 import '../../features/tenants/presentation/tenants_screen.dart';
 import '../widgets/app_shell.dart';
@@ -145,6 +148,21 @@ final GoRouter appRouter = GoRouter(
                   path: AppRoutes.settlements,
                   name: AppRoutes.settlementsName,
                   builder: (context, state) => const SettlementsScreen(),
+                ),
+                _fullScreen(
+                  path: AppRoutes.inviteTenant,
+                  name: AppRoutes.inviteTenantName,
+                  builder: (context, state) => const InviteTenantScreen(),
+                ),
+                _fullScreen(
+                  path: AppRoutes.joinMeter,
+                  name: AppRoutes.joinMeterName,
+                  builder: (context, state) => const JoinMeterScreen(),
+                ),
+                _fullScreen(
+                  path: AppRoutes.tenantHome,
+                  name: AppRoutes.tenantHomeName,
+                  builder: (context, state) => const TenantHomeScreen(),
                 ),
                 _fullScreen(
                   path: AppRoutes.tenants,

@@ -2293,6 +2293,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{value} / unit'**
   String chartRateValue(Object value);
+
+  /// No description provided for @tenantInviteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite a tenant'**
+  String get tenantInviteTitle;
+
+  /// No description provided for @tenantMeterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Meter code'**
+  String get tenantMeterCode;
+
+  /// No description provided for @tenantInviteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this code or QR with your tenant. They join from Join meter account.'**
+  String get tenantInviteHint;
+
+  /// No description provided for @tenantJoinTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Join meter account'**
+  String get tenantJoinTitle;
+
+  /// No description provided for @tenantScanQr.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR code'**
+  String get tenantScanQr;
+
+  /// No description provided for @tenantEnterCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter meter code'**
+  String get tenantEnterCode;
+
+  /// No description provided for @tenantChooseName.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your name'**
+  String get tenantChooseName;
+
+  /// No description provided for @tenantJoinRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Join request'**
+  String get tenantJoinRequest;
+
+  /// No description provided for @tenantPendingApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the meter owner to approve your join request.'**
+  String get tenantPendingApproval;
+
+  /// No description provided for @tenantApprove.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get tenantApprove;
+
+  /// No description provided for @tenantJoined.
+  ///
+  /// In en, this message translates to:
+  /// **'Joined meter'**
+  String get tenantJoined;
+
+  /// No description provided for @tenantRoleLandlord.
+  ///
+  /// In en, this message translates to:
+  /// **'I manage a meter'**
+  String get tenantRoleLandlord;
+
+  /// No description provided for @tenantRoleTenant.
+  ///
+  /// In en, this message translates to:
+  /// **'I am a tenant'**
+  String get tenantRoleTenant;
+
+  /// No description provided for @tenantSwitchView.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch view'**
+  String get tenantSwitchView;
+
+  /// No description provided for @tenantLeave.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave meter'**
+  String get tenantLeave;
+
+  /// No description provided for @tenantNotApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your meter owner has not approved your join yet.'**
+  String get tenantNotApproved;
+
+  /// No description provided for @tenantNoSubMeter.
+  ///
+  /// In en, this message translates to:
+  /// **'No sub-meter — your share is split equally'**
+  String get tenantNoSubMeter;
+
+  /// No description provided for @tenantHomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My meter'**
+  String get tenantHomeTitle;
+
+  /// No description provided for @tenantCodeMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'That meter code was not found on this device'**
+  String get tenantCodeMismatch;
 }
 
 class _AppLocalizationsDelegate

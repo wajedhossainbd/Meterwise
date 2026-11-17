@@ -4,7 +4,7 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v3.0.4+16 · DB schema v10 · 58/58 tests green ·
+> **Last state:** v3.1.0+17 · DB schema v11 · 59/59 tests green ·
 > `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
 > (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
@@ -56,7 +56,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `3.0.4+16`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `3.1.0+17`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -137,7 +137,7 @@ test/  # billing_engine_test, billing_periods_test, migration_test,
 
 ---
 
-## 4. Database schema (v10)
+## 4. Database schema (v11)
 
 All migrations are **additive** (createTable/addColumn only). Migration code in
 `app_database.dart onUpgrade`; version history in `app_constants.dart`.
@@ -162,8 +162,9 @@ BillPayments · v4 TariffVersions+BillingPeriods · v5 archived (`if (from == 4)
 — NOT `< 5`, because `from < 4`'s createTable already includes it) · v6
 Settlements · v7 tenant contracts + distribution + SQL migrating legacy global
 fixed-rate to per-tenant. v8 property `billingCalcMode`. v9 `AppSettings.themeMode`
-(persisted appearance). v10 `AppSettings.invoiceLanguage` (auto/en/bn). All additive;
-migration tests cover v3/v4/v6/v7/v8/v9 upgrade paths.
+(persisted appearance). v10 `AppSettings.invoiceLanguage` (auto/en/bn). v11 tenant
+role fields (`appRole`, `meterCode`, `joinedMeterCode`, `tenantName`, `tenantApproved`).
+All additive; migration tests cover v3/v4/v6/v7/v8/v9/v10 upgrade paths.
 
 **Readings/recharges belong to a period BY DATE** (no FK): locking checks
 whether the date's month is finalized. Foreign keys ON via `beforeOpen` PRAGMA.
@@ -346,7 +347,7 @@ Android: `android/app/build.gradle.kts` → `compileSdk = 36` AND
 
 ---
 
-## 10. Testing status (58 tests)
+## 10. Testing status (59 tests)
 
 - `billing_engine_test.dart` — v2 semantics: spreadsheet golden columns (T1/T2
   exact), shared-ladder shares for N=1/2/3/4, mixed contracts (divisor counts
@@ -404,6 +405,7 @@ migration tests + additive-only migrations).
 | 3.0.0 | Core-first revamp: persisted theme + invoice language, full en/bn coverage, working error Retry, finalized metadata freeze, dashboard split, quiet visual refresh (schema v10) |
 | 3.0.1 | Native WebView-owned Bangla PDF channel + real signed release keystore |
 | 3.0.2–3.0.4 | Device debugging on S9+: background thread fix, print resolution fix, PDF title stamping; Bangla invoices verified on-device |
+| 3.1.0 | Tenant access prototype: meter code + QR invite, scan/manual join with roster-name selection, landlord approval, tenant-scoped home with usage/bill/balance (schema v11) |
 
 ---
 

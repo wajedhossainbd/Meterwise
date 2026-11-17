@@ -1191,4 +1191,65 @@ class AppLocalizationsEn extends AppLocalizations {
   String chartRateValue(Object value) {
     return '$value / unit';
   }
+
+  @override
+  String get tenantInviteTitle => 'Invite a tenant';
+
+  @override
+  String get tenantMeterCode => 'Meter code';
+
+  @override
+  String get tenantInviteHint =>
+      'Share this code or QR with your tenant. They join from Join meter account.';
+
+  @override
+  String get tenantJoinTitle => 'Join meter account';
+
+  @override
+  String get tenantScanQr => 'Scan QR code';
+
+  @override
+  String get tenantEnterCode => 'Enter meter code';
+
+  @override
+  String get tenantChooseName => 'Choose your name';
+
+  @override
+  String get tenantJoinRequest => 'Join request';
+
+  @override
+  String get tenantPendingApproval =>
+      'Waiting for the meter owner to approve your join request.';
+
+  @override
+  String get tenantApprove => 'Approve';
+
+  @override
+  String get tenantJoined => 'Joined meter';
+
+  @override
+  String get tenantRoleLandlord => 'I manage a meter';
+
+  @override
+  String get tenantRoleTenant => 'I am a tenant';
+
+  @override
+  String get tenantSwitchView => 'Switch view';
+
+  @override
+  String get tenantLeave => 'Leave meter';
+
+  @override
+  String get tenantNotApproved =>
+      'Your meter owner has not approved your join yet.';
+
+  @override
+  String get tenantNoSubMeter => 'No sub-meter — your share is split equally';
+
+  @override
+  String get tenantHomeTitle => 'My meter';
+
+  @override
+  String get tenantCodeMismatch =>
+      'That meter code was not found on this device';
 }
