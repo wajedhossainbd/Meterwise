@@ -18,6 +18,7 @@ import '../../tariff/data/tariff_version_repository.dart';
 import '../../tenants/data/tenant_repository.dart';
 import '../application/invoice_html.dart';
 import '../application/invoice_pdf.dart';
+import '../application/native_invoice_pdf.dart';
 import '../data/billing_period_repository.dart';
 import '../domain/models/billing_result.dart';
 import '../../settings/data/settings_repository.dart';
@@ -38,6 +39,10 @@ class TenantBillDetailScreen extends ConsumerWidget {
   /// path if `onPageFinished` never fires). Once it fails or times out we
   /// skip it for the rest of the session instead of stalling every share.
   static bool _htmlConverterBroken = false;
+
+  /// The native channel is tried first; if it fails on a device we stop using
+  /// it for the session and fall through to the plugin (then the vector PDF).
+  static bool _nativeConverterBroken = false;
 
   String get _monthLabel => Formatters.monthYear(month);
 
@@ -99,17 +104,38 @@ class TenantBillDetailScreen extends ConsumerWidget {
     // [_htmlConverterBroken]), so it runs under a hard timeout; on ANY
     // failure the English vector invoice is generated instead, and the caller
     // shows an explicit notice.
-    if (bangla && !_htmlConverterBroken) {
+    final meta = bangla ? await _meta(ref, l) : null;
+    final html = meta == null
+        ? null
+        : InvoiceHtml.build(
+            bill: bill,
+            monthLabel: _monthLabel,
+            meta: meta,
+            l: l,
+          );
+
+    // Preferred path: our Android channel owns the WebView for the job, so
+    // there is no dangling reference to hang the conversion.
+    if (html != null && !_nativeConverterBroken) {
       try {
-        final meta = await _meta(ref, l);
-        final html = InvoiceHtml.build(
-          bill: bill,
-          monthLabel: _monthLabel,
-          meta: meta,
-          l: l,
-        );
-        // Deprecated upstream, but it is the only engine that shapes Bengali
-        // correctly (platform WebView). Guarded by timeout + vector fallback.
+        final bytes = await NativeInvoicePdf.convert(html);
+        if (bytes != null) return _pdfResult(bytes, usedFallback: false);
+        _nativeConverterBroken = true;
+        developer.log('Native invoice PDF failed; trying plugin fallback',
+            name: 'MeterWise');
+      } catch (e, stack) {
+        _nativeConverterBroken = true;
+        developer.log('Native invoice PDF threw',
+            name: 'MeterWise', error: e, stackTrace: stack);
+      }
+    }
+
+    // Second path: the plugin's deprecated converter, still useful on devices
+    // where our channel is unavailable, under a hard timeout.
+    if (html != null && !_htmlConverterBroken) {
+      try {
+        // Deprecated upstream, but it is the only other engine that shapes
+        // Bengali correctly (platform WebView). Guarded by timeout + fallback.
         // ignore: deprecated_member_use
         final bytes = await Printing.convertHtml(
           format: PdfPageFormat.a4,
@@ -127,12 +153,12 @@ class TenantBillDetailScreen extends ConsumerWidget {
       }
     }
     final pdfL = lookupAppLocalizations(const Locale('en'));
-    final meta = await _meta(ref, pdfL);
+    final pdfMeta = await _meta(ref, pdfL);
     return _pdfResult(
       await InvoicePdf.build(
         bill: bill,
         monthLabel: _monthLabel,
-        meta: meta,
+        meta: pdfMeta,
         l: pdfL,
       ),
       usedFallback: bangla,
@@ -189,6 +215,7 @@ class TenantBillDetailScreen extends ConsumerWidget {
             action: SnackBarAction(
               label: l.invoiceRetryBangla,
               onPressed: () {
+                _nativeConverterBroken = false;
                 _htmlConverterBroken = false;
                 if (context.mounted) _share(context, ref, l);
               },

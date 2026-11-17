@@ -4,9 +4,9 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v3.0.0+12 (revamp) · DB schema v10 · 58/58 tests green ·
-> `flutter analyze` clean. Git history holds the revamp phases; baseline `1ba118a`.
-> Read [README.md](README.md) first.
+> **Last state:** v3.0.1+13 · DB schema v10 · 58/58 tests green ·
+> `flutter analyze` clean · signed release APK built and verified with apksigner.
+> Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
 
 ---
 
@@ -376,9 +376,9 @@ migration tests + additive-only migrations).
 | Item | Status |
 |---|---|
 | Google Drive backup sync | Stub ("coming soon"). Blocked on user's Google Cloud OAuth client + app SHA-1. Local zip backup/restore works. |
-| Release signing | Optional `android/key.properties` + keystore; local builds still use debug keys. Add the real keystore before Play Store (see README). |
+| Release signing | Real keystore generated at `android/app/upload-keystore.jks` with config in `android/key.properties` (both git-ignored). APK verified signed via apksigner. **Back up both files and the password** — losing them means you cannot publish updates. |
 | Settlement transaction list inside PDF | Not embedded; invoice shows settlement paid/received totals, full list lives in Settlements screen. |
-| WebView Bangla PDF | v3.0: convertHtml can HANG on some devices → 10s timeout + session skip-flag + visible fallback notice with Retry action + logged root cause. Invoice language is a persisted setting (auto/en/bn) so a broken device can stay on the English vector renderer. A native WebView-owned PDF channel remains a device-verification follow-up. |
+| WebView Bangla PDF | v3.0.1: native Android channel (`com.meterwise.app/invoice_pdf`, `MainActivity.kt` + `android.print/MeterWisePrintCallbacks.java`) owns a transparent WebView for the whole job, with 20s layout/write timeouts and teardown in `finally`. Dart wrapper: `features/billing/application/native_invoice_pdf.dart`. Fallbacks: deprecated plugin converter (10s) → English vector PDF, with visible notice + Retry. Invoice language is a persisted setting (auto/en/bn). Native path still needs on-device verification. |
 | In-order finalize | Not hard-enforced (carry-forward walks drafts correctly); could add strict ordering if user asks. |
 | User's on-device tariff version | May still carry lifeline-as-slab-row (see gotcha #12) — remind if math complaints resurface. |
 | iOS | Untouched (CocoaPods not installed; Android-only so far). |
@@ -401,6 +401,7 @@ migration tests + additive-only migrations).
 | 2.2.0–2.2.1 | **Bangla-capable HTML invoices** (WebView) + launcher icon + splash fixes + share fix |
 | 2.3.0 | Property-level calculation modes (sharedSlab / reconciled / fixedRate), schema v8 |
 | 3.0.0 | Core-first revamp: persisted theme + invoice language, full en/bn coverage, working error Retry, finalized metadata freeze, dashboard split, quiet visual refresh (schema v10) |
+| 3.0.1 | Native WebView-owned Bangla PDF channel + real signed release keystore |
 
 ---
 

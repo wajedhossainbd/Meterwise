@@ -87,7 +87,7 @@ Local release builds fall back to the debug key. For a Play Store upload, create
 `android/key.properties` (git-ignored) and put the keystore in `android/app/`:
 
 ```
-storeFile=app/upload-keystore.jks
+storeFile=upload-keystore.jks
 storePassword=<password>
 keyAlias=upload
 keyPassword=<password>
@@ -97,12 +97,15 @@ Gradle picks it up automatically; without the file, local builds still work.
 
 ## Status
 
-- Version **3.0.0+12**, database schema **v10**
+- Version **3.0.1+13**, database schema **v10**
 - `flutter analyze`: clean · `flutter test`: **58 tests passing**
-- Android only. Release signing uses the debug key unless `android/key.properties` is present.
-- Invoice language is configurable (auto / English / Bangla); a device with a broken
-  HTML→PDF converter shows a visible notice and offers a retry instead of silently
-  switching to English.
+- Android only. Release APKs are signed with the keystore configured in
+  `android/key.properties` (both git-ignored — back them up).
+- Bangla invoices use a native Android channel that owns its WebView for the whole
+  job (explicit callbacks, 20 s timeouts, guaranteed teardown). The deprecated
+  plugin converter and the English vector PDF remain as fallbacks, with a visible
+  notice and retry if Bangla cannot be produced.
+- Invoice language is configurable (auto / English / Bangla).
 - Google Drive sync is an acknowledged "coming soon" stub; local backup/restore works
 
 This project is not published to pub.dev.
