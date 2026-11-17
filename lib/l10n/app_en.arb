@@ -406,5 +406,7 @@
   "invoiceLanguageEn": "English",
   "invoiceLanguageBn": "Bangla",
   "invoiceFallbackNotice": "Bangla PDF is unavailable on this device. An English invoice was created instead.",
-  "invoiceRetryBangla": "Retry Bangla"
+  "invoiceRetryBangla": "Retry Bangla",
+  "chartRateCaption": "Average selling rate per unit",
+  "chartRateValue": "{value} / unit"
 }

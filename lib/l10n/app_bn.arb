@@ -406,5 +406,7 @@
   "invoiceLanguageEn": "ইংরেজি",
   "invoiceLanguageBn": "বাংলা",
   "invoiceFallbackNotice": "এই ডিভাইসে বাংলা পিডিএফ পাওয়া যায়নি। পরিবর্তে ইংরেজি বিল তৈরি করা হয়েছে।",
-  "invoiceRetryBangla": "বাংলা আবার চেষ্টা করুন"
+  "invoiceRetryBangla": "বাংলা আবার চেষ্টা করুন",
+  "chartRateCaption": "প্রতি ইউনিট গড় বিক্রয় মূল্য",
+  "chartRateValue": "{value} / ইউনিট"
 }

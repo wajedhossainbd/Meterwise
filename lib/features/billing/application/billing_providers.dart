@@ -68,12 +68,17 @@ class MonthlySummary {
     required this.units,
     required this.recharge,
     required this.billed,
+    required this.rate,
   });
 
   final DateTime month;
   final double units;
   final double recharge;
   final double billed;
+
+  /// Canonical average selling rate from the engine (bill / main-meter units).
+  /// The dashboard chart must use this, never recompute its own definition.
+  final double rate;
 }
 
 /// The billing month the user is currently viewing (normalized to the 1st).
@@ -286,6 +291,7 @@ Future<List<MonthlySummary>> monthlyHistory(Ref ref, {int count = 6}) async {
         units: bill?.mainMeterUnits ?? 0,
         recharge: ctx.rechargeTotal(month),
         billed: bill?.totalBilled ?? 0,
+        rate: bill?.averageSellingRate ?? 0,
       ),
     );
   }

@@ -1189,4 +1189,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get invoiceRetryBangla => 'বাংলা আবার চেষ্টা করুন';
+
+  @override
+  String get chartRateCaption => 'প্রতি ইউনিট গড় বিক্রয় মূল্য';
+
+  @override
+  String chartRateValue(Object value) {
+    return '$value / ইউনিট';
+  }
 }

@@ -1183,4 +1183,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invoiceRetryBangla => 'Retry Bangla';
+
+  @override
+  String get chartRateCaption => 'Average selling rate per unit';
+
+  @override
+  String chartRateValue(Object value) {
+    return '$value / unit';
+  }
 }

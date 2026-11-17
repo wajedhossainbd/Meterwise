@@ -2281,6 +2281,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Retry Bangla'**
   String get invoiceRetryBangla;
+
+  /// No description provided for @chartRateCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Average selling rate per unit'**
+  String get chartRateCaption;
+
+  /// No description provided for @chartRateValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / unit'**
+  String chartRateValue(Object value);
 }
 
 class _AppLocalizationsDelegate
