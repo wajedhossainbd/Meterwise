@@ -45,7 +45,6 @@ class InvoicePdf {
 
   // ---- palette -------------------------------------------------------------
   static const _blue = PdfColor.fromInt(0xFF2962FF);
-  static const _violet = PdfColor.fromInt(0xFF7C4DFF);
   static const _ink = PdfColor.fromInt(0xFF1D2433);
   static const _muted = PdfColor.fromInt(0xFF6B7280);
   static const _tintBlue = PdfColor.fromInt(0xFFEEF3FF);
@@ -139,11 +138,7 @@ class InvoicePdf {
     return pw.Container(
       padding: const pw.EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: pw.BoxDecoration(
-        gradient: const pw.LinearGradient(
-          begin: pw.Alignment.centerLeft,
-          end: pw.Alignment.centerRight,
-          colors: [_blue, _violet],
-        ),
+        color: _blue,
         borderRadius: pw.BorderRadius.circular(14),
       ),
       child: pw.Row(

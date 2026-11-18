@@ -66,7 +66,7 @@ class InvoiceHtml {
       box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Noto Sans Bengali','Noto Sans',Roboto,sans-serif;
          color: #1D2433; font-size: 11px; }
-  .banner { background: linear-gradient(90deg,#2962FF,#7C4DFF); color: #fff;
+  .banner { background: #2962FF; color: #fff;
             border-radius: 12px; padding: 14px 16px; display: flex;
             align-items: center; }
   .logo { width: 38px; height: 38px; background: #fff; color: #2962FF;

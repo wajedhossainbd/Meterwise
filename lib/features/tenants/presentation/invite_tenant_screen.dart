@@ -55,7 +55,7 @@ class InviteTenantScreen extends ConsumerWidget {
                     SelectableText(
                       code,
                       style: theme.textTheme.headlineSmall
-                          ?.copyWith(fontWeight: FontWeight.w700),
+                          ?.copyWith(fontWeight: FontWeight.w600),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 12),

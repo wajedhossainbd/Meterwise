@@ -111,7 +111,7 @@ class _SessionTile extends StatelessWidget {
                 const SizedBox(width: 10),
                 Text(Formatters.date(session.date),
                     style: theme.textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w700)),
+                        ?.copyWith(fontWeight: FontWeight.w600)),
                 const Spacer(),
                 if (locked)
                   IconButton(

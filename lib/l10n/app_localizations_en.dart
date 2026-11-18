@@ -1320,4 +1320,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get driveNoPacket => 'No landlord packet found for this meter code';
+
+  @override
+  String get settingsPrivacy => 'Privacy policy';
 }

@@ -4,7 +4,7 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v3.3.0+23 · DB schema v11 · 61/61 tests green ·
+> **Last state:** v3.4.0+24 · DB schema v11 · 61/61 tests green ·
 > `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
 > (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
@@ -16,9 +16,9 @@
 **Repository:** `https://github.com/wajedhossainbd/Meterwise.git` (public,
 default branch `main`, pushed from local `/Volumes/Mac 500 SSD/Claude/MeterWise`).
 
-**Release:** v3.3.0+23, signed APK attached to the GitHub Release. Users update
-by downloading the APK from Releases; Android uses the `+23` build number to
-detect upgrades.
+**Release:** v3.4.0+24, signed APK (and Play AAB) attached to the GitHub Release.
+Users update by downloading the APK from Releases; Android uses the `+24` build
+number to detect upgrades.
 
 **Last verified (device, 2026-11-18):** two-device walkthrough with the S9+ as
 landlord and the Pixel_7 AVD (`MeterTest`) as tenant:
@@ -57,6 +57,10 @@ flutter build apk --release \
 6. Release signing uses a self-generated keystore — for Google Play, enrol in
    App Signing by Google Play or back up this keystore permanently.
 7. QR code rotation/revocation is not implemented; a shared code is permanent.
+8. **Play Store blockers are account-side only** — see `PLAY_STORE.md`: developer
+   account, Play App Signing enrolment, restricted Drive scope verification,
+   content rating, data safety form, tester programme, feature graphic. AAB is
+   already built and ready to upload.
 
 **Rules to preserve:** the billing engine is the single computation path; the
 spreadsheet goldens are the contract; all migrations are additive; all
@@ -109,7 +113,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `3.3.0+23`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `3.4.0+24`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -465,6 +469,7 @@ migration tests + additive-only migrations).
 | 3.2.0 | Google Drive packet sync: Google Sign-In, landlord upload, tenant download + idempotent import, Settings UI |
 | 3.2.1 | Device fixes: Web OAuth `serverClientId`, UTC token expiry, tenant role restored when re-entering from Settings. Drive backup + tenant sync verified on S9+ |
 | 3.3.0 | Encrypted Drive packets (AES‑GCM), tenant write-back, hourly WorkManager sync |
+| 3.4.0 | Professional UI craft pass, privacy policy + in-app link, Play Store compliance docs and signed AAB |
 
 ---
 

@@ -51,7 +51,7 @@ class AppTheme {
         titleTextStyle: TextStyle(
           color: colorScheme.onSurface,
           fontSize: 22,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
         ),
       ),
       cardTheme: CardThemeData(
@@ -99,7 +99,7 @@ class AppTheme {
           (states) => TextStyle(
             fontSize: 12,
             fontWeight: states.contains(WidgetState.selected)
-                ? FontWeight.w700
+                ? FontWeight.w600
                 : FontWeight.w500,
             color: states.contains(WidgetState.selected)
                 ? colorScheme.primary

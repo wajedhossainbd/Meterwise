@@ -449,5 +449,6 @@
   "driveSignedInAs": "Signed in as",
   "driveBackupDone": "Backup uploaded",
   "driveSyncDone": "Synced {count} new entries",
-  "driveNoPacket": "No landlord packet found for this meter code"
+  "driveNoPacket": "No landlord packet found for this meter code",
+  "settingsPrivacy": "Privacy policy"
 }

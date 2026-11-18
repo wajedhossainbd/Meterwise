@@ -63,7 +63,7 @@ class LabelValueRow extends StatelessWidget {
             ? theme.textTheme.titleMedium
             : theme.textTheme.bodyMedium)
         ?.copyWith(
-      fontWeight: emphasize ? FontWeight.w700 : null,
+      fontWeight: emphasize ? FontWeight.w600 : null,
       color: valueColor,
     );
     return Padding(
@@ -76,7 +76,7 @@ class LabelValueRow extends StatelessWidget {
               label,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
-                fontWeight: emphasize ? FontWeight.w700 : null,
+                fontWeight: emphasize ? FontWeight.w600 : null,
               ),
             ),
           ),

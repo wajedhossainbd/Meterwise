@@ -45,7 +45,7 @@ class MiniBarChart extends StatelessWidget {
               '${labels[group.x]}\n${format(rod.toY)}',
               TextStyle(
                 color: theme.colorScheme.onInverseSurface,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 fontSize: 12,
               ),
             ),
@@ -86,11 +86,7 @@ class MiniBarChart extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(7),
                   ),
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [color.withValues(alpha: 0.65), color],
-                  ),
+                  color: color,
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
                     toY: maxY,

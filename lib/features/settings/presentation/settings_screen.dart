@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_routes.dart';
@@ -131,6 +132,15 @@ class SettingsScreen extends ConsumerWidget {
               title: Text(l.tenantLeave),
               onTap: () =>
                   ref.read(settingsRepositoryProvider).leaveMeter(),
+            ),
+            ListTile(
+              leading: _iconBadge(Icons.privacy_tip_outlined, AppColors.info),
+              title: Text(l.settingsPrivacy),
+              onTap: () => launchUrl(
+                Uri.parse(
+                    'https://wajedhossainbd.github.io/Meterwise/privacy.html'),
+                mode: LaunchMode.externalApplication,
+              ),
             ),
           const Divider(),
           _sectionLabel(context, l.settingsAppearance),

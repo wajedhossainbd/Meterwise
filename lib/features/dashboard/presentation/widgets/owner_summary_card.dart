@@ -33,7 +33,7 @@ class _OwnerSummaryCard extends StatelessWidget {
                           ? theme.textTheme.titleMedium
                           : theme.textTheme.bodyMedium)
                       ?.copyWith(
-                          fontWeight: FontWeight.w700, color: color)),
+                          fontWeight: FontWeight.w600, color: color)),
             ],
           ),
         );
@@ -51,7 +51,7 @@ class _OwnerSummaryCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(l.ownerSummaryTitle,
                     style: theme.textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w700)),
+                        ?.copyWith(fontWeight: FontWeight.w600)),
               ],
             ),
             const SizedBox(height: 10),
@@ -103,7 +103,7 @@ class _OwnerSummaryCard extends StatelessWidget {
                     ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
             Text(value,
                 style: theme.textTheme.bodyMedium
-                    ?.copyWith(fontWeight: FontWeight.w700)),
+                    ?.copyWith(fontWeight: FontWeight.w600)),
           ],
         ),
       );

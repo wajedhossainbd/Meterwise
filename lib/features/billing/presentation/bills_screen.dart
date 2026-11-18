@@ -144,7 +144,7 @@ class _MonthSelector extends ConsumerWidget {
                 key: ValueKey(month),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w800),
+                    ?.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -386,19 +386,19 @@ class _TenantBillCard extends ConsumerWidget {
                       bill.tenantName.trim().isEmpty
                           ? '?'
                           : bill.tenantName.trim()[0].toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.w800),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(bill.tenantName,
                         style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w700)),
+                            ?.copyWith(fontWeight: FontWeight.w600)),
                   ),
                   Text(
                     Formatters.money(bill.totalBill, currencyCode: currency),
                     style: theme.textTheme.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.w800),
+                        ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                 ],
               ),

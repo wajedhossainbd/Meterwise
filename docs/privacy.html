@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MeterWise Privacy Policy</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         max-width: 720px; margin: 40px auto; padding: 0 20px; color: #1d2433; line-height: 1.6; }
+  h1 { font-size: 28px; font-weight: 600; }
+  h2 { font-size: 19px; font-weight: 600; margin-top: 32px; }
+  code { background: #f4f6fb; padding: 2px 5px; border-radius: 4px; }
+  .muted { color: #6b7280; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>MeterWise Privacy Policy</h1>
+<p class="muted">Last updated: 18 November 2026</p>
+
+<p>MeterWise is an offline-first app for recording prepaid electricity meter
+readings and splitting bills between tenants. This policy explains what data
+the app handles.</p>
+
+<h2>Data stored on your device</h2>
+<p>Property name, meter details, tenant names and contact details, meter
+readings, recharge amounts, settlements, bill snapshots and any meter photos
+you take are stored in a local SQLite database on your device. They are not
+uploaded to any server operated by MeterWise. You can export a local zip backup
+from <strong>Settings → Backup</strong> and share it yourself if you choose.</p>
+
+<h2>Google account and Google Drive</h2>
+<p>If you enable Drive sync, the app asks for your Google account sign-in and
+permission to access Google Drive. The app uses that access only to:</p>
+<ul>
+  <li>create a folder named <code>MeterWise/&lt;meter code&gt;</code> in <em>your own</em> Drive;</li>
+  <li>read and write encrypted billing packets in that folder so a landlord and
+      their tenants can synchronise data;</li>
+  <li>identify the signed-in account (email address) so you can see which
+      account is connected in the app.</li>
+</ul>
+<p>Packets are encrypted with AES-256-GCM using a key derived from the meter
+code. MeterWise has no server and never receives a copy of your Drive files.
+You can revoke the app's Drive access at any time in your Google Account
+permissions.</p>
+
+<h2>Permissions</h2>
+<ul>
+  <li><strong>Camera</strong> — photograph meters/receipts and scan a tenant QR code.</li>
+  <li><strong>Internet / network state</strong> — Google sign-in and Drive sync only.</li>
+  <li><strong>Notifications / boot / wake lock</strong> — the hourly background
+      sync task; no promotional notifications.</li>
+</ul>
+
+<h2>Sharing and third parties</h2>
+<p>The app contains no advertising, analytics or tracking SDKs. Invoice PDFs are
+generated on your device; sharing them is something you initiate through the
+system share sheet. Google's own privacy policy applies to Google sign-in and
+Drive.</p>
+
+<h2>Retention and deletion</h2>
+<p>Local data remains until you uninstall the app or clear its data. Drive
+packets remain until you delete the <code>MeterWise</code> folder. Uninstalling
+the app does not delete files from your Drive.</p>
+
+<h2>Contact</h2>
+<p>Developer: Wajed Hossain — pizzatrianglebd@gmail.com</p>
+</body>
+</html>

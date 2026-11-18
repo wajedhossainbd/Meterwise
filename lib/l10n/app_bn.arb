@@ -449,5 +449,6 @@
   "driveSignedInAs": "সাইন ইন করা আছে",
   "driveBackupDone": "ব্যাকআপ আপলোড হয়েছে",
   "driveSyncDone": "{count} টি নতুন এন্ট্রি সিঙ্ক হয়েছে",
-  "driveNoPacket": "এই মিটার কোডের জন্য কোনো প্যাকেট পাওয়া যায়নি"
+  "driveNoPacket": "এই মিটার কোডের জন্য কোনো প্যাকেট পাওয়া যায়নি",
+  "settingsPrivacy": "গোপনীয়তা নীতি"
 }

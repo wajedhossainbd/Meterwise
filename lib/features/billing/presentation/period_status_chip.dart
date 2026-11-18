@@ -33,7 +33,7 @@ class PeriodStatusChip extends StatelessWidget {
             label,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   color: color,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
           ),
         ],

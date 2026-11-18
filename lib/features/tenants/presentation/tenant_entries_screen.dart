@@ -99,7 +99,7 @@ class TenantEntriesScreen extends ConsumerWidget {
                     title: Text(e.title),
                     subtitle: Text(e.subtitle),
                     trailing: Text(e.value,
-                        style: const TextStyle(fontWeight: FontWeight.w700)),
+                        style: const TextStyle(fontWeight: FontWeight.w600)),
                   ),
                 );
               },

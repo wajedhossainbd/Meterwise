@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Generates the Android launcher icons (legacy mipmaps + adaptive-icon
-/// foregrounds) so the app icon matches the in-app splash logo: a blue→violet
-/// gradient disc with a white lightning bolt.
+/// foregrounds) so the app icon matches the in-app splash logo: a solid
+/// brand-blue disc with a white lightning bolt.
 ///
 /// Runs as part of `flutter test`; output is deterministic and idempotent.
 void main() {
@@ -80,14 +80,10 @@ Future<Uint8List> _drawIcon(int size, {required bool foreground}) async {
   final s = size.toDouble();
 
   if (!foreground) {
-    // Full-bleed gradient disc (legacy icon).
+    // Flat brand disc (legacy icon) — no gradient, no glow.
     final paint = Paint()
       ..isAntiAlias = true
-      ..shader = ui.Gradient.linear(
-        Offset.zero,
-        Offset(s, s),
-        const [Color(0xFF2962FF), Color(0xFF7C4DFF)],
-      );
+      ..color = const Color(0xFF2962FF);
     canvas.drawCircle(Offset(s / 2, s / 2), s / 2 * 0.98, paint);
   }
 

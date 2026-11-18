@@ -2539,6 +2539,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No landlord packet found for this meter code'**
   String get driveNoPacket;
+
+  /// No description provided for @settingsPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get settingsPrivacy;
 }
 
 class _AppLocalizationsDelegate

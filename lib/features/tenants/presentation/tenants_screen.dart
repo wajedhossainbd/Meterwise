@@ -137,7 +137,7 @@ class _TenantCard extends ConsumerWidget {
                   backgroundColor: color.withValues(alpha: 0.18),
                   foregroundColor: color,
                   child: Text(_initial(tenant.name),
-                      style: const TextStyle(fontWeight: FontWeight.w800)),
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

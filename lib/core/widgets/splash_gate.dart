@@ -93,13 +93,7 @@ class _SplashGateState extends State<SplashGate>
               child: Material(
                 type: MaterialType.transparency,
                 child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [AppColors.seed, AppColors.violet],
-                  ),
-                ),
+                decoration: const BoxDecoration(color: AppColors.seed),
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -127,11 +121,7 @@ class _SplashGateState extends State<SplashGate>
                               padding: const EdgeInsets.all(22),
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [AppColors.seed, AppColors.violet],
-                                ),
+                                color: AppColors.seed,
                               ),
                               child: const Icon(
                                 Icons.bolt,
@@ -154,7 +144,7 @@ class _SplashGateState extends State<SplashGate>
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 30,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   letterSpacing: 0.5,
                                 ),
                               ),

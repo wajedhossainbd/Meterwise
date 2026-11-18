@@ -36,7 +36,7 @@ class _TenantBillRow extends StatelessWidget {
                   backgroundColor: color.withValues(alpha: 0.18),
                   foregroundColor: color,
                   child: Text(initial,
-                      style: const TextStyle(fontWeight: FontWeight.w800)),
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -45,7 +45,7 @@ class _TenantBillRow extends StatelessWidget {
                     children: [
                       Text(bill.tenantName,
                           style: theme.textTheme.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w700)),
+                              ?.copyWith(fontWeight: FontWeight.w600)),
                       Text(
                         '${Formatters.units(bill.billedUnits)} kWh • '
                         '${l.effectiveRateLabel} '
@@ -61,7 +61,7 @@ class _TenantBillRow extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(money(bill.totalBill),
-                        style: const TextStyle(fontWeight: FontWeight.w800)),
+                        style: const TextStyle(fontWeight: FontWeight.w600)),
                     Text(
                       '${bill.isCredit ? l.dashInCredit : l.dashDue}'
                       ' ${money(bill.balance.abs())}',

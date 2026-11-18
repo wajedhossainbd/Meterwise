@@ -1325,4 +1325,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get driveNoPacket => 'এই মিটার কোডের জন্য কোনো প্যাকেট পাওয়া যায়নি';
+
+  @override
+  String get settingsPrivacy => 'গোপনীয়তা নীতি';
 }

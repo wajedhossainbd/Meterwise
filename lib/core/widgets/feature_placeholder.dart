@@ -33,15 +33,7 @@ class FeaturePlaceholder extends StatelessWidget {
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      theme.colorScheme.primaryContainer,
-                      theme.colorScheme.primaryContainer
-                          .withValues(alpha: 0.5),
-                    ],
-                  ),
+                  color: theme.colorScheme.primaryContainer,
                 ),
                 child: Icon(icon, size: 44, color: theme.colorScheme.primary),
               ),
@@ -50,7 +42,7 @@ class FeaturePlaceholder extends StatelessWidget {
             Text(
               title,
               style: theme.textTheme.titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w700),
+                  ?.copyWith(fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
             if (message != null) ...[

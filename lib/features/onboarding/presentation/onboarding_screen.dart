@@ -139,11 +139,7 @@ class _IntroPage extends StatelessWidget {
               padding: const EdgeInsets.all(30),
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppColors.seed, AppColors.violet],
-                ),
+                color: AppColors.seed,
               ),
               child: const Icon(Icons.bolt, size: 64, color: Colors.white),
             ),
@@ -154,7 +150,7 @@ class _IntroPage extends StatelessWidget {
             child: Text(
               l.welcomeTitle(AppConstants.appName),
               style: theme.textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w800),
+                  ?.copyWith(fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
           ),
@@ -196,7 +192,7 @@ class _HowItWorksPage extends StatelessWidget {
             child: Text(
               l.tourHowTitle,
               style: theme.textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w800),
+                  ?.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
           const SizedBox(height: 24),
@@ -221,7 +217,7 @@ class _HowItWorksPage extends StatelessWidget {
                       children: [
                         Text(s.$3,
                             style: theme.textTheme.titleMedium
-                                ?.copyWith(fontWeight: FontWeight.w700)),
+                                ?.copyWith(fontWeight: FontWeight.w600)),
                         const SizedBox(height: 3),
                         Text(s.$4,
                             style: theme.textTheme.bodyMedium?.copyWith(
@@ -263,7 +259,7 @@ class _ChooseModePage extends StatelessWidget {
             child: Text(
               l.onboardingQuestion,
               style: theme.textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w800),
+                  ?.copyWith(fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
           ),
@@ -345,7 +341,7 @@ class _ChoiceCard extends StatelessWidget {
                   children: [
                     Text(title,
                         style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w800)),
+                            ?.copyWith(fontWeight: FontWeight.w600)),
                     const SizedBox(height: 4),
                     Text(description, style: theme.textTheme.bodyMedium),
                   ],

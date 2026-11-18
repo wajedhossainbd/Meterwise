@@ -211,7 +211,7 @@ class TenantHomeScreen extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(label),
-            Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
+            Text(value, style: const TextStyle(fontWeight: FontWeight.w600)),
           ],
         ),
       );

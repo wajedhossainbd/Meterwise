@@ -3,6 +3,18 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [3.4.0+24] — 2026-11-18
+
+### Changed
+- **Professional UI craft pass:** flat brand mark on splash, onboarding, empty
+  states, charts and launcher icon (no hue gradients, glows or heavy 800-weight
+  headings); solid-colour invoice banner; quieter 600-weight emphasis throughout.
+
+### Added
+- Privacy policy page (GitHub Pages) and in-app link under Settings.
+- `PLAY_STORE.md` compliance plan and `STORE_LISTING.md` listing copy.
+- Signed AAB build for Google Play upload.
+
 ## [3.3.0+23] — 2026-11-18
 
 ### Added
