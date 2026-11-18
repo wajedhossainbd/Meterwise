@@ -1,5 +1,11 @@
 # MeterWise
 
+[![Release](https://img.shields.io/github/v/release/wajedhossainbd/Meterwise?display_name=tag&color=2962FF)](https://github.com/wajedhossainbd/Meterwise/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/wajedhossainbd/Meterwise/total?color=2E9E5B)](https://github.com/wajedhossainbd/Meterwise/releases)
+[![Platform](https://img.shields.io/badge/platform-Android-3DDC84?logo=android&logoColor=white)](https://www.android.com/)
+[![Flutter](https://img.shields.io/badge/Flutter-3.44.4-02569B?logo=flutter&logoColor=white)](https://flutter.dev/)
+[![Tests](https://img.shields.io/badge/tests-61%20passing-brightgreen)](test/)
+
 **Smart Multi-Tenant Electricity Billing** — a Flutter Android app for prepaid
 electricity billing in multi-tenant buildings in Bangladesh (DPDC-style tariffs).
 
@@ -35,6 +41,26 @@ spreadsheet is encoded as exact golden tests — see [BILLING.md](BILLING.md).
 - English vector PDF invoices and Bangla-capable HTML invoices
 - en + bn localization (348 keys), light/dark theme, local zip backup and staged restore
 - Adaptive NavigationBar (< 720px) / NavigationRail (≥ 720px)
+
+## Screenshots
+
+Real captures from the app running on device (Samsung S9+ and Pixel emulator).
+
+| Landlord dashboard | Monthly bills and tenant split |
+|---|---|
+| ![Landlord dashboard](docs/screenshots/landlord-dashboard.png) | ![Landlord bills](docs/screenshots/landlord-bills.png) |
+
+| Invite tenant by QR / code | Tenant-scoped home |
+|---|---|
+| ![Invite QR](docs/screenshots/invite-qr.png) | ![Tenant home](docs/screenshots/tenant-home.png) |
+
+| Tenant self-entry | Tenant entry history |
+|---|---|
+| ![Tenant self entry](docs/screenshots/tenant-self-entry.png) | ![Tenant entries](docs/screenshots/tenant-entries.png) |
+
+| Meter reading session | Bengali PDF invoice |
+|---|---|
+| ![Add reading](docs/screenshots/add-reading.png) | ![Bangla invoice](docs/screenshots/bangla-invoice.png) |
 
 ## Architecture
 
