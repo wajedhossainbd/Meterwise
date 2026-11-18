@@ -440,5 +440,14 @@
   "tenantSelectTenant": "Select tenant",
   "tenantReadingTooLow": "Reading must be higher than the last one",
   "tenantSelfEntry": "My entries",
-  "tenantBuildingTotal": "Building total"
+  "tenantBuildingTotal": "Building total",
+  "driveSyncTitle": "Drive sync",
+  "driveSignIn": "Sign in with Google",
+  "driveBackup": "Back up to Drive",
+  "driveSyncNow": "Sync from Drive",
+  "driveSignOut": "Sign out",
+  "driveSignedInAs": "Signed in as",
+  "driveBackupDone": "Backup uploaded",
+  "driveSyncDone": "Synced {count} new entries",
+  "driveNoPacket": "No landlord packet found for this meter code"
 }

@@ -440,5 +440,14 @@
   "tenantSelectTenant": "ভাড়াটে বেছে নিন",
   "tenantReadingTooLow": "রিডিং আগের চেয়ে বেশি হতে হবে",
   "tenantSelfEntry": "আমার এন্ট্রি",
-  "tenantBuildingTotal": "বিল্ডিং মোট"
+  "tenantBuildingTotal": "বিল্ডিং মোট",
+  "driveSyncTitle": "ড্রাইভ সিঙ্ক",
+  "driveSignIn": "Google দিয়ে সাইন ইন",
+  "driveBackup": "ড্রাইভে ব্যাকআপ",
+  "driveSyncNow": "ড্রাইভ থেকে সিঙ্ক",
+  "driveSignOut": "সাইন আউট",
+  "driveSignedInAs": "সাইন ইন করা আছে",
+  "driveBackupDone": "ব্যাকআপ আপলোড হয়েছে",
+  "driveSyncDone": "{count} টি নতুন এন্ট্রি সিঙ্ক হয়েছে",
+  "driveNoPacket": "এই মিটার কোডের জন্য কোনো প্যাকেট পাওয়া যায়নি"
 }

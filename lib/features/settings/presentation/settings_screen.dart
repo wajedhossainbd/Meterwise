@@ -90,6 +90,12 @@ class SettingsScreen extends ConsumerWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: () => context.pushNamed(AppRoutes.backupName),
           ),
+          ListTile(
+            leading: _iconBadge(Icons.cloud_sync_outlined, AppColors.info),
+            title: Text(l.driveSyncTitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => context.pushNamed(AppRoutes.driveSyncName),
+          ),
           const Divider(),
           _sectionLabel(context, l.tenantSwitchView),
           ListTile(

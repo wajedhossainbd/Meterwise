@@ -13,6 +13,7 @@ import '../../features/recharge/presentation/recharge_screen.dart';
 import '../../features/settings/presentation/backup_screen.dart';
 import '../../features/settings/presentation/billing_settings_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
+import '../../features/sync/presentation/drive_sync_screen.dart';
 import '../../features/settlements/presentation/settlements_screen.dart';
 import '../../features/tariff/presentation/tariff_manager_screen.dart';
 import '../../features/tenants/presentation/invite_tenant_screen.dart';
@@ -144,6 +145,11 @@ final GoRouter appRouter = GoRouter(
                   path: AppRoutes.backup,
                   name: AppRoutes.backupName,
                   builder: (context, state) => const BackupScreen(),
+                ),
+                _fullScreen(
+                  path: AppRoutes.driveSync,
+                  name: AppRoutes.driveSyncName,
+                  builder: (context, state) => const DriveSyncScreen(),
                 ),
                 _fullScreen(
                   path: AppRoutes.settlements,

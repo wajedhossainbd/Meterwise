@@ -27,6 +27,16 @@ class ReadingRepository {
         ]))
       .watch();
 
+  Future<List<MeterReading>> getAll() =>
+      (_db.select(_db.meterReadings)
+            ..orderBy([
+              (t) => OrderingTerm(
+                    expression: t.readingDate,
+                    mode: OrderingMode.desc,
+                  ),
+            ]))
+        .get();
+
   /// Records a reading session: one main-meter reading plus one per tenant,
   /// all stamped with the same [date]. Written atomically.
   Future<void> addSession({

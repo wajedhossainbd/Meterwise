@@ -41,6 +41,8 @@ class RechargeRepository {
         ]))
       .watch();
 
+  Future<List<Recharge>> getAll() => _db.select(_db.recharges).get();
+
   Future<int> create(int mainMeterId, RechargeDraft d) async {
     await _guard.ensureMainMeterEditable(mainMeterId, d.date);
     return _db.into(_db.recharges).insert(

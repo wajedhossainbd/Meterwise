@@ -1296,4 +1296,33 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tenantBuildingTotal => 'বিল্ডিং মোট';
+
+  @override
+  String get driveSyncTitle => 'ড্রাইভ সিঙ্ক';
+
+  @override
+  String get driveSignIn => 'Google দিয়ে সাইন ইন';
+
+  @override
+  String get driveBackup => 'ড্রাইভে ব্যাকআপ';
+
+  @override
+  String get driveSyncNow => 'ড্রাইভ থেকে সিঙ্ক';
+
+  @override
+  String get driveSignOut => 'সাইন আউট';
+
+  @override
+  String get driveSignedInAs => 'সাইন ইন করা আছে';
+
+  @override
+  String get driveBackupDone => 'ব্যাকআপ আপলোড হয়েছে';
+
+  @override
+  String driveSyncDone(Object count) {
+    return '$count টি নতুন এন্ট্রি সিঙ্ক হয়েছে';
+  }
+
+  @override
+  String get driveNoPacket => 'এই মিটার কোডের জন্য কোনো প্যাকেট পাওয়া যায়নি';
 }

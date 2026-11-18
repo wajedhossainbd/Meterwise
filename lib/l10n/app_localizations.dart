@@ -2485,6 +2485,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Building total'**
   String get tenantBuildingTotal;
+
+  /// No description provided for @driveSyncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drive sync'**
+  String get driveSyncTitle;
+
+  /// No description provided for @driveSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Google'**
+  String get driveSignIn;
+
+  /// No description provided for @driveBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up to Drive'**
+  String get driveBackup;
+
+  /// No description provided for @driveSyncNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync from Drive'**
+  String get driveSyncNow;
+
+  /// No description provided for @driveSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get driveSignOut;
+
+  /// No description provided for @driveSignedInAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as'**
+  String get driveSignedInAs;
+
+  /// No description provided for @driveBackupDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup uploaded'**
+  String get driveBackupDone;
+
+  /// No description provided for @driveSyncDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced {count} new entries'**
+  String driveSyncDone(Object count);
+
+  /// No description provided for @driveNoPacket.
+  ///
+  /// In en, this message translates to:
+  /// **'No landlord packet found for this meter code'**
+  String get driveNoPacket;
 }
 
 class _AppLocalizationsDelegate

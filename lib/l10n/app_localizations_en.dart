@@ -1291,4 +1291,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tenantBuildingTotal => 'Building total';
+
+  @override
+  String get driveSyncTitle => 'Drive sync';
+
+  @override
+  String get driveSignIn => 'Sign in with Google';
+
+  @override
+  String get driveBackup => 'Back up to Drive';
+
+  @override
+  String get driveSyncNow => 'Sync from Drive';
+
+  @override
+  String get driveSignOut => 'Sign out';
+
+  @override
+  String get driveSignedInAs => 'Signed in as';
+
+  @override
+  String get driveBackupDone => 'Backup uploaded';
+
+  @override
+  String driveSyncDone(Object count) {
+    return 'Synced $count new entries';
+  }
+
+  @override
+  String get driveNoPacket => 'No landlord packet found for this meter code';
 }

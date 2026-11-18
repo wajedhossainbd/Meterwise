@@ -56,4 +56,6 @@ class AppRoutes {
   static const String tenantHomeName = 'tenantHome';
   static const String tenantEntry = 'tenant-entry';
   static const String tenantEntryName = 'tenantEntry';
+  static const String driveSync = 'drive-sync';
+  static const String driveSyncName = 'driveSync';
 }
