@@ -28,8 +28,8 @@ class _DriveSyncScreenState extends ConsumerState<DriveSyncScreen> {
     try {
       final email = await ref.read(driveSyncProvider).signInEmail();
       if (mounted) setState(() => _email = email);
-    } catch (_) {
-      if (mounted) setState(() => _message = 'Google sign-in failed');
+    } catch (e) {
+      if (mounted) setState(() => _message = 'Sign-in: $e');
     } finally {
       if (mounted) setState(() => _busy = false);
     }

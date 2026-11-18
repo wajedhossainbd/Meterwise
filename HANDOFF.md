@@ -4,7 +4,7 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v3.2.0+21 · DB schema v11 · 59/59 tests green ·
+> **Last state:** v3.2.1+22 · DB schema v11 · 59/59 tests green ·
 > `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
 > (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
@@ -56,7 +56,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `3.2.0+21`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `3.2.1+22`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -410,6 +410,7 @@ migration tests + additive-only migrations).
 | 3.1.2 | Tenant-scoped bottom nav (Home + My entries), entry history list, building-total label |
 | 3.1.3 | Cross-device join accepts any well-formed meter code; tenant can leave meter / return to landlord view |
 | 3.2.0 | Google Drive packet sync: Google Sign-In, landlord upload, tenant download + idempotent import, Settings UI |
+| 3.2.1 | Device fixes: Web OAuth `serverClientId`, UTC token expiry, tenant role restored when re-entering from Settings. Drive backup + tenant sync verified on S9+ |
 
 ---
 

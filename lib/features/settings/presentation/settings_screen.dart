@@ -114,7 +114,14 @@ class SettingsScreen extends ConsumerWidget {
               if (settings?.joinedMeterCode == null) {
                 await context.pushNamed(AppRoutes.joinMeterName);
               } else {
-                await context.pushNamed(AppRoutes.tenantHomeName);
+                // Re-entering tenant view must restore the role, otherwise the
+                // Settings tile would navigate without actually switching mode.
+                await ref
+                    .read(settingsRepositoryProvider)
+                    .setRole('tenant');
+                if (context.mounted) {
+                  await context.pushNamed(AppRoutes.tenantHomeName);
+                }
               }
             },
           ),

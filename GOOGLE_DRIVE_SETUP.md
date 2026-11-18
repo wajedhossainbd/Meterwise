@@ -58,15 +58,28 @@ replace that keystore, the SHA‑1 changes and you must add the new one in step 
 > sensitive scope and can trigger review. I will design the code to use the
 > narrowest scopes that work and document this clearly.
 
-## Step 4 — Create the Android OAuth client ID
+## Step 4 — Create TWO OAuth clients
 
-1. Go to **APIs & Services → Credentials**.
-2. Click **+ Create Credentials → OAuth client ID**.
-3. Application type: **Android**.
-4. Name: `MeterWise Android`.
-5. Package name: `com.meterwise.app`
-6. SHA‑1 certificate fingerprint: paste the SHA‑1 from the table above.
-7. Click **Create**.
+`google_sign_in` v7 on Android needs **both**:
+
+**A) Web application client (used as `serverClientId`) — REQUIRED**
+1. Go to **APIs & Services → Credentials → + Create Credentials → OAuth client ID**.
+2. Application type: **Web application**.
+3. Name: `MeterWise Web`. Leave redirect URIs empty. Click **Create**.
+4. Copy its **Client ID** into `.secrets/google_server_client_id.txt`
+   (or drop the downloaded JSON in the project root — I'll extract it).
+
+**B) Android client**
+1. **+ Create Credentials → OAuth client ID**.
+2. Application type: **Android**.
+3. Name: `MeterWise Android`.
+4. Package name: `com.meterwise.app`
+5. SHA‑1 certificate fingerprint: paste the SHA‑1 from the table above.
+6. Click **Create**. Copy its Client ID into `.secrets/google_client_id.txt`.
+
+> A "Desktop app / installed" client JSON does **not** work as the Android
+> `serverClientId` — sign-in fails with `missingServerClientId`. You need the
+> **Web application** client for that field.
 
 ## Step 5 — Send me the client ID
 

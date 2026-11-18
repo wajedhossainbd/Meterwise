@@ -22,6 +22,8 @@ class DriveSyncService {
     if (!_initialized) {
       await _googleSignIn.initialize(
         clientId: driveClientId.isEmpty ? null : driveClientId,
+        serverClientId:
+            driveServerClientId.isEmpty ? null : driveServerClientId,
       );
       _initialized = true;
     }
@@ -30,8 +32,11 @@ class DriveSyncService {
     final authorization =
         await _account!.authorizationClient.authorizeScopes(driveScopes);
     final credentials = AccessCredentials(
-      AccessToken('Bearer', authorization.accessToken,
-          DateTime.now().add(const Duration(hours: 1))),
+      AccessToken(
+        'Bearer',
+        authorization.accessToken,
+        DateTime.now().toUtc().add(const Duration(hours: 1)),
+      ),
       null,
       driveScopes,
     );
