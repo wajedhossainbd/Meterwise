@@ -97,7 +97,7 @@ Gradle picks it up automatically; without the file, local builds still work.
 
 ## Status
 
-- Version **3.2.1+22**, database schema **v11**
+- Version **3.3.0+23**, database schema **v11**
 - `flutter analyze`: clean · `flutter test`: **58 tests passing**
 - Android only. Release APKs are signed with the keystore configured in
   `android/key.properties` (both git-ignored — back them up).
@@ -109,6 +109,6 @@ Gradle picks it up automatically; without the file, local builds still work.
   with a visible notice and retry if Bangla cannot be produced.
 - Invoice language is configurable (auto / English / Bangla).
 - **Tenant access (prototype):** landlord generates a meter code + QR from Settings → Invite a tenant; a tenant joins by scanning/entering the code and picking their roster name, then sees a scoped home with their usage, bill, balance, recharge history, invoices and an equal-split explanation. Approval happens on the landlord's device. Once joined, the first tab is the tenant's own home. Tenants can add their own sub-meter reading, log their own recharge, and record a manual payment or reimbursement to another tenant — all into the same ledger. Drive-based packet sync is the next step.
-- Google Drive sync: landlord uploads an encrypted-free JSON packet to their own Drive hourly-ready folder; tenant downloads and imports it. OAuth client ID is injected at build time from `.secrets/google_client_id.txt`. See `GOOGLE_DRIVE_SETUP.md`. Note: packets are currently plain JSON — E2E encryption is a follow-up.
+- Google Drive sync: landlord uploads an **AES‑256‑GCM encrypted** packet to their own Drive; tenant downloads, decrypts with the meter code and imports it. Tenants write their own entries back as encrypted `tenant_<name>.enc`, which the landlord picks up on next sync. An hourly WorkManager task runs both directions when online. OAuth client IDs are injected at build time from `.secrets/`. See `GOOGLE_DRIVE_SETUP.md`.
 
 This project is not published to pub.dev.

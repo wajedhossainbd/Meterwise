@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:workmanager/workmanager.dart';
 
 import 'core/constants/app_constants.dart';
 import 'core/router/app_router.dart';
@@ -8,12 +9,23 @@ import 'core/theme/theme_controller.dart';
 import 'core/widgets/splash_gate.dart';
 import 'features/onboarding/presentation/onboarding_screen.dart';
 import 'features/settings/data/settings_repository.dart';
+import 'features/sync/data/sync_worker.dart';
 import 'features/tariff/data/tariff_repository.dart';
 import 'features/tariff/data/tariff_version_repository.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Hourly Drive sync. Runs in its own isolate; failures are retried next hour.
+  await Workmanager().initialize(syncCallbackDispatcher);
+  await Workmanager().registerPeriodicTask(
+    meterSyncTask,
+    meterSyncTask,
+    frequency: const Duration(hours: 1),
+    initialDelay: const Duration(minutes: 15),
+    constraints: Constraints(networkType: NetworkType.connected),
+  );
 
   // Seed the default DPDC tariff and the settings row before the first frame so
   // the app is usable immediately. Reuse the same container for the running app

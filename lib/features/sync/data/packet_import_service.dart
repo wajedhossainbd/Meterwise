@@ -118,6 +118,66 @@ class PacketImportService {
     return added;
   }
 
+  /// Imports a tenant's write-back packet into the landlord's database.
+  Future<int> importTenantPacket(Map<String, dynamic> packet) async {
+    final name = packet['tenantName'] as String?;
+    if (name == null) return 0;
+    final tenant = await (_db.select(_db.tenants)
+          ..where((t) => t.name.equals(name))
+          ..limit(1))
+        .getSingleOrNull();
+    if (tenant == null) return 0;
+    var added = 0;
+
+    for (final r in (packet['readings'] as List<dynamic>? ?? [])) {
+      final map = r as Map<String, dynamic>;
+      final date = DateTime.parse(map['date'] as String);
+      final value = (map['value'] as num).toDouble();
+      final duplicate = await (_db.select(_db.meterReadings)
+            ..where((x) =>
+                x.tenantId.equals(tenant.id) &
+                x.readingDate.equals(date) &
+                x.readingValue.equals(value))
+            ..limit(1))
+        .getSingleOrNull();
+      if (duplicate != null) continue;
+      await _db.into(_db.meterReadings).insert(MeterReadingsCompanion.insert(
+            tenantId: Value(tenant.id),
+            readingDate: date,
+            readingValue: value,
+          ));
+      added++;
+    }
+
+    final meter = await (_db.select(_db.mainMeters)..limit(1)).getSingleOrNull();
+    if (meter != null) {
+      for (final r in (packet['recharges'] as List<dynamic>? ?? [])) {
+        final map = r as Map<String, dynamic>;
+        final date = DateTime.parse(map['date'] as String);
+        final amount = (map['amount'] as num).toDouble();
+        final duplicate = await (_db.select(_db.recharges)
+              ..where((x) =>
+                  x.rechargeDate.equals(date) &
+                  x.amount.equals(amount) &
+                  x.paidBy.equals(name))
+              ..limit(1))
+            .getSingleOrNull();
+        if (duplicate != null) continue;
+        await _db.into(_db.recharges).insert(RechargesCompanion.insert(
+              mainMeterId: meter.id,
+              rechargeDate: date,
+              amount: amount,
+              agentFee: Value((map['agentFee'] as num?)?.toDouble() ?? 0),
+              otherExpenses:
+                  Value((map['otherExpenses'] as num?)?.toDouble() ?? 0),
+              paidBy: Value(name),
+            ));
+        added++;
+      }
+    }
+    return added;
+  }
+
   String? _tenantNameFor(Map<String, dynamic> packet, dynamic id) {
     for (final t in (packet['tenants'] as List<dynamic>? ?? [])) {
       final map = t as Map<String, dynamic>;

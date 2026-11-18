@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/database/app_database.dart';
 import 'drive_config.dart';
+import 'packet_crypto.dart';
 
 /// Google Drive transport for meter packets.
 ///
@@ -71,19 +72,27 @@ class DriveSyncService {
     return _folder(api, meterCode, root);
   }
 
-  /// Landlord: upload the packet, replacing any previous version.
-  Future<void> uploadPacket({
-    required String meterCode,
-    required Map<String, dynamic> packet,
-  }) async {
-    final api = await _api();
-    final folderId = await _meterFolder(api, meterCode);
-    final bytes = utf8.encode(jsonEncode(packet));
+  Future<String> _readText(drive.DriveApi api, String fileId) async {
+    final media = await api.files.get(
+      fileId,
+      downloadOptions: drive.DownloadOptions.fullMedia,
+    ) as drive.Media;
+    final chunks = await media.stream.toList();
+    return utf8.decode(chunks.expand((c) => c).toList(growable: false));
+  }
+
+  Future<void> _writeFile(
+    drive.DriveApi api,
+    String folderId,
+    String name,
+    String content,
+  ) async {
+    final bytes = utf8.encode(content);
+    final media = drive.Media(Stream.value(bytes), bytes.length);
     final existing = await api.files.list(
-      q: "name='landlord.json' and '$folderId' in parents and trashed=false",
+      q: "name='$name' and '$folderId' in parents and trashed=false",
       $fields: 'files(id)',
     );
-    final media = drive.Media(Stream.value(bytes), bytes.length);
     if (existing.files?.isNotEmpty ?? false) {
       await api.files.update(
         drive.File(),
@@ -92,29 +101,108 @@ class DriveSyncService {
       );
     } else {
       await api.files.create(
-        drive.File(name: 'landlord.json', parents: [folderId]),
+        drive.File(name: name, parents: [folderId]),
         uploadMedia: media,
       );
     }
   }
 
-  /// Tenant: download the landlord's packet. Returns null when not found.
+  /// Landlord: upload the encrypted packet, replacing any previous version.
+  Future<void> uploadPacket({
+    required String meterCode,
+    required Map<String, dynamic> packet,
+  }) async {
+    final api = await _api();
+    final folderId = await _meterFolder(api, meterCode);
+    await _writeFile(
+      api,
+      folderId,
+      'landlord.enc',
+      PacketCrypto.encrypt(meterCode, packet),
+    );
+  }
+
+  /// Tenant: download and decrypt the landlord's packet.
   Future<Map<String, dynamic>?> downloadPacket(String meterCode) async {
     final api = await _api();
     final folderId = await _meterFolder(api, meterCode);
     final found = await api.files.list(
-      q: "name='landlord.json' and '$folderId' in parents and trashed=false",
+      q: "name='landlord.enc' and '$folderId' in parents and trashed=false",
       $fields: 'files(id)',
     );
     if (found.files?.isEmpty ?? true) return null;
-    final media = await api.files.get(
-      found.files!.first.id!,
-      downloadOptions: drive.DownloadOptions.fullMedia,
-    ) as drive.Media;
-    final chunks = await media.stream.toList();
-    final bytes = chunks.expand((c) => c).toList(growable: false);
-    return jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+    final text = await _readText(api, found.files!.first.id!);
+    return PacketCrypto.decrypt(meterCode, text);
   }
+
+  /// Tenant: write their own entries back so the landlord can pick them up.
+  Future<void> uploadTenantPacket({
+    required String meterCode,
+    required String tenantName,
+    required Map<String, dynamic> packet,
+  }) async {
+    final api = await _api();
+    final folderId = await _meterFolder(api, meterCode);
+    final safe = tenantName.replaceAll(RegExp(r'[^A-Za-z0-9_-]'), '_');
+    await _writeFile(
+      api,
+      folderId,
+      'tenant_$safe.enc',
+      PacketCrypto.encrypt(meterCode, packet),
+    );
+  }
+
+  /// Landlord: download every tenant write-back packet.
+  Future<List<Map<String, dynamic>>> downloadTenantPackets(
+    String meterCode,
+  ) async {
+    final api = await _api();
+    final folderId = await _meterFolder(api, meterCode);
+    final found = await api.files.list(
+      q: "'$folderId' in parents and trashed=false and "
+          "name contains 'tenant_' and name contains '.enc'",
+      $fields: 'files(id,name)',
+    );
+    final result = <Map<String, dynamic>>[];
+    for (final file in found.files ?? const <drive.File>[]) {
+      try {
+        final text = await _readText(api, file.id!);
+        result.add(PacketCrypto.decrypt(meterCode, text));
+      } on Object {
+        // Skip packets encrypted with a different meter code.
+      }
+    }
+    return result;
+  }
+
+  /// Tenant packet: only that tenant's own entries.
+  Map<String, dynamic> buildTenantPacket({
+    required String tenantName,
+    required List<MeterReading> readings,
+    required List<Recharge> recharges,
+  }) =>
+      {
+        'version': 1,
+        'kind': 'tenant',
+        'tenantName': tenantName,
+        'generatedAt': DateTime.now().toIso8601String(),
+        'readings': [
+          for (final r in readings)
+            {
+              'date': r.readingDate.toIso8601String(),
+              'value': r.readingValue,
+            }
+        ],
+        'recharges': [
+          for (final r in recharges)
+            {
+              'date': r.rechargeDate.toIso8601String(),
+              'amount': r.amount,
+              'agentFee': r.agentFee,
+              'otherExpenses': r.otherExpenses,
+            }
+        ],
+      };
 
   /// Builds the packet from local data. Kept here so both roles use one shape.
   Map<String, dynamic> buildPacket({

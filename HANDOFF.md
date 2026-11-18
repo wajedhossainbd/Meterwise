@@ -4,7 +4,7 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v3.2.1+22 · DB schema v11 · 59/59 tests green ·
+> **Last state:** v3.3.0+23 · DB schema v11 · 61/61 tests green ·
 > `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
 > (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
@@ -56,7 +56,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `3.2.1+22`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `3.3.0+23`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -377,7 +377,7 @@ migration tests + additive-only migrations).
 
 | Item | Status |
 |---|---|
-| Google Drive sync | v3.2.0: working transport via user's own Drive (no MeterWise server). `features/sync/` — `DriveSyncService` (Google Sign-In v7, Drive API v3, folder `MeterWise/<code>`, `landlord.json`), `PacketImportService` (idempotent import), UI in Settings → Drive sync. Client ID injected via `--dart-define=METERWISE_DRIVE_CLIENT_ID` from `.secrets/google_client_id.txt`. Packets are plain JSON (E2E encryption is a follow-up). |
+| Google Drive sync | v3.3.0: AES‑256‑GCM encrypted packets (`packet_crypto.dart`, key = SHA‑256 of `MeterWise:v1:<meterCode>`), `landlord.enc` + `tenant_<name>.enc` in `MeterWise/<code>`. Tenant write-back imported by landlord. Hourly WorkManager task (`sync_worker.dart`, registered in `main.dart`) runs sync when online. Both OAuth client IDs injected via `--dart-define` from `.secrets/`. UI: Settings → Drive sync. |
 | Release signing | Real keystore generated at `android/app/upload-keystore.jks` with config in `android/key.properties` (both git-ignored). APK verified signed via apksigner. **Back up both files and the password** — losing them means you cannot publish updates. |
 | Settlement transaction list inside PDF | Not embedded; invoice shows settlement paid/received totals, full list lives in Settlements screen. |
 | WebView Bangla PDF | v3.0.4: native Android channel (`com.meterwise.app/invoice_pdf`, `MainActivity.kt` + `android.print/MeterWisePrintCallbacks.java`) owns a transparent WebView for the whole job. Runs on a background thread (MethodChannel handlers are on the main thread — waiting there froze the UI), 20s layout/write timeouts, teardown in `finally`, explicit `ISO_A4` + 300 DPI print attributes (missing resolution caused `attributes must specify print resolution`). `stampTitle()` appends an `/Info /Title` so sharing apps don't show "Untitled". Device-verified on S9+. Fallbacks: plugin converter (10s) → English vector PDF, with visible notice + Retry. Invoice language is a persisted setting (auto/en/bn). |
@@ -411,6 +411,7 @@ migration tests + additive-only migrations).
 | 3.1.3 | Cross-device join accepts any well-formed meter code; tenant can leave meter / return to landlord view |
 | 3.2.0 | Google Drive packet sync: Google Sign-In, landlord upload, tenant download + idempotent import, Settings UI |
 | 3.2.1 | Device fixes: Web OAuth `serverClientId`, UTC token expiry, tenant role restored when re-entering from Settings. Drive backup + tenant sync verified on S9+ |
+| 3.3.0 | Encrypted Drive packets (AES‑GCM), tenant write-back, hourly WorkManager sync |
 
 ---
 

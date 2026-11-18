@@ -27,28 +27,6 @@ class TenantHomeScreen extends ConsumerWidget {
     final month = ref.watch(billingMonthProvider);
     final viewAsync = ref.watch(periodViewProvider);
 
-    if (!identity.approved) {
-      return Scaffold(
-        appBar: AppBar(title: Text(l.tenantHomeTitle)),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.hourglass_top,
-                    size: 56, color: theme.colorScheme.primary),
-                const SizedBox(height: 16),
-                Text(l.tenantPendingApproval,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.titleMedium),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(l.tenantHomeTitle),
@@ -64,9 +42,21 @@ class TenantHomeScreen extends ConsumerWidget {
             onSelected: (value) async {
               if (value == 'leave') {
                 await ref.read(settingsRepositoryProvider).leaveMeter();
+              } else if (value == 'sync' && context.mounted) {
+                context.pushNamed(AppRoutes.driveSyncName);
               }
             },
             itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'sync',
+                child: Row(
+                  children: [
+                    const Icon(Icons.cloud_sync_outlined, size: 18),
+                    const SizedBox(width: 8),
+                    Text(l.driveSyncTitle),
+                  ],
+                ),
+              ),
               PopupMenuItem(
                 value: 'leave',
                 child: Row(
@@ -81,7 +71,24 @@ class TenantHomeScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: viewAsync.when(
+      body: !identity.approved
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.hourglass_top,
+                        size: 56, color: theme.colorScheme.primary),
+                    const SizedBox(height: 16),
+                    Text(l.tenantPendingApproval,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.titleMedium),
+                  ],
+                ),
+              ),
+            )
+          : viewAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, _) => Center(child: Text(l.commonSomethingWrong)),
         data: (view) {

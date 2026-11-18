@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/database/app_database.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../main_meter/data/main_meter_repository.dart';
 import '../../properties/data/property_repository.dart';
@@ -60,7 +61,18 @@ class _DriveSyncScreenState extends ConsumerState<DriveSyncScreen> {
       await ref
           .read(driveSyncProvider)
           .uploadPacket(meterCode: code, packet: packet);
-      if (mounted) setState(() => _message = l.driveBackupDone);
+      final tenantPackets =
+          await ref.read(driveSyncProvider).downloadTenantPackets(code);
+      var imported = 0;
+      for (final tenantPacket in tenantPackets) {
+        imported +=
+            await ref.read(packetImportProvider).importTenantPacket(tenantPacket);
+      }
+      if (mounted) {
+        setState(() => _message = imported == 0
+            ? l.driveBackupDone
+            : '${l.driveBackupDone} · ${l.driveSyncDone(imported)}');
+      }
     } catch (e) {
       if (mounted) setState(() => _message = '$e');
     } finally {
@@ -82,6 +94,32 @@ class _DriveSyncScreenState extends ConsumerState<DriveSyncScreen> {
         return;
       }
       final count = await ref.read(packetImportProvider).import(packet);
+
+      // Write this tenant's own entries back for the landlord.
+      final name = identity.name;
+      if (name != null) {
+        final tenants = ref.read(tenantListProvider).value ?? const [];
+        final tenant = tenants
+            .where((t) => t.name == name)
+            .cast<Tenant>()
+            .firstOrNull;
+        final readings = (ref.read(readingListProvider).value ?? const [])
+            .where((r) => tenant != null && r.tenantId == tenant.id)
+            .toList();
+        final recharges = (ref.read(rechargeListProvider).value ?? const [])
+            .where((r) => r.paidBy == name)
+            .toList();
+        await ref.read(driveSyncProvider).uploadTenantPacket(
+              meterCode: code,
+              tenantName: name,
+              packet: ref.read(driveSyncProvider).buildTenantPacket(
+                    tenantName: name,
+                    readings: readings,
+                    recharges: recharges,
+                  ),
+            );
+      }
+
       if (mounted) {
         setState(() => _message = l.driveSyncDone(count));
       }
