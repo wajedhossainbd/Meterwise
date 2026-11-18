@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/app_database.dart';
@@ -118,6 +119,7 @@ class _TenantSelfEntryScreenState extends ConsumerState<TenantSelfEntryScreen> {
                 ),
               );
       }
+      HapticFeedback.mediumImpact();
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(l.tenantEntrySaved)));

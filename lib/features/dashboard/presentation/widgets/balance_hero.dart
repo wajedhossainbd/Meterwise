@@ -1,35 +1,33 @@
 // Extracted dashboard section; shares the library imports.
 part of '../dashboard_screen.dart';
 
-/// The one rich moment on the dashboard: the prepaid balance.
-///
-/// Solid brand blue with a hairline highlight — no hue gradient, no glows.
-/// Everything else on the screen stays quiet so this number reads first.
+/// The one rich moment on the dashboard: the prepaid balance and the meter dial
+/// that explains where this month's units went.
 class _BalanceHero extends StatelessWidget {
   const _BalanceHero({
     required this.remaining,
     required this.monthRecharge,
     required this.currency,
     required this.status,
+    required this.usageFraction,
   });
 
-  /// Remaining prepaid balance = total recharge − total bill used.
   final double remaining;
   final double monthRecharge;
   final String currency;
   final PeriodStatus status;
+  final double usageFraction;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     const onPrimary = Colors.white;
     final l = AppLocalizations.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppTokens.s6),
       decoration: BoxDecoration(
         color: AppColors.seed,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppTokens.radiusSurface),
         border: Border.all(color: onPrimary.withValues(alpha: 0.16)),
       ),
       child: Column(
@@ -38,33 +36,55 @@ class _BalanceHero extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.account_balance_wallet_outlined,
-                  color: onPrimary.withValues(alpha: 0.88), size: 20),
-              const SizedBox(width: 8),
+                  color: onPrimary.withValues(alpha: 0.88),
+                  size: AppTokens.iconMedium),
+              const SizedBox(width: AppTokens.s2),
               Text(l.dashAvailableBalance,
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: onPrimary, fontWeight: FontWeight.w500)),
+                  style: const TextStyle(
+                      color: onPrimary,
+                      fontSize: AppTokens.textTitle,
+                      fontWeight: AppTokens.weightMedium)),
               const Spacer(),
               PeriodStatusChip(status: status),
             ],
           ),
-          const SizedBox(height: 12),
-          AnimatedCount(
-            value: remaining,
-            formatter: (v) => Formatters.money(v, currencyCode: currency),
-            style: theme.textTheme.headlineLarge
-                ?.copyWith(color: onPrimary, fontWeight: FontWeight.w600),
+          const SizedBox(height: AppTokens.s4),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: AnimatedCount(
+                  value: remaining,
+                  formatter: (v) =>
+                      Formatters.money(v, currencyCode: currency),
+                  style: const TextStyle(
+                    color: onPrimary,
+                    fontSize: AppTokens.textDisplay,
+                    fontWeight: AppTokens.weightSemibold,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
+              MeterGauge(fraction: usageFraction),
+            ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppTokens.s4),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTokens.s3,
+              vertical: AppTokens.s2,
+            ),
             decoration: BoxDecoration(
               color: onPrimary.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppTokens.radiusChip),
             ),
             child: Text(
               l.dashRechargedThisMonth(
                   Formatters.money(monthRecharge, currencyCode: currency)),
-              style: theme.textTheme.bodyMedium?.copyWith(color: onPrimary),
+              style: const TextStyle(
+                color: onPrimary,
+                fontSize: AppTokens.textBody,
+              ),
             ),
           ),
         ],

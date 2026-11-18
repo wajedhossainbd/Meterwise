@@ -9,6 +9,7 @@ import '../../../core/theme/app_tokens.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/animated_count.dart';
 import '../../../core/widgets/async_value_view.dart';
+import '../../../core/widgets/meter_gauge.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../billing/application/billing_providers.dart';
 import '../../billing/data/billing_period_repository.dart';
@@ -110,6 +111,9 @@ class _DashboardBody extends ConsumerWidget {
                   monthRecharge: monthly?.totalRecharge ?? 0,
                   currency: currency,
                   status: view.status,
+                  usageFraction: monthly != null && monthly.mainMeterUnits > 0
+                      ? monthly.totalTenantUnits / monthly.mainMeterUnits
+                      : 0,
                 ),
               ),
               const SizedBox(height: 16),

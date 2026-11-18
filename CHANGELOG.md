@@ -3,6 +3,13 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [3.7.0+28] — 2026-11-19
+
+### Added
+- Custom-drawn `MeterGauge` on the balance hero — the app signature visual showing the tenant share of the main meter.
+- Haptic feedback and press-scale motion on all `BrandButton`s, plus success haptics for mark-paid, finalize and entry-save.
+- DESIGN_SYSTEM.md now covers the peak/end emotional moments and finance conventions.
+
 ## [3.6.0+27] — 2026-11-19
 
 ### Added

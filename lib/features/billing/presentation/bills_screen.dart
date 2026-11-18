@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -178,6 +179,7 @@ class _PeriodHeaderState extends ConsumerState<_PeriodHeader> {
     if (!mounted) return;
     setState(() => _busy = false);
     if (errors.isEmpty) {
+      HapticFeedback.mediumImpact();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(l.periodFinalizedToast)),
       );
@@ -441,6 +443,7 @@ class _TenantBillCard extends ConsumerWidget {
                       if (paid) {
                         repo.unmark(bill.tenantId, monthKey);
                       } else {
+                        HapticFeedback.lightImpact();
                         repo.markPaid(bill.tenantId, monthKey);
                       }
                     },

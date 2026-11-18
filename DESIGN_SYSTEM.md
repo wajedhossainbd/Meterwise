@@ -76,7 +76,22 @@ selected state is a tonal pill + 600 label, never a colour wash.
 One easing (`easeOutCubic`), 150ms for feedback and 250ms for entrances. Fade +
 small rise on content entry only. No looping, bouncing or parallax motion.
 
-## 7. Checklist for a new screen
+## 7. Emotional design (peak / end)
+
+Finance conventions: feel safe, professional and tactile. Trust is built through
+precision and feedback, not decoration.
+
+- **The peak** of the landlord journey is the dashboard balance reveal. It is a
+  single composed moment: the figure plus a custom-drawn `MeterGauge` showing
+  the tenant's share of the main meter. The dial is the app's signature visual —
+  no stock illustration, no gradient.
+- **The end** of a task is a confident confirmation: haptic tap on every
+  `BrandButton`, a medium haptic + clear snackbar after mark-paid, finalize and
+  entry-save. The app never just "falls off" after an action.
+- Motion is a trust signal: 150–250ms scale/fade, never looping.
+- Empty states explain what to do next and offer the action inline.
+
+## 8. Checklist for a new screen
 - [ ] Uses tokens for every spacing/radius value
 - [ ] One primary action, at most one secondary
 - [ ] All buttons are `BrandButton`; status is `BrandChip`
