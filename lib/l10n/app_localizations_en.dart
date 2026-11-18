@@ -1323,4 +1323,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsPrivacy => 'Privacy policy';
+
+  @override
+  String updateAvailable(Object version) {
+    return 'Update available: v$version';
+  }
+
+  @override
+  String get updateBody =>
+      'A newer version is available on GitHub. It will be downloaded in-app and Android will ask you to confirm the install.';
+
+  @override
+  String get updateLater => 'Later';
+
+  @override
+  String get updateInstall => 'Download & install';
+
+  @override
+  String get updateFailed =>
+      'Could not download the update. Please try again later.';
 }

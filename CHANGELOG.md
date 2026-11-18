@@ -3,6 +3,11 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [3.5.0+26] — 2026-11-18
+
+### Added
+- In-app GitHub Releases updater for sideload APK builds: checks on cold start, shows release notes, downloads the APK in-app and opens the Android installer. Disabled in the Play AAB via `METERWISE_GITHUB_UPDATER=false`.
+
 ## [3.4.1+25] — 2026-11-18
 
 ### Fixed

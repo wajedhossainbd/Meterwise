@@ -10,7 +10,13 @@ class AppConstants {
   static const String appName = 'MeterWise';
 
   /// User-facing version. Keep in sync with `version:` in pubspec.yaml.
-  static const String appVersion = '3.4.1';
+  static const String appVersion = '3.5.0';
+
+  /// GitHub in-app updater is for sideload APK builds only. The Play Store AAB
+  /// is built with `--dart-define=METERWISE_GITHUB_UPDATER=false` because Play
+  /// policy forbids apps updating themselves outside the store.
+  static const bool githubUpdaterEnabled =
+      bool.fromEnvironment('METERWISE_GITHUB_UPDATER', defaultValue: true);
 
   /// Tagline shown on splash / about screens.
   static const String appTagline = 'Smart Multi-Tenant Electricity Billing';

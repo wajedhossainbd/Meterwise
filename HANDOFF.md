@@ -4,7 +4,7 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v3.4.0+24 · DB schema v11 · 61/61 tests green ·
+> **Last state:** v3.5.0+26 · DB schema v11 · 63/63 tests green ·
 > `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
 > (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
@@ -48,8 +48,12 @@ CID=$(tr -d '\r\n' < .secrets/google_client_id.txt)
 SID=$(tr -d '\r\n' < .secrets/google_server_client_id.txt)
 flutter build apk --release \
   --dart-define=METERWISE_DRIVE_CLIENT_ID="$CID" \
-  --dart-define=METERWISE_DRIVE_SERVER_CLIENT_ID="$SID"
+  --dart-define=METERWISE_DRIVE_SERVER_CLIENT_ID="$SID" \
+  --dart-define=METERWISE_GITHUB_UPDATER=false
 ```
+
+The sideload APK keeps the updater enabled (default). `features/updates/`
+contains the GitHub Releases check, in-app APK download and install prompt.
 
 **Where work left off / natural next steps:**
 1. Drive sync on the emulator needs a Google account added to that AVD.
@@ -120,7 +124,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `3.4.1+25`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `3.5.0+26`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -478,6 +482,7 @@ migration tests + additive-only migrations).
 | 3.3.0 | Encrypted Drive packets (AES‑GCM), tenant write-back, hourly WorkManager sync |
 | 3.4.0 | Professional UI craft pass, privacy policy + in-app link, Play Store compliance docs and signed AAB |
 | 3.4.1 | Dark-theme hero contrast fix |
+| 3.5.0 | In-app GitHub updater for sideload builds (disabled in Play AAB) |
 
 ---
 

@@ -12,6 +12,7 @@ import 'features/settings/data/settings_repository.dart';
 import 'features/sync/data/sync_worker.dart';
 import 'features/tariff/data/tariff_repository.dart';
 import 'features/tariff/data/tariff_version_repository.dart';
+import 'features/updates/presentation/update_prompt.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
@@ -58,6 +59,10 @@ class MeterWiseApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Sideload builds only: offer a GitHub release update once per cold start.
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => UpdatePrompt.maybeShow(context));
+
     final themeMode = ref.watch(themeModeControllerProvider);
     final settings = ref.watch(appSettingsProvider);
     final locale = ref.watch(localeProvider);

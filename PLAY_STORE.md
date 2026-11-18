@@ -20,6 +20,7 @@ App: `com.meterwise.app` · version `3.3.0+23` (next release should bump to
 | In-app privacy access | ✅ Settings → Privacy policy |
 | Permissions are minimal and justified | ✅ INTERNET (Drive sign-in/sync), CAMERA (meter photo + QR scan), FOREGROUND_SERVICE/POST_NOTIFICATIONS/RECEIVE_BOOT_COMPLETED/WAKE_LOCK (WorkManager hourly sync), USE_BIOMETRIC/FINGERPRINT (Google Sign-In), ACCESS_NETWORK_STATE |
 | No ads / no analytics / no trackers | ✅ none in dependencies |
+| No self-update outside Play | ✅ in-app GitHub updater is compiled out of the AAB with `--dart-define=METERWISE_GITHUB_UPDATER=false`; enabled only in the sideload APK |
 | Local-first data | ✅ SQLite on device; no MeterWise server |
 | Screenshots for listing | ✅ `docs/screenshots/` (8 device captures) |
 

@@ -450,5 +450,10 @@
   "driveBackupDone": "ব্যাকআপ আপলোড হয়েছে",
   "driveSyncDone": "{count} টি নতুন এন্ট্রি সিঙ্ক হয়েছে",
   "driveNoPacket": "এই মিটার কোডের জন্য কোনো প্যাকেট পাওয়া যায়নি",
-  "settingsPrivacy": "গোপনীয়তা নীতি"
+  "settingsPrivacy": "গোপনীয়তা নীতি",
+  "updateAvailable": "আপডেট পাওয়া গেছে: v{version}",
+  "updateBody": "GitHub-এ একটি নতুন সংস্করণ পাওয়া গেছে। অ্যাপের ভেতর থেকে ডাউনলোড হবে এবং ইনস্টলের জন্য Android আপনাকে জিজ্ঞেস করবে।",
+  "updateLater": "পরে",
+  "updateInstall": "ডাউনলোড ও ইনস্টল",
+  "updateFailed": "আপডেট ডাউনলোড করা যায়নি। পরে আবার চেষ্টা করুন।"
 }

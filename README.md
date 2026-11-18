@@ -123,8 +123,8 @@ Gradle picks it up automatically; without the file, local builds still work.
 
 ## Status
 
-- Version **3.4.1+25**, database schema **v11**
-- `flutter analyze`: clean · `flutter test`: **61 tests passing**
+- Version **3.5.0+26**, database schema **v11**
+- `flutter analyze`: clean · `flutter test`: **63 tests passing**
 - Android only. Release APKs are signed with the keystore configured in
   `android/key.properties` (both git-ignored — back them up).
 - Bangla invoices use a native Android channel that owns its WebView for the whole
@@ -180,6 +180,17 @@ SID=$(tr -d '\r\n' < .secrets/google_server_client_id.txt)
 flutter build apk --release \
   --dart-define=METERWISE_DRIVE_CLIENT_ID="$CID" \
   --dart-define=METERWISE_DRIVE_SERVER_CLIENT_ID="$SID"
+```
+
+That APK includes the in-app GitHub updater (enabled by default). For the
+**Play Store AAB**, disable it — Play policy forbids apps updating themselves
+outside the store:
+
+```bash
+flutter build appbundle --release \
+  --dart-define=METERWISE_DRIVE_CLIENT_ID="$CID" \
+  --dart-define=METERWISE_DRIVE_SERVER_CLIENT_ID="$SID" \
+  --dart-define=METERWISE_GITHUB_UPDATER=false
 ```
 
 A plain `flutter build apk --release` still works — Drive sign-in is simply

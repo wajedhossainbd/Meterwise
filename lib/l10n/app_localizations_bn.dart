@@ -1328,4 +1328,22 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get settingsPrivacy => 'গোপনীয়তা নীতি';
+
+  @override
+  String updateAvailable(Object version) {
+    return 'আপডেট পাওয়া গেছে: v$version';
+  }
+
+  @override
+  String get updateBody =>
+      'GitHub-এ একটি নতুন সংস্করণ পাওয়া গেছে। অ্যাপের ভেতর থেকে ডাউনলোড হবে এবং ইনস্টলের জন্য Android আপনাকে জিজ্ঞেস করবে।';
+
+  @override
+  String get updateLater => 'পরে';
+
+  @override
+  String get updateInstall => 'ডাউনলোড ও ইনস্টল';
+
+  @override
+  String get updateFailed => 'আপডেট ডাউনলোড করা যায়নি। পরে আবার চেষ্টা করুন।';
 }

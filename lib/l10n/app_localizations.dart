@@ -2545,6 +2545,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Privacy policy'**
   String get settingsPrivacy;
+
+  /// No description provided for @updateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Update available: v{version}'**
+  String updateAvailable(Object version);
+
+  /// No description provided for @updateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A newer version is available on GitHub. It will be downloaded in-app and Android will ask you to confirm the install.'**
+  String get updateBody;
+
+  /// No description provided for @updateLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get updateLater;
+
+  /// No description provided for @updateInstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Download & install'**
+  String get updateInstall;
+
+  /// No description provided for @updateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not download the update. Please try again later.'**
+  String get updateFailed;
 }
 
 class _AppLocalizationsDelegate
