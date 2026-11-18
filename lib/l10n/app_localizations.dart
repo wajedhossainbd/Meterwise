@@ -2575,6 +2575,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not download the update. Please try again later.'**
   String get updateFailed;
+
+  /// No description provided for @tenantSwitchLandlord.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to landlord view'**
+  String get tenantSwitchLandlord;
+
+  /// No description provided for @tenantCheckStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Check approval status'**
+  String get tenantCheckStatus;
 }
 
 class _AppLocalizationsDelegate

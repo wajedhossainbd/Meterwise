@@ -3,6 +3,11 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [3.7.1+29] — 2026-11-19
+
+### Fixed
+- Pending tenant state is no longer a dead end: added a status-check action and a "Switch to landlord view" menu item so the owner can approve without dropping the joined meter.
+
 ## [3.7.0+28] — 2026-11-19
 
 ### Added

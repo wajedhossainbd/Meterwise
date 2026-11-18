@@ -455,5 +455,7 @@
   "updateBody": "A newer version is available on GitHub. It will be downloaded in-app and Android will ask you to confirm the install.",
   "updateLater": "Later",
   "updateInstall": "Download & install",
-  "updateFailed": "Could not download the update. Please try again later."
+  "updateFailed": "Could not download the update. Please try again later.",
+  "tenantSwitchLandlord": "Switch to landlord view",
+  "tenantCheckStatus": "Check approval status"
 }

@@ -1342,4 +1342,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get updateFailed =>
       'Could not download the update. Please try again later.';
+
+  @override
+  String get tenantSwitchLandlord => 'Switch to landlord view';
+
+  @override
+  String get tenantCheckStatus => 'Check approval status';
 }

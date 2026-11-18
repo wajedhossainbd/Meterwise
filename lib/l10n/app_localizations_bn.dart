@@ -1346,4 +1346,10 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get updateFailed => 'আপডেট ডাউনলোড করা যায়নি। পরে আবার চেষ্টা করুন।';
+
+  @override
+  String get tenantSwitchLandlord => 'মালিকের ভিউতে যান';
+
+  @override
+  String get tenantCheckStatus => 'অনুমোদনের অবস্থা দেখুন';
 }

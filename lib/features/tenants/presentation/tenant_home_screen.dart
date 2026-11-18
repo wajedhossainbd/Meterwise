@@ -43,6 +43,12 @@ class TenantHomeScreen extends ConsumerWidget {
             onSelected: (value) async {
               if (value == 'leave') {
                 await ref.read(settingsRepositoryProvider).leaveMeter();
+              } else if (value == 'landlord') {
+                // Same-device prototype: switch roles without dropping the
+                // join, so the owner can approve and then switch back.
+                await ref
+                    .read(settingsRepositoryProvider)
+                    .setRole('landlord');
               } else if (value == 'sync' && context.mounted) {
                 context.pushNamed(AppRoutes.driveSyncName);
               }
@@ -55,6 +61,16 @@ class TenantHomeScreen extends ConsumerWidget {
                     const Icon(Icons.cloud_sync_outlined, size: 18),
                     const SizedBox(width: 8),
                     Text(l.driveSyncTitle),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'landlord',
+                child: Row(
+                  children: [
+                    const Icon(Icons.admin_panel_settings_outlined, size: 18),
+                    const SizedBox(width: 8),
+                    Text(l.tenantSwitchLandlord),
                   ],
                 ),
               ),
@@ -85,6 +101,20 @@ class TenantHomeScreen extends ConsumerWidget {
                     Text(l.tenantPendingApproval,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.titleMedium),
+                    const SizedBox(height: 20),
+                    BrandButton(
+                      label: l.tenantCheckStatus,
+                      icon: Icons.refresh,
+                      variant: BrandButtonVariant.secondary,
+                      onPressed: () {
+                        ref.invalidate(appSettingsProvider);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(l.tenantPendingApproval)),
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
