@@ -11,6 +11,59 @@
 
 ---
 
+## 0. CURRENT HANDOFF SNAPSHOT — start here
+
+**Repository:** `https://github.com/wajedhossainbd/Meterwise.git` (public,
+default branch `main`, pushed from local `/Volumes/Mac 500 SSD/Claude/MeterWise`).
+
+**Release:** v3.3.0+23, signed APK attached to the GitHub Release. Users update
+by downloading the APK from Releases; Android uses the `+23` build number to
+detect upgrades.
+
+**Last verified (device, 2026-11-18):** two-device walkthrough with the S9+ as
+landlord and the Pixel_7 AVD (`MeterTest`) as tenant:
+- Landlord: setup → QR/code invite (`MW-6D82-72WB` at the time) → two reading
+  sessions → recharge → Bills (300 kWh, 60 kWh common, ৳1,944.01) → mark paid.
+- Tenant: join with the code → pick roster name → approve → scoped 2-tab home
+  (৳862.88 credit, 175 kWh, ৳1,137.12) → self-entry reading → history.
+- Google sign-in + AES‑GCM encrypted landlord backup and tenant sync verified on
+  the S9+ (the emulator has no Google account, so Drive UI there needs one).
+- Bangla PDF invoice exports correctly with filename `MeterWise_<tenant>_<month>.pdf`.
+
+**Secrets:** `.secrets/` is git-ignored and holds both OAuth client IDs and the
+downloaded JSONs. Never commit them. The Android keystore is
+`android/app/upload-keystore.jks` with config in `android/key.properties`
+(also git-ignored); back both up outside the repo.
+
+**Build with sync:**
+```bash
+CID=$(tr -d '\r\n' < .secrets/google_client_id.txt)
+SID=$(tr -d '\r\n' < .secrets/google_server_client_id.txt)
+flutter build apk --release \
+  --dart-define=METERWISE_DRIVE_CLIENT_ID="$CID" \
+  --dart-define=METERWISE_DRIVE_SERVER_CLIENT_ID="$SID"
+```
+
+**Where work left off / natural next steps:**
+1. Drive sync on the emulator needs a Google account added to that AVD.
+2. Hourly WorkManager task is registered but its background execution has not
+   been observed over a full hour on device — verify with logcat.
+3. No auto-refresh of tenant view when the app returns to foreground (manual
+   Sync button only).
+4. Tenant write-back currently covers readings + recharges; settlements and
+   mark-paid flags are not yet exchanged through packets.
+5. Old plain-JSON `landlord.json` files from pre-3.3.0 builds remain in Drive;
+   new builds read `landlord.enc` only. Clean them up if desired.
+6. Release signing uses a self-generated keystore — for Google Play, enrol in
+   App Signing by Google Play or back up this keystore permanently.
+7. QR code rotation/revocation is not implemented; a shared code is permanent.
+
+**Rules to preserve:** the billing engine is the single computation path; the
+spreadsheet goldens are the contract; all migrations are additive; all
+user-visible strings go through en+bn ARB; secrets stay out of git.
+
+---
+
 ## 1. What this app is
 
 **MeterWise** (`com.meterwise.app`, package `meterwise`) is a production-quality

@@ -98,7 +98,7 @@ Gradle picks it up automatically; without the file, local builds still work.
 ## Status
 
 - Version **3.3.0+23**, database schema **v11**
-- `flutter analyze`: clean · `flutter test`: **58 tests passing**
+- `flutter analyze`: clean · `flutter test`: **61 tests passing**
 - Android only. Release APKs are signed with the keystore configured in
   `android/key.properties` (both git-ignored — back them up).
 - Bangla invoices use a native Android channel that owns its WebView for the whole
@@ -108,7 +108,51 @@ Gradle picks it up automatically; without the file, local builds still work.
   The deprecated plugin converter and the English vector PDF remain as fallbacks,
   with a visible notice and retry if Bangla cannot be produced.
 - Invoice language is configurable (auto / English / Bangla).
-- **Tenant access (prototype):** landlord generates a meter code + QR from Settings → Invite a tenant; a tenant joins by scanning/entering the code and picking their roster name, then sees a scoped home with their usage, bill, balance, recharge history, invoices and an equal-split explanation. Approval happens on the landlord's device. Once joined, the first tab is the tenant's own home. Tenants can add their own sub-meter reading, log their own recharge, and record a manual payment or reimbursement to another tenant — all into the same ledger. Drive-based packet sync is the next step.
+- **Tenant access:** landlord generates a meter code + QR from Settings → Invite a tenant; a tenant joins by scanning/entering the code and picking their roster name, then sees a scoped home with their usage, bill, balance, recharge history, invoices and an equal-split explanation. Approval happens on the landlord's device. Once joined, the first tab is the tenant's own home. Tenants can add their own sub-meter reading, log their own recharge, and record a manual payment or reimbursement to another tenant — all into the same ledger.
 - Google Drive sync: landlord uploads an **AES‑256‑GCM encrypted** packet to their own Drive; tenant downloads, decrypts with the meter code and imports it. Tenants write their own entries back as encrypted `tenant_<name>.enc`, which the landlord picks up on next sync. An hourly WorkManager task runs both directions when online. OAuth client IDs are injected at build time from `.secrets/`. See `GOOGLE_DRIVE_SETUP.md`.
+
+## Download / install
+
+Grab the latest signed APK from the
+[GitHub Releases page](https://github.com/wajedhossainbd/Meterwise/releases).
+Enable "Install unknown apps" for your browser/file manager, install the APK,
+then open the app. Upgrades preserve your local database (all migrations are
+additive) — but still take a backup from **Settings → Backup** first.
+
+## Documentation
+
+| File | What it covers |
+|---|---|
+| [CHANGELOG.md](CHANGELOG.md) | Version-by-version release notes |
+| [BILLING.md](BILLING.md) | Billing formulas and the spreadsheet-verified rules |
+| [HANDOFF.md](HANDOFF.md) | Architecture, schema, gotchas, test status, **where work left off** |
+| [GOOGLE_DRIVE_SETUP.md](GOOGLE_DRIVE_SETUP.md) | One-time Google Cloud OAuth setup for Drive sync |
+
+## Versioning and updates
+
+- `pubspec.yaml` → `version: X.Y.Z+BUILD` is the single source of truth for
+  Android `versionName` / `versionCode` (an incrementing `BUILD` is what makes
+  Android offer an update).
+- Keep `AppConstants.appVersion` in `lib/core/constants/app_constants.dart`
+  in sync with the `X.Y.Z` part (shown in Settings).
+- Update [CHANGELOG.md](CHANGELOG.md) and `README.md` status on every release.
+- Build with the secrets injected (see below), then create a GitHub Release
+  tagged `vX.Y.Z` and attach the APK so users get a downloadable update.
+
+## Building with Drive sync
+
+The OAuth client IDs are **not in the repository**. Put them in `.secrets/`
+(git-ignored) as described in `GOOGLE_DRIVE_SETUP.md`, then:
+
+```bash
+CID=$(tr -d '\r\n' < .secrets/google_client_id.txt)
+SID=$(tr -d '\r\n' < .secrets/google_server_client_id.txt)
+flutter build apk --release \
+  --dart-define=METERWISE_DRIVE_CLIENT_ID="$CID" \
+  --dart-define=METERWISE_DRIVE_SERVER_CLIENT_ID="$SID"
+```
+
+A plain `flutter build apk --release` still works — Drive sign-in is simply
+unavailable in that build.
 
 This project is not published to pub.dev.
