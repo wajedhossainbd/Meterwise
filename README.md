@@ -123,7 +123,7 @@ Gradle picks it up automatically; without the file, local builds still work.
 
 ## Status
 
-- Version **3.5.0+26**, database schema **v11**
+- Version **3.6.0+27**, database schema **v11**
 - `flutter analyze`: clean · `flutter test`: **63 tests passing**
 - Android only. Release APKs are signed with the keystore configured in
   `android/key.properties` (both git-ignored — back them up).
@@ -155,6 +155,7 @@ additive) — but still take a backup from **Settings → Backup** first.
 | [GOOGLE_DRIVE_SETUP.md](GOOGLE_DRIVE_SETUP.md) | One-time Google Cloud OAuth setup for Drive sync |
 | [PLAY_STORE.md](PLAY_STORE.md) | Play Store compliance checklist and remaining account-side actions |
 | [STORE_LISTING.md](STORE_LISTING.md) | Ready-to-paste store listing copy |
+| [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) | Brand tokens and component rules |
 
 **Privacy policy:** https://wajedhossainbd.github.io/Meterwise/privacy.html
 

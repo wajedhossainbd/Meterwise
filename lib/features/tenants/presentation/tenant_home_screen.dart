@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/brand_button.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../../l10n/app_localizations.dart';
@@ -180,13 +181,19 @@ class TenantHomeScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              OutlinedButton.icon(
-                onPressed: () => context.pushNamed(AppRoutes.tenantEntryName),
-                icon: const Icon(Icons.edit_outlined),
-                label: Text(l.tenantSelfEntry),
+              BrandButton(
+                label: l.tenantSelfEntry,
+                icon: Icons.edit_outlined,
+                variant: BrandButtonVariant.secondary,
+                expanded: true,
+                onPressed: () =>
+                    context.pushNamed(AppRoutes.tenantEntryName),
               ),
               const SizedBox(height: 12),
-              FilledButton.icon(
+              BrandButton(
+                label: l.invoiceTitle,
+                icon: Icons.receipt_long_outlined,
+                expanded: true,
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => TenantBillDetailScreen(
@@ -195,8 +202,6 @@ class TenantHomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                icon: const Icon(Icons.receipt_long),
-                label: Text(l.invoiceTitle),
               ),
             ],
           );

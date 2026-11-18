@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/app_database.dart';
+import '../../../core/widgets/brand_button.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../main_meter/data/main_meter_repository.dart';
 import '../../properties/data/property_repository.dart';
@@ -159,27 +160,30 @@ class _DriveSyncScreenState extends ConsumerState<DriveSyncScreen> {
                   ),
                   const SizedBox(height: 12),
                   if (_email == null)
-                    FilledButton.icon(
-                      onPressed: _busy ? null : _signIn,
-                      icon: const Icon(Icons.login),
-                      label: Text(l.driveSignIn),
+                    BrandButton(
+                      label: l.driveSignIn,
+                      icon: Icons.login,
+                      loading: _busy,
+                      onPressed: _signIn,
                     )
                   else ...[
-                    FilledButton.icon(
-                      onPressed: _busy ? null : (isTenant ? _sync : _backup),
-                      icon: Icon(isTenant ? Icons.sync : Icons.cloud_upload),
-                      label: Text(isTenant ? l.driveSyncNow : l.driveBackup),
+                    BrandButton(
+                      label: isTenant ? l.driveSyncNow : l.driveBackup,
+                      icon: isTenant ? Icons.sync : Icons.cloud_upload_outlined,
+                      loading: _busy,
+                      onPressed: isTenant ? _sync : _backup,
                     ),
                     const SizedBox(height: 8),
-                    OutlinedButton.icon(
+                    BrandButton(
+                      label: l.driveSignOut,
+                      icon: Icons.logout,
+                      variant: BrandButtonVariant.secondary,
                       onPressed: _busy
                           ? null
                           : () async {
                               await ref.read(driveSyncProvider).signOut();
                               if (mounted) setState(() => _email = null);
                             },
-                      icon: const Icon(Icons.logout),
-                      label: Text(l.driveSignOut),
                     ),
                   ],
                   if (_busy)

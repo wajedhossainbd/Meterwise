@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_tokens.dart';
 
 /// Builds the Material 3 [ColorScheme] from the brand seed and overlays the
 /// power-yellow / light-blue accents so they're available app-wide.
@@ -14,7 +15,7 @@ import 'app_colors.dart';
 class AppTheme {
   const AppTheme._();
 
-  static const double _radius = 16;
+  static const double _radius = AppTokens.radiusCard;
 
   static ThemeData light() => _build(Brightness.light);
 
@@ -27,10 +28,6 @@ class AppTheme {
       brightness: brightness,
       secondary: AppColors.accentOrange,
       tertiary: AppColors.powerYellow,
-    );
-
-    final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(_radius),
     );
 
     final scaffoldBg =
@@ -56,7 +53,7 @@ class AppTheme {
       ),
       cardTheme: CardThemeData(
         // Soft, modern shadow rather than Material's tonal tint.
-        elevation: 1.5,
+        elevation: isLight ? 1 : 0,
         shadowColor: Colors.black.withValues(alpha: 0.06),
         clipBehavior: Clip.antiAlias,
         color: cardColor,
@@ -68,25 +65,66 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          minimumSize: const Size(64, 52),
-          shape: shape,
+          minimumSize: const Size(88, AppTokens.buttonHeight),
+          padding: const EdgeInsets.symmetric(horizontal: AppTokens.s5),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+                Radius.circular(AppTokens.radiusControl)),
+          ),
+          textStyle: const TextStyle(
+            fontSize: AppTokens.textBody,
+            fontWeight: AppTokens.weightSemibold,
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          minimumSize: const Size(64, 52),
-          shape: shape,
+          minimumSize: const Size(88, AppTokens.buttonHeight),
+          padding: const EdgeInsets.symmetric(horizontal: AppTokens.s5),
+          side: BorderSide(color: colorScheme.outlineVariant),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+                Radius.circular(AppTokens.radiusControl)),
+          ),
+          textStyle: const TextStyle(
+            fontSize: AppTokens.textBody,
+            fontWeight: AppTokens.weightSemibold,
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          minimumSize: const Size(64, AppTokens.buttonHeight),
+          padding: const EdgeInsets.symmetric(horizontal: AppTokens.s3),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+                Radius.circular(AppTokens.radiusControl)),
+          ),
+          textStyle: const TextStyle(
+            fontSize: AppTokens.textBody,
+            fontWeight: AppTokens.weightSemibold,
+          ),
+        ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          minimumSize: const Size(AppTokens.iconButtonSize,
+              AppTokens.iconButtonSize),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+                Radius.circular(AppTokens.radiusControl)),
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppTokens.radiusControl),
           borderSide: BorderSide.none,
         ),
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
+          horizontal: AppTokens.s4,
+          vertical: AppTokens.s3,
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
@@ -112,7 +150,7 @@ class AppTheme {
         foregroundColor: colorScheme.onPrimary,
         elevation: 3,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(AppTokens.radiusControl),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
@@ -125,16 +163,24 @@ class AppTheme {
       ),
       dialogTheme: DialogThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(AppTokens.radiusSurface),
         ),
         backgroundColor: cardColor,
       ),
       chipTheme: ChipThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppTokens.radiusChip),
         ),
         side: BorderSide.none,
         backgroundColor: colorScheme.secondaryContainer,
+        labelStyle: const TextStyle(
+          fontSize: AppTokens.textCaption,
+          fontWeight: AppTokens.weightSemibold,
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppTokens.s2,
+          vertical: AppTokens.s1,
+        ),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: SegmentedButton.styleFrom(

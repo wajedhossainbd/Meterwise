@@ -3,6 +3,12 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [3.6.0+27] — 2026-11-19
+
+### Added
+- Formal design system: `DESIGN_SYSTEM.md`, token file, `BrandButton` (4 roles) and `BrandChip` components.
+- Theme-wide button, chip, input, FAB and dialog styling from tokens — every screen inherits the same 48px/12px-radius controls and 14/600 labels.
+
 ## [3.5.0+26] — 2026-11-18
 
 ### Added

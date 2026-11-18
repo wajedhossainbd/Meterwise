@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/async_value_view.dart';
+import '../../../core/widgets/brand_button.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../properties/data/property_repository.dart';
@@ -259,16 +260,17 @@ class _PeriodHeaderState extends ConsumerState<_PeriodHeader> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 else if (finalized)
-                  OutlinedButton.icon(
+                  BrandButton(
+                    label: l.periodUnlock,
+                    icon: Icons.lock_open_outlined,
+                    variant: BrandButtonVariant.secondary,
                     onPressed: _unlock,
-                    icon: const Icon(Icons.lock_open, size: 18),
-                    label: Text(l.periodUnlock),
                   )
                 else
-                  FilledButton.icon(
+                  BrandButton(
+                    label: l.periodFinalize,
+                    icon: Icons.lock_outlined,
                     onPressed: view.bill == null ? null : _finalize,
-                    icon: const Icon(Icons.lock_outline, size: 18),
-                    label: Text(l.periodFinalize),
                   ),
               ],
             ),
