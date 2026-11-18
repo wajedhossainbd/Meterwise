@@ -81,6 +81,14 @@ replace that keystore, the SHA‑1 changes and you must add the new one in step 
 > `serverClientId` — sign-in fails with `missingServerClientId`. You need the
 > **Web application** client for that field.
 
+## Publishing note
+
+The app requests `https://www.googleapis.com/auth/drive` (restricted scope)
+because landlord and tenant are different Google accounts. Before a Play Store
+release, put the Cloud project's OAuth consent screen into **Production** and
+submit Google's verification. See `PLAY_STORE.md` § 6 for the submission
+checklist, demo-video outline and the `drive.file` fallback.
+
 ## Step 5 — Send me the client ID
 
 Copy the **Client ID** that appears (it looks like

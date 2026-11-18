@@ -33,7 +33,14 @@ landlord and the Pixel_7 AVD (`MeterTest`) as tenant:
 **Secrets:** `.secrets/` is git-ignored and holds both OAuth client IDs and the
 downloaded JSONs. Never commit them. The Android keystore is
 `android/app/upload-keystore.jks` with config in `android/key.properties`
-(also git-ignored); back both up outside the repo.
+(also git-ignored). Verified backup of all of these exists outside the repo at
+`~/Documents/MeterWise-secrets/v3.4.1/` (hashes matched); also copy to an
+external drive or password manager.
+
+**OAuth scope decision:** keep the restricted `drive` scope and submit Google
+verification (landlord and tenant are different Google accounts, so
+`drive.file` alone cannot read another user's packet). Full submission
+checklist and fallback plan are in `PLAY_STORE.md` § 6.
 
 **Build with sync:**
 ```bash

@@ -31,6 +31,17 @@ App: `com.meterwise.app` · version `3.3.0+23` (next release should bump to
 2. **App signing by Google Play** — enrol during the first upload. Keep the
    local upload keystore safe; do **not** lose it. If you use Play App Signing,
    the key used to sign the uploaded AAB is the upload key.
+   - Upload certificate SHA-256 (for reference in Play Console):
+     `50:47:2B:20:79:01:BB:32:FB:95:E7:1F:20:85:75:C0:2C:3C:2B:50:F1:8D:65:A9:3B:E3:77:53:D8:A6:BC:54`
+   - Exact steps: Play Console → app → **Setup → App integrity** → enrol in
+     **App signing by Google Play** → accept terms → upload the signed AAB on
+     the release track. Google generates and holds the *app-signing* key; the
+     local keystore remains the *upload* key used to sign future AABs.
+   - After enrolment, verify Play Console shows the upload certificate above.
+   - **Back up** the upload keystore + `key.properties` + `.secrets/` outside
+     this repo. A local encrypted backup already exists at
+     `~/Documents/MeterWise-secrets/v3.4.1/` (with verified identical hashes);
+     also copy it to an external drive or password manager.
 3. **Store listing**
    - Short description (80 chars): "Fair prepaid electricity billing for multi-tenant buildings in Bangladesh."
    - Full description: see `STORE_LISTING.md`.
@@ -51,16 +62,33 @@ App: `com.meterwise.app` · version `3.3.0+23` (next release should bump to
    - Data encrypted in transit: yes (Google APIs/HTTPS). User can request
      deletion: yes — uninstall the app and delete the `MeterWise` Drive folder.
 6. **OAuth consent screen / sensitive scope verification** — ⚠️ **main blocker**
-   - Drive sync currently requests `https://www.googleapis.com/auth/drive`
-     (full Drive). Google treats this as a **restricted scope** and new apps
-     generally need verification before publication, with a privacy policy and
-     a demo video.
-   - Options:
-     a) Keep `drive` scope and submit Google's verification (uses the privacy
-        policy link above). Documented in `GOOGLE_DRIVE_SETUP.md`.
-     b) Reduce to `drive.file` and add a Google Drive "Open with" intent filter
-        so a tenant can grant per-file access — smaller review burden, but more
-        app work. Recommended if verification is too slow.
+   - **Decision: keep the `drive` scope and apply for verification.** The app's
+     core sync requires the tenant to read a packet created by the landlord's
+     *different* Google account. `drive.file` only grants access to files the
+     app created or the user opened through Drive's "Open with", so it would
+     require a separate per-file sharing flow and break the automatic sync.
+   - `https://www.googleapis.com/auth/drive` is a **restricted** scope; Google
+     will review before the app can be published to all users.
+   - Verification submission checklist:
+     1. Google Cloud project with Drive API enabled and quota set to **Production**
+        (a project in "Testing" expires after 7 days).
+     2. OAuth consent screen in **Production**, with app domain and the public
+        privacy policy URL: https://wajedhossainbd.github.io/Meterwise/privacy.html
+     3. Authorized domain: `wajedhossainbd.github.io` (for the policy link).
+     4. A short demo video showing: sign-in, landlord creating the
+        `MeterWise/<code>` folder and encrypted packet, tenant joining with the
+        code and reading the packet, and the in-app privacy-policy link.
+     5. A written justification: "The app stores each user's billing packets in
+        their own Google Drive so two users can synchronise a shared meter
+        without a MeterWise-hosted server; access is limited to the app-created
+        `MeterWise` folder."
+     6. Submit the verification request from the OAuth consent screen page.
+   - **Fallback if verification is rejected or too slow:** add a Google Drive
+     "Open with" intent filter for packet files and switch
+     `driveScopes` in `lib/features/sync/data/drive_config.dart` to
+     `https://www.googleapis.com/auth/drive.file`, then ask the tenant to open
+     the shared packet once from Drive. This is a smaller review burden but
+     needs app changes and a manual first-time step.
 7. **App access / tester instructions** — no sign-in wall after install (the
    Google sign-in is optional, for Drive sync only), so "no credentials needed"
    can be declared for the reviewer.
