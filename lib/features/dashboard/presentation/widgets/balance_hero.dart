@@ -22,7 +22,7 @@ class _BalanceHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final onPrimary = theme.colorScheme.onPrimary;
+    const onPrimary = Colors.white;
     final l = AppLocalizations.of(context);
 
     return Container(

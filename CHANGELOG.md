@@ -3,6 +3,11 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [3.4.1+25] — 2026-11-18
+
+### Fixed
+- Dark-theme contrast on the balance hero (explicit white text on brand blue).
+
 ## [3.4.0+24] — 2026-11-18
 
 ### Changed

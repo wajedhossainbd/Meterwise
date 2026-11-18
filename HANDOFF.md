@@ -113,7 +113,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `3.4.0+24`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `3.4.1+25`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -470,6 +470,7 @@ migration tests + additive-only migrations).
 | 3.2.1 | Device fixes: Web OAuth `serverClientId`, UTC token expiry, tenant role restored when re-entering from Settings. Drive backup + tenant sync verified on S9+ |
 | 3.3.0 | Encrypted Drive packets (AES‑GCM), tenant write-back, hourly WorkManager sync |
 | 3.4.0 | Professional UI craft pass, privacy policy + in-app link, Play Store compliance docs and signed AAB |
+| 3.4.1 | Dark-theme hero contrast fix |
 
 ---
 
