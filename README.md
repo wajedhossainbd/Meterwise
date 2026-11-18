@@ -97,7 +97,7 @@ Gradle picks it up automatically; without the file, local builds still work.
 
 ## Status
 
-- Version **3.1.2+19**, database schema **v11**
+- Version **3.1.3+20**, database schema **v11**
 - `flutter analyze`: clean · `flutter test`: **58 tests passing**
 - Android only. Release APKs are signed with the keystore configured in
   `android/key.properties` (both git-ignored — back them up).

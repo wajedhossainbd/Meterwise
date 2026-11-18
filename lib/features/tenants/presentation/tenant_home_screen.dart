@@ -60,6 +60,25 @@ class TenantHomeScreen extends ConsumerWidget {
               SnackBar(content: Text(identity.code ?? '')),
             ),
           ),
+          PopupMenuButton<String>(
+            onSelected: (value) async {
+              if (value == 'leave') {
+                await ref.read(settingsRepositoryProvider).leaveMeter();
+              }
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'leave',
+                child: Row(
+                  children: [
+                    const Icon(Icons.logout, size: 18),
+                    const SizedBox(width: 8),
+                    Text(l.tenantLeave),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
       body: viewAsync.when(

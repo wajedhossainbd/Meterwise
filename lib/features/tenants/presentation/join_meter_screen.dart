@@ -45,10 +45,11 @@ class _JoinMeterScreenState extends ConsumerState<JoinMeterScreen> {
     final code = _code.text.trim().toUpperCase();
     if (code.isEmpty || name.isEmpty) return;
     setState(() => _busy = true);
-    // Prototype: the landlord's code lives in this install's settings. A real
-    // deployment resolves the code against the shared Drive room instead.
-    final expected = await ref.read(meterCodeProvider.future);
-    if (code != expected.toUpperCase()) {
+    // Prototype: accept any well-formed code so a tenant on a different device
+    // can join using the landlord's code. Real deployment resolves it against
+    // the shared Drive room instead.
+    final wellFormed = RegExp(r'^MW-[A-Z0-9]{4}-[A-Z0-9]{4}$').hasMatch(code);
+    if (!wellFormed) {
       if (mounted) {
         setState(() => _busy = false);
         ScaffoldMessenger.of(context)
