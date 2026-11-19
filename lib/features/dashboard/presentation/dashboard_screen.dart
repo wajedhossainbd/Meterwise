@@ -15,7 +15,6 @@ import '../../../l10n/app_localizations.dart';
 import '../../billing/application/billing_providers.dart';
 import '../../billing/data/billing_period_repository.dart';
 import '../../billing/domain/models/billing_result.dart';
-import '../../billing/presentation/period_status_chip.dart';
 import '../../main_meter/data/main_meter_repository.dart';
 import '../../properties/data/property_repository.dart';
 import '../../readings/application/reading_sessions.dart';

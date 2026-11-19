@@ -132,3 +132,12 @@ precision and feedback, not decoration.
 - [ ] Empty, loading and error states included
 - [ ] Checked in both light and dark themes
 - [ ] Localized through en + bn ARB
+
+
+## Gradients (approved exception)
+Gradients are used only on feature surfaces, not on standard cards or controls:
+- `SoftGradient.hero` — dashboard balance card (warm orange).
+- `SoftGradient.credit` / `.due` — tenant balance card.
+- `SoftGradient.tile(color)` — icon tiles (quick actions, stat cards, lists).
+Everything else — cards, buttons, inputs, navigation — stays flat. Gradient
+surfaces always use white foreground text and white translucent chips.

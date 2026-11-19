@@ -6,7 +6,6 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_tokens.dart';
 import '../../../core/theme/soft_ui.dart';
 import '../../../core/widgets/brand_button.dart';
-import '../../../core/widgets/brand_chip.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../../l10n/app_localizations.dart';
@@ -143,25 +142,33 @@ class TenantHomeScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              SoftCard(
-                depth: SoftDepth.strong,
+              Container(
                 padding: const EdgeInsets.all(AppTokens.s6),
+                decoration: BoxDecoration(
+                  gradient: bill.isCredit
+                      ? SoftGradient.credit
+                      : SoftGradient.due,
+                  borderRadius: BorderRadius.circular(AppTokens.radiusSurface),
+                  boxShadow: Soft.raised(context, depth: SoftDepth.strong),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        SoftInset(
-                          radius: AppTokens.radiusControl,
+                        Container(
                           padding: const EdgeInsets.all(AppTokens.s2),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.20),
+                            borderRadius: BorderRadius.circular(
+                                AppTokens.radiusControl),
+                          ),
                           child: Icon(
                             bill.isCredit
                                 ? Icons.savings_outlined
                                 : Icons.account_balance_wallet_outlined,
                             size: AppTokens.iconMedium,
-                            color: bill.isCredit
-                                ? Soft.success(context)
-                                : Soft.danger(context),
+                            color: Colors.white,
                           ),
                         ),
                         const SizedBox(width: AppTokens.s3),
@@ -170,19 +177,36 @@ class TenantHomeScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(identity.name ?? '',
-                                  style: theme.textTheme.titleMedium),
+                                  style: theme.textTheme.titleMedium
+                                      ?.copyWith(color: Colors.white)),
                               Text(Formatters.monthYear(month),
-                                  style: theme.textTheme.bodySmall),
+                                  style: theme.textTheme.bodySmall
+                                      ?.copyWith(
+                                          color: Colors.white
+                                              .withValues(alpha: 0.88))),
                             ],
                           ),
                         ),
-                        BrandChip(
-                          label: bill.isCredit
-                              ? l.invoiceCarryForward
-                              : l.invoiceAmountDue,
-                          tone: bill.isCredit
-                              ? BrandChipTone.success
-                              : BrandChipTone.danger,
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppTokens.s2,
+                            vertical: AppTokens.s1,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.20),
+                            borderRadius:
+                                BorderRadius.circular(AppTokens.radiusChip),
+                          ),
+                          child: Text(
+                            bill.isCredit
+                                ? l.invoiceCarryForward
+                                : l.invoiceAmountDue,
+                            style: const TextStyle(
+                              fontSize: AppTokens.textCaption,
+                              fontWeight: AppTokens.weightSemibold,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -190,6 +214,7 @@ class TenantHomeScreen extends ConsumerWidget {
                     Text(
                       money(bill.balance.abs()),
                       style: theme.textTheme.headlineLarge?.copyWith(
+                        color: Colors.white,
                         letterSpacing: -1,
                         fontFeatures: const [FontFeature.tabularFigures()],
                       ),
@@ -200,7 +225,7 @@ class TenantHomeScreen extends ConsumerWidget {
                           ? l.invoiceCarryForward
                           : l.invoiceAmountDue,
                       style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: Soft.muted(context)),
+                          ?.copyWith(color: Colors.white.withValues(alpha: 0.88)),
                     ),
                   ],
                 ),

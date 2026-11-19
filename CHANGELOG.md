@@ -3,6 +3,25 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [4.4.0+34] — 2026-11-19
+
+### Changed
+- **Gradient dashboard hero**: the balance card is now a warm orange gradient
+  (`#FFB85C → #F78837 → #E8622E`) with white typography, translucent status
+  pill and a white-on-glass meter dial.
+- **Tenant balance hero** uses a green (credit) or red (due) gradient with
+  white content.
+- **Gradient icon tiles**: quick actions, stat cards and list/settings icon
+  tiles use a subtle light-to-deep sheen of their hue with white glyphs.
+- All other tiles remain clean white on the neutral cool-grey canvas.
+
+### Added
+- `SoftGradient` in `core/theme/soft_ui.dart` — the only approved gradients
+  (feature heroes and icon tiles); `SoftSurface` accepts a `gradient`.
+
+### Preserved
+- Billing logic, sync, roles, permissions and localization unchanged.
+
 ## [4.3.0+33] — 2026-11-19
 
 ### Changed

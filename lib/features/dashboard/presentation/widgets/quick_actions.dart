@@ -62,7 +62,7 @@ class _ActionButton extends StatelessWidget {
         child: Column(
           children: [
             SoftSurface(
-              color: color,
+              gradient: SoftGradient.tile(color),
               depth: SoftDepth.subtle,
               borderRadius: BorderRadius.circular(AppTokens.radiusControl),
               child: SizedBox(

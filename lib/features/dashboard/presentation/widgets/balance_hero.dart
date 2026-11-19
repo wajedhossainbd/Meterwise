@@ -1,9 +1,9 @@
 // Extracted dashboard section; shares the library imports.
 part of '../dashboard_screen.dart';
 
-/// The peak moment of the dashboard: the prepaid balance, with the recessed
-/// meter dial explaining where this month's units went. A soft raised surface,
-/// a single accent, no coloured billboard.
+/// The peak moment of the dashboard: a warm gradient hero carrying the prepaid
+/// balance and the recessed meter dial. Everything on it is white for contrast;
+/// the surrounding cards stay clean white.
 class _BalanceHero extends StatelessWidget {
   const _BalanceHero({
     required this.remaining,
@@ -22,29 +22,61 @@ class _BalanceHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final accent = Soft.accentInk(context);
+    final finalized = status == PeriodStatus.finalized;
 
-    return SoftCard(
-      depth: SoftDepth.strong,
+    return Container(
       padding: const EdgeInsets.all(AppTokens.s6),
+      decoration: BoxDecoration(
+        gradient: SoftGradient.hero,
+        borderRadius: BorderRadius.circular(AppTokens.radiusSurface),
+        boxShadow: Soft.raised(context, depth: SoftDepth.strong),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Icon(Icons.account_balance_wallet_outlined,
-                  color: accent, size: AppTokens.iconMedium),
+                  color: Colors.white, size: AppTokens.iconMedium),
               const SizedBox(width: AppTokens.s2),
               Text(
                 l.dashAvailableBalance,
                 style: TextStyle(
-                  color: Soft.muted(context),
+                  color: Colors.white.withValues(alpha: 0.92),
                   fontSize: AppTokens.textTitle,
                   fontWeight: AppTokens.weightMedium,
                 ),
               ),
               const Spacer(),
-              PeriodStatusChip(status: status),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppTokens.s2,
+                  vertical: AppTokens.s1,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.20),
+                  borderRadius: BorderRadius.circular(AppTokens.radiusChip),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      finalized ? Icons.lock_outlined : Icons.edit_note_outlined,
+                      size: 13,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: AppTokens.s1),
+                    Text(
+                      finalized ? l.statusFinalized : l.statusDraft,
+                      style: const TextStyle(
+                        fontSize: AppTokens.textCaption,
+                        fontWeight: AppTokens.weightSemibold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           const SizedBox(height: AppTokens.s4),
@@ -55,30 +87,33 @@ class _BalanceHero extends StatelessWidget {
                 child: AnimatedCount(
                   value: remaining,
                   formatter: (v) => Formatters.money(v, currencyCode: currency),
-                  style: TextStyle(
-                    color: Soft.text(context),
+                  style: const TextStyle(
+                    color: Colors.white,
                     fontSize: AppTokens.textDisplay,
                     fontWeight: AppTokens.weightSemibold,
                     letterSpacing: -1,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+                    fontFeatures: [FontFeature.tabularFigures()],
                   ),
                 ),
               ),
-              MeterGauge(fraction: usageFraction),
+              MeterGauge(fraction: usageFraction, onColor: true),
             ],
           ),
           const SizedBox(height: AppTokens.s5),
-          SoftInset(
-            radius: AppTokens.radiusChip,
+          Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppTokens.s3,
               vertical: AppTokens.s2,
             ),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.16),
+              borderRadius: BorderRadius.circular(AppTokens.radiusChip),
+            ),
             child: Text(
               l.dashRechargedThisMonth(
                   Formatters.money(monthRecharge, currencyCode: currency)),
-              style: TextStyle(
-                color: Soft.muted(context),
+              style: const TextStyle(
+                color: Colors.white,
                 fontSize: AppTokens.textBody,
               ),
             ),

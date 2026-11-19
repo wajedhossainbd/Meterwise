@@ -106,6 +106,46 @@ class Soft {
   static BorderRadius get circle => BorderRadius.circular(AppTokens.radiusPill);
 }
 
+/// Restrained gradient washes used only on feature surfaces and icon tiles.
+/// White cards stay white; colour is a deliberate accent, not the canvas.
+class SoftGradient {
+  const SoftGradient._();
+
+  /// The dashboard hero: a warm electricity gradient, light to deep.
+  static const LinearGradient hero = LinearGradient(
+    colors: [
+      Color(0xFFFFB85C),
+      Color(0xFFF78837),
+      Color(0xFFE8622E),
+    ],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  /// A green credit / red due gradient for the tenant balance hero.
+  static const LinearGradient credit = LinearGradient(
+    colors: [Color(0xFF46B98C), Color(0xFF1F7A54)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+  static const LinearGradient due = LinearGradient(
+    colors: [Color(0xFFEF8062), Color(0xFFC44532)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  /// A subtle sheen for a single coloured icon tile.
+  static LinearGradient tile(Color color) => LinearGradient(
+        colors: [
+          Color.lerp(color, Colors.white, 0.30)!,
+          color,
+          Color.lerp(color, Colors.black, 0.10)!,
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+}
+
 /// The universal soft container. Everything that needs to "sit on" the surface
 /// is built from this one widget: cards, tiles, buttons, wells and icon pads.
 class SoftSurface extends StatelessWidget {
@@ -115,6 +155,7 @@ class SoftSurface extends StatelessWidget {
     this.padding,
     this.margin,
     this.color,
+    this.gradient,
     this.borderRadius,
     this.inset = false,
     this.depth = SoftDepth.normal,
@@ -126,6 +167,7 @@ class SoftSurface extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final Color? color;
+  final Gradient? gradient;
   final BorderRadius? borderRadius;
   final bool inset;
   final SoftDepth depth;
@@ -158,7 +200,8 @@ class SoftSurface extends StatelessWidget {
       padding: padding,
       clipBehavior: clipBehavior,
       decoration: BoxDecoration(
-        color: background,
+        color: gradient == null ? background : null,
+        gradient: gradient,
         borderRadius: radius,
         boxShadow: inset
             ? Soft.pressed(context, depth: depth)
@@ -179,6 +222,7 @@ class SoftCard extends StatelessWidget {
     this.padding,
     this.margin,
     this.color,
+    this.gradient,
     this.onTap,
     this.inset = false,
     this.depth = SoftDepth.normal,
@@ -189,6 +233,7 @@ class SoftCard extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
   final Color? color;
+  final Gradient? gradient;
   final VoidCallback? onTap;
   final bool inset;
   final SoftDepth depth;
@@ -199,6 +244,7 @@ class SoftCard extends StatelessWidget {
         padding: padding,
         margin: margin,
         color: color,
+        gradient: gradient,
         onTap: onTap,
         inset: inset,
         depth: depth,
@@ -292,7 +338,7 @@ class SoftIconTile extends StatelessWidget {
     final tileColor = color ?? Soft.accentInk(context);
     return SoftSurface(
       depth: SoftDepth.subtle,
-      color: tileColor,
+      gradient: SoftGradient.tile(tileColor),
       borderRadius: circular
           ? Soft.circle
           : BorderRadius.circular(AppTokens.radiusControl),

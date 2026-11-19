@@ -33,7 +33,7 @@ class StatCard extends StatelessWidget {
           Row(
             children: [
               SoftSurface(
-                color: color,
+                gradient: SoftGradient.tile(color),
                 depth: SoftDepth.subtle,
                 borderRadius: BorderRadius.circular(AppTokens.radiusControl),
                 child: SizedBox(
