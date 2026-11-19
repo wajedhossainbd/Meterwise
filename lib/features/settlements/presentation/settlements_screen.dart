@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/soft_ui.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/async_value_view.dart';
 import '../../../core/widgets/feature_placeholder.dart';
@@ -75,10 +76,10 @@ class SettlementsScreen extends ConsumerWidget {
               final locked = finalizedMonths
                   .contains(Formatters.monthKey(s.settlementDate));
               return ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: AppColors.violet.withValues(alpha: 0.16),
-                  foregroundColor: AppColors.violet,
-                  child: const Icon(Icons.swap_horiz),
+                leading: SoftIconTile(
+                  icon: Icons.swap_horiz,
+                  color: AppColors.violet,
+                  circular: true,
                 ),
                 title: Text(
                   '${names[s.fromTenantId] ?? 'Tenant'} → '

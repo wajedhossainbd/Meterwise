@@ -14,31 +14,38 @@ abstract final class AppTokens {
   static const double s6 = 24;
   static const double s8 = 32;
 
-  // Nested radii: controls 12, cards 16, large surfaces 20, chips 8.
-  static const double radiusChip = 8;
-  static const double radiusControl = 12;
-  static const double radiusCard = 16;
-  static const double radiusSurface = 20;
+  // Soft, generous radii: the softer UI language uses larger curves than the
+  // old Material look. Controls 14, cards 20, large surfaces 26, chips 10.
+  static const double radiusChip = 10;
+  static const double radiusControl = 14;
+  static const double radiusCard = 20;
+  static const double radiusSurface = 26;
   static const double radiusPill = 999;
 
   // Sizes.
-  static const double buttonHeight = 48;
-  static const double iconButtonSize = 40;
-  static const double chipHeight = 28;
+  static const double buttonHeight = 50;
+  static const double iconButtonSize = 42;
+  static const double chipHeight = 30;
   static const double iconSmall = 18;
   static const double iconMedium = 20;
   static const double iconLarge = 24;
   static const double hairline = 1;
 
-  // Type scale — two weights plus semibold for emphasis only.
+  // Type scale — restrained weights, generous tracking on display figures.
   static const double textCaption = 12;
   static const double textBody = 14;
   static const double textTitle = 16;
   static const double textHeading = 20;
-  static const double textDisplay = 28;
+  static const double textDisplay = 30;
   static const FontWeight weightRegular = FontWeight.w400;
   static const FontWeight weightMedium = FontWeight.w500;
   static const FontWeight weightSemibold = FontWeight.w600;
+
+  // Soft-UI shadow geometry. Paired light/dark offsets create the extruded
+  // look; inset shadows create the pressed / well look.
+  static const double softDistance = 5;
+  static const double softBlur = 12;
+  static const double softSpread = 0;
 
   // One easing family, short for feedback.
   static const Duration durationShort = Duration(milliseconds: 150);

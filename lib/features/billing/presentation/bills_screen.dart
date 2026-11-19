@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -245,7 +246,7 @@ class _PeriodHeaderState extends ConsumerState<_PeriodHeader> {
     final view = widget.view;
     final finalized = view.isFinalized;
 
-    return Card(
+    return SoftCard(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -304,7 +305,7 @@ class _NoBillCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return SoftCard(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -363,7 +364,7 @@ class _TenantBillCard extends ConsumerWidget {
           Formatters.money(bill.balance.abs(), currencyCode: currency));
     }
 
-    return Card(
+    return SoftCard(
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -382,15 +383,21 @@ class _TenantBillCard extends ConsumerWidget {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 18,
-                    backgroundColor: color.withValues(alpha: 0.18),
-                    foregroundColor: color,
-                    child: Text(
-                      bill.tenantName.trim().isEmpty
-                          ? '?'
-                          : bill.tenantName.trim()[0].toUpperCase(),
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                  SoftSurface(
+                    depth: SoftDepth.subtle,
+                    borderRadius: Soft.circle,
+                    child: SizedBox(
+                      width: 36,
+                      height: 36,
+                      child: Center(
+                        child: Text(
+                          bill.tenantName.trim().isEmpty
+                              ? '?'
+                              : bill.tenantName.trim()[0].toUpperCase(),
+                          style: TextStyle(
+                              color: color, fontWeight: FontWeight.w600),
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -416,13 +423,12 @@ class _TenantBillCard extends ConsumerWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  Container(
+                  SoftSurface(
+                    inset: true,
+                    depth: SoftDepth.subtle,
+                    borderRadius: Soft.circle,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: statusColor.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

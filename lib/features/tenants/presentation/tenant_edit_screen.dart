@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/app_database.dart';
@@ -157,7 +158,7 @@ class _TenantEditScreenState extends ConsumerState<TenantEditScreen> {
               decoration: InputDecoration(labelText: l.tenantEmail),
             ),
             const SizedBox(height: 16),
-            Card(
+            SoftCard(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Column(

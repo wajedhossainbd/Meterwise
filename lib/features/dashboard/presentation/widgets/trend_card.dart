@@ -19,7 +19,7 @@ class _TrendCardState extends ConsumerState<_TrendCard> {
     final currency = ref.watch(currencyCodeProvider);
     final l = AppLocalizations.of(context);
 
-    return Card(
+    return SoftCard(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

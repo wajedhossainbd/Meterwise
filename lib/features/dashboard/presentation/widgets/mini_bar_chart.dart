@@ -1,6 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/soft_ui.dart';
+
 /// A compact, interactive monthly-trend chart: gradient bars on soft track
 /// backgrounds, tap/hold tooltips with the exact value, and smooth animation
 /// when the data or series changes.
@@ -90,7 +92,7 @@ class MiniBarChart extends StatelessWidget {
                   backDrawRodData: BackgroundBarChartRodData(
                     show: true,
                     toY: maxY,
-                    color: color.withValues(alpha: 0.08),
+                    color: Soft.inset(context),
                   ),
                 ),
               ],

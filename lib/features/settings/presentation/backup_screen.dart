@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -137,7 +138,7 @@ class _BackupScreenState extends ConsumerState<BackupScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Card(
+          SoftCard(
             child: ListTile(
               leading: const Icon(Icons.cloud_outlined),
               title: Text(l.backupDriveTitle),

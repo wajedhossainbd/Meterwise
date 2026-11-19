@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/app_database.dart';
@@ -142,7 +143,7 @@ class _DriveSyncScreenState extends ConsumerState<DriveSyncScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Card(
+          SoftCard(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(

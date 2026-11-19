@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/soft_ui.dart';
 import '../../../core/theme/theme_controller.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../billing/data/period_guard.dart';
@@ -262,13 +263,11 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _iconBadge(IconData icon, Color color) => Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Icon(icon, color: color, size: 22),
+  Widget _iconBadge(IconData icon, Color color) => SoftIconTile(
+        icon: icon,
+        color: color,
+        size: 44,
+        iconSize: 22,
       );
 
   Widget _sectionLabel(BuildContext context, String text) => Padding(

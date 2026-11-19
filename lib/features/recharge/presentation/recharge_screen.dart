@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/soft_ui.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/async_value_view.dart';
 import '../../../core/widgets/feature_placeholder.dart';
@@ -71,11 +71,9 @@ class RechargeScreen extends ConsumerWidget {
                     final locked = finalizedMonths
                         .contains(Formatters.monthKey(r.rechargeDate));
                     return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor:
-                            AppColors.accentOrange.withValues(alpha: 0.16),
-                        foregroundColor: AppColors.accentOrange,
-                        child: const Icon(Icons.bolt),
+                      leading: const SoftIconTile(
+                        icon: Icons.bolt,
+                        circular: true,
                       ),
                       title: Text(
                         Formatters.money(r.amount, currencyCode: currency),

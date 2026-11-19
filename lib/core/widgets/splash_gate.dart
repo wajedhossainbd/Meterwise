@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_constants.dart';
-import '../theme/app_colors.dart';
+import '../theme/app_tokens.dart';
+import '../theme/soft_ui.dart';
 
 /// Shows an animated welcome splash (logo scale-in + name fade) over the app
 /// on cold start, then fades away. Shown once per app session.
@@ -93,7 +94,7 @@ class _SplashGateState extends State<SplashGate>
               child: Material(
                 type: MaterialType.transparency,
                 child: Container(
-                decoration: const BoxDecoration(color: AppColors.seed),
+                decoration: BoxDecoration(color: Soft.base(context)),
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -102,31 +103,19 @@ class _SplashGateState extends State<SplashGate>
                         opacity: _logoFade,
                         child: ScaleTransition(
                           scale: _logoScale,
-                          // Matches the launcher icon: gradient disc + white
-                          // bolt, ringed in white so it pops on the gradient.
-                          child: Container(
-                            padding: const EdgeInsets.all(7),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.18),
-                                  blurRadius: 30,
-                                  offset: const Offset(0, 12),
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(22),
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.seed,
-                              ),
-                              child: const Icon(
+                          // A raised soft disc with a recessed dial and the
+                          // brand bolt — the app's signature motif.
+                          child: SoftSurface(
+                            depth: SoftDepth.strong,
+                            borderRadius: Soft.circle,
+                            padding: const EdgeInsets.all(AppTokens.s5),
+                            child: SoftInset(
+                              radius: AppTokens.radiusPill,
+                              padding: const EdgeInsets.all(AppTokens.s5),
+                              child: Icon(
                                 Icons.bolt,
                                 size: 54,
-                                color: Colors.white,
+                                color: Soft.accent(context),
                               ),
                             ),
                           ),
@@ -139,20 +128,20 @@ class _SplashGateState extends State<SplashGate>
                           position: _textSlide,
                           child: Column(
                             children: [
-                              const Text(
+                              Text(
                                 AppConstants.appName,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Soft.text(context),
                                   fontSize: 30,
                                   fontWeight: FontWeight.w600,
-                                  letterSpacing: 0.5,
+                                  letterSpacing: -0.5,
                                 ),
                               ),
                               const SizedBox(height: 6),
                               Text(
                                 AppConstants.appTagline,
                                 style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.85),
+                                  color: Soft.muted(context),
                                   fontSize: 13,
                                 ),
                               ),

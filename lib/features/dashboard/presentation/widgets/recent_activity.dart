@@ -14,7 +14,7 @@ class _RecentActivity extends ConsumerWidget {
     final lastRecharge = recharges.isEmpty ? null : recharges.first;
     final l = AppLocalizations.of(context);
 
-    return Card(
+    return SoftCard(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

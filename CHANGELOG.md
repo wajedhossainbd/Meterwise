@@ -3,6 +3,33 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [4.0.0+30] — 2026-11-19
+
+### Changed
+- **Complete application-wide visual redesign** to "Soft Modern" — minimalist
+  neumorphic / soft UI with subtle skeuomorphic depth, applied to every screen,
+  module, card, form, control and interaction.
+- Monochromatic neutral base shared by scaffold and surfaces; depth comes from
+  paired light/dark shadows (raised) and reversed inner shadows (inset wells).
+- Large, consistent radii (chips 10, controls 14, cards 20, surfaces 26) and a
+  restrained single-accent palette with semantic colours only where meaningful.
+- Global theme retuned: app bars, navigation bar/rail, all button roles, inputs
+  (inset wells), dialogs, sheets, chips, segmented controls, FAB, snackbars,
+  tooltips and typography.
+- Signature `MeterGauge` rebuilt as a dial recessed into the surface; balance
+  hero, tenant home hero, quick actions, stat cards, charts and onboarding /
+  splash surfaces redesigned around the soft model.
+
+### Added
+- Reusable design-system primitives in `core/theme/soft_ui.dart`:
+  `SoftSurface`, `SoftCard`, `SoftInset`, `SoftIconTile`, `SoftIconButton` and
+  the brightness-aware `Soft` shadow/colour engine.
+- `DESIGN_SYSTEM.md` fully documents the new language and component rules.
+
+### Preserved
+- All billing logic, migrations, permissions, Drive sync, updater, roles,
+  localization and integrations are unchanged. This release is visual only.
+
 ## [3.7.1+29] — 2026-11-19
 
 ### Fixed

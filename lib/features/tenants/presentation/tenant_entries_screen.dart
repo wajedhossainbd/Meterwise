@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -93,7 +94,7 @@ class TenantEntriesScreen extends ConsumerWidget {
               separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, i) {
                 final e = entries[i];
-                return Card(
+                return SoftCard(
                   child: ListTile(
                     leading: Icon(e.icon, color: theme.colorScheme.primary),
                     title: Text(e.title),

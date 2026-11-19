@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/soft_ui.dart';
 /// A titled card used to group related content/fields on a screen.
 class SectionCard extends StatelessWidget {
   const SectionCard({
@@ -16,7 +17,7 @@ class SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
+    return SoftCard(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

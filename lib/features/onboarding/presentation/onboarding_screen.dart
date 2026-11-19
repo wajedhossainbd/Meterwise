@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/app_constants.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_tokens.dart';
+import '../../../core/theme/soft_ui.dart';
 import '../../../core/widgets/animated_count.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../settings/data/settings_repository.dart';
@@ -135,13 +136,12 @@ class _IntroPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FadeSlideIn(
-            child: Container(
-              padding: const EdgeInsets.all(30),
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.seed,
-              ),
-              child: const Icon(Icons.bolt, size: 64, color: Colors.white),
+            child: SoftSurface(
+              depth: SoftDepth.strong,
+              borderRadius: Soft.circle,
+              padding: const EdgeInsets.all(AppTokens.s8),
+              child: Icon(Icons.bolt,
+                  size: 64, color: Soft.accent(context)),
             ),
           ),
           const SizedBox(height: 28),
@@ -177,10 +177,11 @@ class _HowItWorksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final accent = Soft.accent(context);
     final steps = [
-      (Icons.speed, AppColors.cyan, l.tourStep1Title, l.tourStep1Body),
-      (Icons.bolt, AppColors.accentOrange, l.tourStep2Title, l.tourStep2Body),
-      (Icons.receipt_long, AppColors.teal, l.tourStep3Title, l.tourStep3Body),
+      (Icons.speed, l.tourStep1Title, l.tourStep1Body),
+      (Icons.bolt, l.tourStep2Title, l.tourStep2Body),
+      (Icons.receipt_long, l.tourStep3Title, l.tourStep3Body),
     ];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -202,24 +203,21 @@ class _HowItWorksPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: s.$2.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Icon(s.$1, color: s.$2, size: 26),
+                  SoftInset(
+                    radius: AppTokens.radiusControl,
+                    padding: const EdgeInsets.all(AppTokens.s3),
+                    child: Icon(s.$1, color: accent, size: 26),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: AppTokens.s4),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(s.$3,
+                        Text(s.$2,
                             style: theme.textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 3),
-                        Text(s.$4,
+                        const SizedBox(height: AppTokens.s1),
+                        Text(s.$3,
                             style: theme.textTheme.bodyMedium?.copyWith(
                                 color: theme.colorScheme.onSurfaceVariant)),
                       ],
@@ -268,7 +266,6 @@ class _ChooseModePage extends StatelessWidget {
             index: 1,
             child: _ChoiceCard(
               icon: Icons.home_outlined,
-              color: AppColors.teal,
               title: l.onboardingSingle,
               description: l.onboardingSingleDesc,
               onTap: saving ? null : () => onChoose(multiTenant: false),
@@ -279,7 +276,6 @@ class _ChooseModePage extends StatelessWidget {
             index: 2,
             child: _ChoiceCard(
               icon: Icons.apartment_outlined,
-              color: AppColors.seed,
               title: l.onboardingMulti,
               description: l.onboardingMultiDesc,
               onTap: saving ? null : () => onChoose(multiTenant: true),
@@ -300,14 +296,12 @@ class _ChooseModePage extends StatelessWidget {
 class _ChoiceCard extends StatelessWidget {
   const _ChoiceCard({
     required this.icon,
-    required this.color,
     required this.title,
     required this.description,
     required this.onTap,
   });
 
   final IconData icon;
-  final Color color;
   final String title;
   final String description;
   final VoidCallback? onTap;
@@ -315,42 +309,33 @@ class _ChoiceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Material(
-      color: color.withValues(
-          alpha: theme.brightness == Brightness.light ? 0.08 : 0.18),
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: color,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Icon(icon, size: 28, color: Colors.white),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title,
-                        style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 4),
-                    Text(description, style: theme.textTheme.bodyMedium),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right),
-            ],
+    return SoftSurface(
+      depth: SoftDepth.subtle,
+      onTap: onTap,
+      padding: const EdgeInsets.all(AppTokens.s5),
+      child: Row(
+        children: [
+          SoftSurface(
+            depth: SoftDepth.subtle,
+            borderRadius: BorderRadius.circular(AppTokens.radiusControl),
+            padding: const EdgeInsets.all(AppTokens.s3),
+            child: Icon(icon, size: 28, color: Soft.accent(context)),
           ),
-        ),
+          const SizedBox(width: AppTokens.s4),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w600)),
+                const SizedBox(height: AppTokens.s1),
+                Text(description, style: theme.textTheme.bodyMedium),
+              ],
+            ),
+          ),
+          Icon(Icons.chevron_right, color: Soft.muted(context)),
+        ],
       ),
     );
   }

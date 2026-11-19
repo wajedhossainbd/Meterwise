@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/database/app_database.dart';
@@ -66,7 +67,7 @@ class TariffManagerScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
             for (final preset in kTariffPresets)
-              Card(
+              SoftCard(
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
                   leading: const Icon(Icons.bookmark_outline),
@@ -213,7 +214,7 @@ class _VersionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l = AppLocalizations.of(context);
-    return Card(
+    return SoftCard(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: Icon(version.archived
@@ -224,12 +225,9 @@ class _VersionTile extends StatelessWidget {
             Flexible(child: Text(version.label)),
             if (version.archived) ...[
               const SizedBox(width: 8),
-              Container(
+              SoftInset(
+                radius: 10,
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(10),
-                ),
                 child: Text(l.tariffArchived, style: theme.textTheme.labelSmall),
               ),
             ],

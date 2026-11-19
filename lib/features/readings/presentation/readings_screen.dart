@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -90,7 +91,7 @@ class _SessionTile extends StatelessWidget {
         '${tenantNames[entry.key] ?? 'Tenant'}: ${Formatters.units(entry.value)}',
     ];
 
-    return Card(
+    return SoftCard(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -99,14 +100,12 @@ class _SessionTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(7),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(Icons.speed,
-                      size: 18, color: theme.colorScheme.primary),
+                SoftIconTile(
+                  icon: Icons.speed,
+                  color: theme.colorScheme.primary,
+                  size: 38,
+                  iconSize: 18,
+                  circular: true,
                 ),
                 const SizedBox(width: 10),
                 Text(Formatters.date(session.date),

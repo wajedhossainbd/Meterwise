@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/widgets/async_value_view.dart';
@@ -137,7 +138,7 @@ class _BillingSettingsScreenState
                 ),
               ),
               const SizedBox(height: 16),
-              Card(
+              SoftCard(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(

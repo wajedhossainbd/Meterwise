@@ -1,8 +1,8 @@
 // Extracted dashboard section; shares the library imports.
 part of '../dashboard_screen.dart';
 
-/// Three primary actions, styled as one quiet set: neutral surfaces, hairline
-/// outline, a single brand accent in the icon tile. No confetti colours.
+/// Three primary actions as one quiet set: soft raised surfaces with a recessed
+/// icon tile and a single accent. No confetti colours, no outlines.
 class _QuickActions extends StatelessWidget {
   const _QuickActions();
 
@@ -46,53 +46,39 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     return Expanded(
-      child: Material(
-        color: cs.surface,
-        borderRadius: BorderRadius.circular(AppTokens.radiusCard),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(AppTokens.radiusCard),
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: AppTokens.s4,
-              horizontal: AppTokens.s2,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppTokens.radiusCard),
-              border: Border.all(
-                color: cs.outlineVariant.withValues(alpha: 0.5),
-                width: AppTokens.hairline,
+      child: SoftSurface(
+        depth: SoftDepth.subtle,
+        onTap: onTap,
+        padding: const EdgeInsets.symmetric(
+          vertical: AppTokens.s4,
+          horizontal: AppTokens.s2,
+        ),
+        child: Column(
+          children: [
+            SoftInset(
+              radius: AppTokens.radiusControl,
+              padding: const EdgeInsets.all(AppTokens.s2),
+              child: SizedBox(
+                width: AppTokens.iconButtonSize - AppTokens.s4,
+                height: AppTokens.iconButtonSize - AppTokens.s4,
+                child: Icon(icon,
+                    size: AppTokens.iconMedium, color: Soft.accent(context)),
               ),
             ),
-            child: Column(
-              children: [
-                Container(
-                  width: AppTokens.iconButtonSize,
-                  height: AppTokens.iconButtonSize,
-                  decoration: BoxDecoration(
-                    color: cs.primary.withValues(alpha: 0.12),
-                    borderRadius:
-                        BorderRadius.circular(AppTokens.radiusControl),
-                  ),
-                  child: Icon(icon, size: AppTokens.iconMedium, color: cs.primary),
-                ),
-                const SizedBox(height: AppTokens.s3),
-                Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: AppTokens.textCaption,
-                    fontWeight: AppTokens.weightSemibold,
-                    color: cs.onSurface,
-                  ),
-                ),
-              ],
+            const SizedBox(height: AppTokens.s3),
+            Text(
+              label,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: AppTokens.textCaption,
+                fontWeight: AppTokens.weightSemibold,
+                color: Soft.text(context),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

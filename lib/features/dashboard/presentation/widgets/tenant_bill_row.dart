@@ -23,7 +23,7 @@ class _TenantBillRow extends StatelessWidget {
         ? '?'
         : bill.tenantName.trim()[0].toUpperCase();
 
-    return Card(
+    return SoftCard(
       margin: const EdgeInsets.only(bottom: 10),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -32,11 +32,18 @@ class _TenantBillRow extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: color.withValues(alpha: 0.18),
-                  foregroundColor: color,
-                  child: Text(initial,
-                      style: const TextStyle(fontWeight: FontWeight.w600)),
+                SoftSurface(
+                  depth: SoftDepth.subtle,
+                  borderRadius: Soft.circle,
+                  child: SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: Center(
+                      child: Text(initial,
+                          style: TextStyle(
+                              color: color, fontWeight: FontWeight.w600)),
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -88,7 +95,7 @@ class _TenantBillRow extends StatelessWidget {
                   value: v,
                   minHeight: 7,
                   color: color,
-                  backgroundColor: color.withValues(alpha: 0.12),
+                  backgroundColor: Soft.inset(context),
                 ),
               ),
             ),

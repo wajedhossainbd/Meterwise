@@ -38,7 +38,7 @@ class _OwnerSummaryCard extends StatelessWidget {
           ),
         );
 
-    return Card(
+    return SoftCard(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -89,12 +89,9 @@ class _OwnerSummaryCard extends StatelessWidget {
     );
   }
 
-  Widget _miniStat(ThemeData theme, String label, String value) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(10),
-        ),
+  Widget _miniStat(ThemeData theme, String label, String value) => SoftInset(
+        radius: AppTokens.radiusChip,
+        padding: const EdgeInsets.symmetric(horizontal: AppTokens.s3, vertical: AppTokens.s2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

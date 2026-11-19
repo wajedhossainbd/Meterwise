@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -91,7 +92,7 @@ class _SettlementEditScreenState extends ConsumerState<SettlementEditScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Card(
+            SoftCard(
               child: ListTile(
                 leading: const Icon(Icons.event),
                 title: Text(l.readingDate),

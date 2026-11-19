@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_tokens.dart';
+import '../../../core/theme/soft_ui.dart';
 import '../../../core/widgets/brand_button.dart';
+import '../../../core/widgets/brand_chip.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/section_card.dart';
 import '../../../l10n/app_localizations.dart';
@@ -141,32 +143,65 @@ class TenantHomeScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: bill.isCredit ? AppColors.credit : AppColors.due,
-                  borderRadius: BorderRadius.circular(20),
-                ),
+              SoftCard(
+                depth: SoftDepth.strong,
+                padding: const EdgeInsets.all(AppTokens.s6),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(identity.name ?? '',
-                        style: theme.textTheme.titleMedium
-                            ?.copyWith(color: Colors.white)),
-                    Text(Formatters.monthYear(month),
-                        style: theme.textTheme.bodyMedium
-                            ?.copyWith(color: Colors.white70)),
-                    const SizedBox(height: 12),
-                    Text(money(bill.balance.abs()),
-                        style: theme.textTheme.headlineLarge
-                            ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600)),
-                    Text(bill.isCredit
-                        ? l.invoiceCarryForward
-                        : l.invoiceAmountDue,
-                        style: theme.textTheme.bodyMedium
-                            ?.copyWith(color: Colors.white70)),
+                    Row(
+                      children: [
+                        SoftInset(
+                          radius: AppTokens.radiusControl,
+                          padding: const EdgeInsets.all(AppTokens.s2),
+                          child: Icon(
+                            bill.isCredit
+                                ? Icons.savings_outlined
+                                : Icons.account_balance_wallet_outlined,
+                            size: AppTokens.iconMedium,
+                            color: bill.isCredit
+                                ? Soft.success(context)
+                                : Soft.danger(context),
+                          ),
+                        ),
+                        const SizedBox(width: AppTokens.s3),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(identity.name ?? '',
+                                  style: theme.textTheme.titleMedium),
+                              Text(Formatters.monthYear(month),
+                                  style: theme.textTheme.bodySmall),
+                            ],
+                          ),
+                        ),
+                        BrandChip(
+                          label: bill.isCredit
+                              ? l.invoiceCarryForward
+                              : l.invoiceAmountDue,
+                          tone: bill.isCredit
+                              ? BrandChipTone.success
+                              : BrandChipTone.danger,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: AppTokens.s5),
+                    Text(
+                      money(bill.balance.abs()),
+                      style: theme.textTheme.headlineLarge?.copyWith(
+                        letterSpacing: -1,
+                        fontFeatures: const [FontFeature.tabularFigures()],
+                      ),
+                    ),
+                    const SizedBox(height: AppTokens.s1),
+                    Text(
+                      bill.isCredit
+                          ? l.invoiceCarryForward
+                          : l.invoiceAmountDue,
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: Soft.muted(context)),
+                    ),
                   ],
                 ),
               ),

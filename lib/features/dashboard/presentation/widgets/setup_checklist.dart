@@ -35,7 +35,7 @@ class _SetupChecklist extends StatelessWidget {
   }
 
   Widget _step(BuildContext context, String title, bool done, String path) {
-    return Card(
+    return SoftCard(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: Icon(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -125,7 +126,7 @@ class _TenantCard extends ConsumerWidget {
         l.tenantModeShared,
     ].join(' • ');
 
-    return Card(
+    return SoftCard(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 8, 8),
         child: Column(
@@ -133,11 +134,18 @@ class _TenantCard extends ConsumerWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: color.withValues(alpha: 0.18),
-                  foregroundColor: color,
-                  child: Text(_initial(tenant.name),
-                      style: const TextStyle(fontWeight: FontWeight.w600)),
+                SoftSurface(
+                  depth: SoftDepth.subtle,
+                  borderRadius: Soft.circle,
+                  child: SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: Center(
+                      child: Text(_initial(tenant.name),
+                          style: TextStyle(
+                              color: color, fontWeight: FontWeight.w600)),
+                    ),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

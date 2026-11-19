@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -206,7 +207,7 @@ class _TariffVersionEditScreenState
                   (v == null || v.trim().isEmpty) ? l.tariffEnterLabel : null,
             ),
             const SizedBox(height: 12),
-            Card(
+            SoftCard(
               child: ListTile(
                 leading: const Icon(Icons.event),
                 title: Text(l.tariffEffectiveFrom),

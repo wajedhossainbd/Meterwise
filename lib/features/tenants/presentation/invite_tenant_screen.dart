@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/soft_ui.dart';
+import '../../../core/theme/app_tokens.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -29,17 +31,14 @@ class InviteTenantScreen extends ConsumerWidget {
         data: (code) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Card(
+            SoftCard(
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                    SoftInset(
+                      radius: AppTokens.radiusCard,
+                      padding: const EdgeInsets.all(AppTokens.s3),
                       child: QrImageView(
                         data: code,
                         version: QrVersions.auto,
@@ -83,8 +82,8 @@ class InviteTenantScreen extends ConsumerWidget {
                           ? l.tenantJoined
                           : l.tenantJoinRequest),
                       trailing: settings?.tenantApproved == true
-                          ? const Icon(Icons.check_circle,
-                              color: Colors.green)
+                          ? Icon(Icons.check_circle,
+                              color: Soft.success(context))
                           : FilledButton(
                               onPressed: () => ref
                                   .read(settingsRepositoryProvider)
