@@ -949,10 +949,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get settlementTransfer => 'স্থানান্তর';
 
   @override
-  String get settlementFrom => 'থেকে (পরিশোধকারী — বকেয়ায়)';
+  String get settlementFrom => 'কে থেকে (দাতা — যার বাকি আছে)';
 
   @override
-  String get settlementTo => 'প্রতি (গ্রহীতা — ক্রেডিটে)';
+  String get settlementTo => 'কে প্রতি (গ্রহীতা — যার জমা আছে)';
 
   @override
   String get settlementAmount => 'পরিমাণ';
@@ -1352,4 +1352,47 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tenantCheckStatus => 'অনুমোদনের অবস্থা দেখুন';
+
+  @override
+  String get invoiceDraftNotice => 'খসড়া চালান — পরিমাণ পরিবর্তন হতে পারে';
+
+  @override
+  String get rechargeCreditedTo => 'যে ভাড়াটিয়ার নামে জমা';
+
+  @override
+  String get rechargePayerOther => 'অন্য / বাড়ির মালিক';
+
+  @override
+  String get rechargePayerHint => 'ব্যালেন্সে জমা করতে ভাড়াটি বাছুন।';
+
+  @override
+  String get commonMustBePositive => 'শূন্যের চেয়ে বড় পরিমাণ লিখুন';
+
+  @override
+  String get tenantJoinNameHint =>
+      'বাড়ির মালিকের তালিকায় যে নাম আছে ঠিক সেই নাম লিখুন। নিচে নাম না দেখলে প্রথমে তথ্য সিঙ্ক করুন।';
+
+  @override
+  String get readingMainMustBePositive =>
+      'মূল মিটার রিডিং শূন্যের চেয়ে বড় হতে হবে';
+
+  @override
+  String readingMainHigher(Object value, Object next) {
+    return 'মূল রিডিং ($value) পরের রিডিং ($next) থেকে বেশি।';
+  }
+
+  @override
+  String get settlementDeleteConfirm =>
+      'এই হিসাব মুছে ফেলবেন? এটা দুই ভাড়াটিয়ার ব্যালেন্স বদলাবে।';
+
+  @override
+  String get billsMarkSettledNote => 'নিষ্পত্তি চিহ্নিত করুন (শুধু নোট)';
+
+  @override
+  String get validateEarlierDraft =>
+      'আগের খসড়া মাসটি প্রথমে চূড়ান্ত করুন — পরের মাসগুলো তার ব্যালেন্সের উপর নির্ভর করে।';
+
+  @override
+  String get billingModeSwitchWarning =>
+      'একক-ভাড়াটিয়া মোডে বদলালে সব ভাড়াটিয়া ও তাদের রিডিং বিলে দেখা যাবে না। তথ্য সংরক্ষিত থাকবে। চালিয়ে যাবেন?';
 }

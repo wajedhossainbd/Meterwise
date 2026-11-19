@@ -61,6 +61,7 @@ class AppSettings extends Table {
 
   /// Which roster entry this tenant chose as their identity.
   TextColumn get tenantName => text().nullable()();
+  IntColumn get tenantId => integer().nullable()();
 
   /// Landlord's approval of a join request (v11).
   BoolColumn get tenantApproved =>

@@ -77,7 +77,7 @@ void main() {
       ),
       l: l,
     );
-    expect(html, contains('DRAFT —'));
+    expect(html, contains('Draft invoice — figures may change'));
     expect(html, contains('A&lt;B&gt; &amp; &quot;C&quot;'));
     expect(html, isNot(contains('A<B>')));
   });

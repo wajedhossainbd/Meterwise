@@ -200,6 +200,7 @@ class DriveSyncService {
               'amount': r.amount,
               'agentFee': r.agentFee,
               'otherExpenses': r.otherExpenses,
+              'paidByTenantId': r.paidByTenantId,
             }
         ],
       };
@@ -214,10 +215,14 @@ class DriveSyncService {
     required List<Tenant> tenants,
     required List<MeterReading> readings,
     required List<Recharge> recharges,
+    AppSetting? approval,
   }) =>
       {
         'version': 1,
         'meterCode': meterCode,
+        'tenantApproval': approval == null
+            ? null
+            : {'tenantId': approval.tenantId, 'approved': approval.tenantApproved},
         'generatedAt': DateTime.now().toIso8601String(),
         'property': {
           'name': propertyName,
@@ -250,6 +255,7 @@ class DriveSyncService {
               'date': r.rechargeDate.toIso8601String(),
               'amount': r.amount,
               'paidBy': r.paidBy,
+              'paidByTenantId': r.paidByTenantId,
               'agentFee': r.agentFee,
               'otherExpenses': r.otherExpenses,
             }

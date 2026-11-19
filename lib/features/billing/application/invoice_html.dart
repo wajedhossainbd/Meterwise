@@ -27,7 +27,7 @@ class InvoiceHtml {
   }) {
     String money(num v) => Formatters.money(v, currencyCode: meta.currency);
 
-    String chip(String label, String value, [String color = '#1D2433']) => '''
+    String chip(String label, String value, [String color = '#253247']) => '''
       <span class="chip"><span class="chip-l">${_esc(label)}</span>
       <b style="color:$color">${_esc(value)}</b></span>''';
 
@@ -52,8 +52,8 @@ class InvoiceHtml {
     }
 
     final isCredit = bill.isCredit;
-    final totalColor = isCredit ? '#2E9E5B' : '#E8553C';
-    final totalBg = isCredit ? '#EAF6EF' : '#FDEEEA';
+    final totalColor = isCredit ? '#2F8A5E' : '#C85A48';
+    final totalBg = isCredit ? '#E7F5EE' : '#FCEDEA';
 
     return '''
 <!DOCTYPE html>
@@ -65,11 +65,11 @@ class InvoiceHtml {
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact;
       box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Noto Sans Bengali','Noto Sans',Roboto,sans-serif;
-         color: #1D2433; font-size: 11px; }
-  .banner { background: #2962FF; color: #fff;
-            border-radius: 12px; padding: 14px 16px; display: flex;
+         color: #253247; font-size: 11px; }
+  .banner { background: linear-gradient(135deg,#FFB85C,#F78837,#E8622E); color: #fff;
+            border-radius: 14px; padding: 14px 16px; display: flex;
             align-items: center; }
-  .logo { width: 38px; height: 38px; background: #fff; color: #2962FF;
+  .logo { width: 38px; height: 38px; background: #fff; color: #E8622E;
           border-radius: 50%; font-weight: 800; font-size: 19px;
           display: flex; align-items: center; justify-content: center; }
   .app { margin-left: 11px; }
@@ -78,56 +78,56 @@ class InvoiceHtml {
   .prop { margin-left: auto; text-align: right; }
   .prop b { font-size: 12px; display: block; }
   .prop .addr { font-size: 9px; opacity: .85; }
-  .month { display: inline-block; background: rgba(255,255,255,.22);
-           border-radius: 7px; padding: 2px 8px; font-weight: 700;
+  .month { display: inline-block; background: #FFFFFF;
+           color: #E8622E; border-radius: 7px; padding: 2px 8px; font-weight: 700;
            font-size: 10px; margin-top: 4px; }
   .draft { background:#FFF3CD; color:#8A6D00; font-weight:700; font-size:10px;
            border-radius: 8px; padding: 6px 12px; margin-top: 9px; }
   .chips { margin-top: 10px; }
-  .chip { display: inline-block; background: #F5F6FA; border-radius: 7px;
+  .chip { display: inline-block; background: #EDF1F7; border-radius: 7px;
           padding: 3px 8px; font-size: 8.5px; margin: 0 4px 4px 0; }
-  .chip-l { color: #6B7280; margin-right: 4px; }
-  .billed { background: #EEF3FF; border-radius: 10px; padding: 11px 13px;
+  .chip-l { color: #5C6B80; margin-right: 4px; }
+  .billed { background: #FFF3E4; border-radius: 10px; padding: 11px 13px;
             margin-top: 9px; display: flex; align-items: center; }
-  .billed .who .cap { font-size: 8px; color: #6B7280; }
+  .billed .who .cap { font-size: 8px; color: #5C6B80; }
   .billed .who b { font-size: 14px; display: block; }
-  .billed .who .ph { font-size: 9px; color: #6B7280; }
+  .billed .who .ph { font-size: 9px; color: #5C6B80; }
   .rate { margin-left: auto; text-align: right; }
-  .rate .cap { font-size: 8px; color: #6B7280; }
-  .rate b { color: #2962FF; font-size: 12px; }
+  .rate .cap { font-size: 8px; color: #5C6B80; }
+  .rate b { color: #E8622E; font-size: 12px; }
   .boxes { display: flex; gap: 7px; margin-top: 9px; }
-  .box { flex: 1; background: #F5F6FA; border-radius: 8px; padding: 8px 9px; }
-  .box .cap { font-size: 7.5px; color: #6B7280; }
+  .box { flex: 1; background: #EDF1F7; border-radius: 8px; padding: 8px 9px; }
+  .box .cap { font-size: 7.5px; color: #5C6B80; }
   .box b { font-size: 11px; display: block; margin-top: 2px; }
   table { width: 100%; border-collapse: collapse; margin-top: 10px;
-          border: 1px solid #E3E8F4; border-radius: 9px; overflow: hidden; }
-  th { background: #2962FF; color: #fff; text-align: left; font-size: 9px;
+          border: 1px solid #D8DEEC; border-radius: 9px; overflow: hidden; }
+  th { background: #E8622E; color: #fff; text-align: left; font-size: 9px;
        padding: 6px 8px; }
   th.r, td.r { text-align: right; }
   td { font-size: 9px; padding: 5px 8px; }
   td.b { font-weight: 700; }
-  tr.zebra td { background: #F8FAFF; }
+  tr.zebra td { background: #F8FAFD; }
   .cols { display: flex; gap: 10px; margin-top: 10px; }
-  .panel { flex: 1; background: #F5F6FA; border-radius: 9px; padding: 10px 11px; }
+  .panel { flex: 1; background: #EDF1F7; border-radius: 9px; padding: 10px 11px; }
   .panel h4 { font-size: 10.5px; margin-bottom: 5px; }
   .kv { display: flex; justify-content: space-between; font-size: 9px;
-        padding: 1.5px 0; color: #1D2433; }
-  .kv span:first-child { color: #6B7280; }
+        padding: 1.5px 0; color: #253247; }
+  .kv span:first-child { color: #5C6B80; }
   .kv-b { font-weight: 700; font-size: 10px; border-top: 1px solid #D8DEEC;
           margin-top: 4px; padding-top: 4px; }
-  .kv-b span:first-child { color: #1D2433; }
+  .kv-b span:first-child { color: #253247; }
   .total { display: flex; align-items: center; background: $totalBg;
            color: $totalColor; border-radius: 9px; padding: 10px 13px;
            margin-top: 10px; font-weight: 800; }
   .total .amt { margin-left: auto; font-size: 16px; }
   .foot { display: flex; align-items: flex-end; margin-top: 26px; }
-  .qr { width: 48px; height: 48px; border: 1px solid #CBD2E0; color:#6B7280;
+  .qr { width: 48px; height: 48px; border: 1px solid #CDD6E3; color:#5C6B80;
         border-radius: 7px; display: flex; align-items: center;
         justify-content: center; font-size: 9px; }
-  .sig { margin-left: auto; text-align: center; font-size: 9px; color:#6B7280; }
+  .sig { margin-left: auto; text-align: center; font-size: 9px; color:#5C6B80; }
   .sig .line { width: 150px; border-top: 1px solid #9AA3B5;
                margin-bottom: 4px; }
-  .gen { text-align: center; color: #6B7280; font-size: 8.5px;
+  .gen { text-align: center; color: #5C6B80; font-size: 8.5px;
          margin-top: 12px; }
 </style>
 </head>
@@ -141,10 +141,10 @@ class InvoiceHtml {
       <span class="month">${_esc(monthLabel)}</span></div>
   </div>
 
-  ${meta.finalized ? '' : '<div class="draft">${_esc(l.invoiceDraftBanner)} — ${_esc(l.statusDraft)}</div>'}
+  ${meta.finalized ? '' : '<div class="draft">${_esc(l.invoiceDraftNotice)}</div>'}
 
   <div class="chips">
-    ${chip(l.invoiceStatus, meta.finalized ? l.statusFinalized : l.statusDraft, meta.finalized ? '#2E9E5B' : '#8A6D00')}
+    ${chip(l.invoiceStatus, meta.finalized ? l.statusFinalized : l.statusDraft, meta.finalized ? '#2F8A5E' : '#8A6D00')}
     ${meta.providerName != null ? chip(l.invoiceProvider, meta.providerName!) : ''}
     ${meta.tariffVersionLabel != null ? chip(l.invoiceTariff, meta.tariffVersionLabel!) : ''}
     ${chip(l.invoiceBillingMode, meta.billingMethodLabel)}
@@ -197,15 +197,15 @@ class InvoiceHtml {
       ${kv(l.rechargeRebate, '- ${money(bill.rebate)}')}
       ${bill.expenseShare > 0 ? kv(l.invoiceExpenseShare, money(bill.expenseShare)) : ''}
       ${bill.sharedAdjustment.abs() > 0.005 ? kv(l.invoiceSharedAdjustment, '${bill.sharedAdjustment >= 0 ? '+ ' : '- '}${money(bill.sharedAdjustment.abs())}') : ''}
-      ${kv(l.invoiceTotalBill, money(bill.totalBill), bold: true, color: '#2962FF')}
+      ${kv(l.invoiceTotalBill, money(bill.totalBill), bold: true, color: '#E8622E')}
     </div>
     <div class="panel">
       <h4>${_esc(l.invoicePayment)}</h4>
       ${kv(l.invoicePreviousBalance, money(bill.previousBalance))}
       ${kv(l.invoiceRechargePaid, money(bill.rechargeEnergyCredit))}
       ${bill.rechargeFeesPaid > 0 ? kv(l.invoiceRechargeFees, money(bill.rechargeFeesPaid)) : ''}
-      ${bill.settlementsPaid > 0 ? kv(l.settlementPaid, '+ ${money(bill.settlementsPaid)}') : ''}
-      ${bill.settlementsReceived > 0 ? kv(l.settlementReceived, '- ${money(bill.settlementsReceived)}') : ''}
+      ${bill.settlementsPaid > 0 ? kv(l.settlementPaid, '- ${money(bill.settlementsPaid)}') : ''}
+      ${bill.settlementsReceived > 0 ? kv(l.settlementReceived, '+ ${money(bill.settlementsReceived)}') : ''}
       ${kv(l.invoiceAvailableBalance, money(bill.availableBalance), bold: true)}
     </div>
   </div>

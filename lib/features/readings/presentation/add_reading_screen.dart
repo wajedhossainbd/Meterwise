@@ -52,10 +52,12 @@ class _AddReadingScreenState extends ConsumerState<AddReadingScreen> {
   }
 
   /// Returns an error message if the entry is invalid, else null.
-  String? _validateReadings(
-      double mainValue, Map<int, double> tenantReadings, AppLocalizations l) {
-    final readings = ref.read(readingListProvider).value ?? const [];
+  Future<String?> _validateReadings(double mainValue,
+      Map<int, double> tenantReadings, AppLocalizations l) async {
+    final readings = await ref.read(readingListProvider.future);
     final date = DateTime(_date.year, _date.month, _date.day);
+
+    if (mainValue <= 0) return l.readingMainMustBePositive;
 
     // Prevent a duplicate session on the same date.
     final duplicate = readings.any((r) => r.readingDate == date);
@@ -63,13 +65,23 @@ class _AddReadingScreenState extends ConsumerState<AddReadingScreen> {
       return l.readingDuplicate(Formatters.date(date));
     }
 
-    // Prevent impossible (lower) main reading vs the last one before this date.
+    // A cumulative meter can never run backwards, and must fit between its
+    // neighbours — including when the reading is backdated.
     final lastMain = readings
         .where((r) => r.mainMeterId != null && r.readingDate.isBefore(date))
-        .fold<double?>(null, (max, r) => max == null || r.readingValue > max ? r.readingValue : max);
-    if (lastMain != null && mainValue < lastMain) {
+        .fold<double?>(null,
+            (max, r) => max == null || r.readingValue > max ? r.readingValue : max);
+    if (lastMain != null && mainValue <= lastMain) {
       return l.readingMainLower(
           Formatters.units(mainValue), Formatters.units(lastMain));
+    }
+    final nextMain = readings
+        .where((r) => r.mainMeterId != null && r.readingDate.isAfter(date))
+        .fold<double?>(null,
+            (min, r) => min == null || r.readingValue < min ? r.readingValue : min);
+    if (nextMain != null && mainValue >= nextMain) {
+      return l.readingMainHigher(
+          Formatters.units(mainValue), Formatters.units(nextMain));
     }
 
     for (final entry in tenantReadings.entries) {
@@ -78,7 +90,7 @@ class _AddReadingScreenState extends ConsumerState<AddReadingScreen> {
               r.tenantId == entry.key && r.readingDate.isBefore(date))
           .fold<double?>(null,
               (max, r) => max == null || r.readingValue > max ? r.readingValue : max);
-      if (lastT != null && entry.value < lastT) {
+      if (lastT != null && entry.value <= lastT) {
         return l.readingTenantLower(
             Formatters.units(entry.value), Formatters.units(lastT));
       }
@@ -112,8 +124,9 @@ class _AddReadingScreenState extends ConsumerState<AddReadingScreen> {
     };
     final mainValue = double.parse(_main.text.trim());
 
-    final error = _validateReadings(mainValue, tenantReadings, l);
+    final error = await _validateReadings(mainValue, tenantReadings, l);
     if (error != null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error)),
       );

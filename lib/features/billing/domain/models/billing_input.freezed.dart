@@ -548,7 +548,7 @@ as double?,
 /// @nodoc
 mixin _$RechargeInput {
 
- double get amount; double get fees; String? get paidBy;
+ double get amount; double get fees; String? get paidBy; int? get paidByTenantId;
 /// Create a copy of RechargeInput
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -559,16 +559,16 @@ $RechargeInputCopyWith<RechargeInput> get copyWith => _$RechargeInputCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RechargeInput&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.fees, fees) || other.fees == fees)&&(identical(other.paidBy, paidBy) || other.paidBy == paidBy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RechargeInput&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.fees, fees) || other.fees == fees)&&(identical(other.paidBy, paidBy) || other.paidBy == paidBy)&&(identical(other.paidByTenantId, paidByTenantId) || other.paidByTenantId == paidByTenantId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,amount,fees,paidBy);
+int get hashCode => Object.hash(runtimeType,amount,fees,paidBy,paidByTenantId);
 
 @override
 String toString() {
-  return 'RechargeInput(amount: $amount, fees: $fees, paidBy: $paidBy)';
+  return 'RechargeInput(amount: $amount, fees: $fees, paidBy: $paidBy, paidByTenantId: $paidByTenantId)';
 }
 
 
@@ -579,7 +579,7 @@ abstract mixin class $RechargeInputCopyWith<$Res>  {
   factory $RechargeInputCopyWith(RechargeInput value, $Res Function(RechargeInput) _then) = _$RechargeInputCopyWithImpl;
 @useResult
 $Res call({
- double amount, double fees, String? paidBy
+ double amount, double fees, String? paidBy, int? paidByTenantId
 });
 
 
@@ -596,12 +596,13 @@ class _$RechargeInputCopyWithImpl<$Res>
 
 /// Create a copy of RechargeInput
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? amount = null,Object? fees = null,Object? paidBy = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? amount = null,Object? fees = null,Object? paidBy = freezed,Object? paidByTenantId = freezed,}) {
   return _then(_self.copyWith(
 amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,fees: null == fees ? _self.fees : fees // ignore: cast_nullable_to_non_nullable
 as double,paidBy: freezed == paidBy ? _self.paidBy : paidBy // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,paidByTenantId: freezed == paidByTenantId ? _self.paidByTenantId : paidByTenantId // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -686,10 +687,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double amount,  double fees,  String? paidBy)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( double amount,  double fees,  String? paidBy,  int? paidByTenantId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RechargeInput() when $default != null:
-return $default(_that.amount,_that.fees,_that.paidBy);case _:
+return $default(_that.amount,_that.fees,_that.paidBy,_that.paidByTenantId);case _:
   return orElse();
 
 }
@@ -707,10 +708,10 @@ return $default(_that.amount,_that.fees,_that.paidBy);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double amount,  double fees,  String? paidBy)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( double amount,  double fees,  String? paidBy,  int? paidByTenantId)  $default,) {final _that = this;
 switch (_that) {
 case _RechargeInput():
-return $default(_that.amount,_that.fees,_that.paidBy);case _:
+return $default(_that.amount,_that.fees,_that.paidBy,_that.paidByTenantId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -727,10 +728,10 @@ return $default(_that.amount,_that.fees,_that.paidBy);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double amount,  double fees,  String? paidBy)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( double amount,  double fees,  String? paidBy,  int? paidByTenantId)?  $default,) {final _that = this;
 switch (_that) {
 case _RechargeInput() when $default != null:
-return $default(_that.amount,_that.fees,_that.paidBy);case _:
+return $default(_that.amount,_that.fees,_that.paidBy,_that.paidByTenantId);case _:
   return null;
 
 }
@@ -742,12 +743,13 @@ return $default(_that.amount,_that.fees,_that.paidBy);case _:
 
 
 class _RechargeInput extends RechargeInput {
-  const _RechargeInput({required this.amount, this.fees = 0, this.paidBy}): super._();
+  const _RechargeInput({required this.amount, this.fees = 0, this.paidBy, this.paidByTenantId}): super._();
   
 
 @override final  double amount;
 @override@JsonKey() final  double fees;
 @override final  String? paidBy;
+@override final  int? paidByTenantId;
 
 /// Create a copy of RechargeInput
 /// with the given fields replaced by the non-null parameter values.
@@ -759,16 +761,16 @@ _$RechargeInputCopyWith<_RechargeInput> get copyWith => __$RechargeInputCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RechargeInput&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.fees, fees) || other.fees == fees)&&(identical(other.paidBy, paidBy) || other.paidBy == paidBy));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RechargeInput&&(identical(other.amount, amount) || other.amount == amount)&&(identical(other.fees, fees) || other.fees == fees)&&(identical(other.paidBy, paidBy) || other.paidBy == paidBy)&&(identical(other.paidByTenantId, paidByTenantId) || other.paidByTenantId == paidByTenantId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,amount,fees,paidBy);
+int get hashCode => Object.hash(runtimeType,amount,fees,paidBy,paidByTenantId);
 
 @override
 String toString() {
-  return 'RechargeInput(amount: $amount, fees: $fees, paidBy: $paidBy)';
+  return 'RechargeInput(amount: $amount, fees: $fees, paidBy: $paidBy, paidByTenantId: $paidByTenantId)';
 }
 
 
@@ -779,7 +781,7 @@ abstract mixin class _$RechargeInputCopyWith<$Res> implements $RechargeInputCopy
   factory _$RechargeInputCopyWith(_RechargeInput value, $Res Function(_RechargeInput) _then) = __$RechargeInputCopyWithImpl;
 @override @useResult
 $Res call({
- double amount, double fees, String? paidBy
+ double amount, double fees, String? paidBy, int? paidByTenantId
 });
 
 
@@ -796,12 +798,13 @@ class __$RechargeInputCopyWithImpl<$Res>
 
 /// Create a copy of RechargeInput
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? amount = null,Object? fees = null,Object? paidBy = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? amount = null,Object? fees = null,Object? paidBy = freezed,Object? paidByTenantId = freezed,}) {
   return _then(_RechargeInput(
 amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,fees: null == fees ? _self.fees : fees // ignore: cast_nullable_to_non_nullable
 as double,paidBy: freezed == paidBy ? _self.paidBy : paidBy // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,paidByTenantId: freezed == paidByTenantId ? _self.paidByTenantId : paidByTenantId // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

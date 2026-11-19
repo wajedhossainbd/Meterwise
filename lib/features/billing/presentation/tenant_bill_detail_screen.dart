@@ -392,7 +392,7 @@ class TenantBillDetailScreen extends ConsumerWidget {
                       l.invoiceRechargeFees, money(bill.rechargeFeesPaid)),
                 if (bill.settlementsPaid > 0)
                   LabelValueRow(
-                      l.settlementPaid, '+ ${money(bill.settlementsPaid)}'),
+                      l.settlementPaid, '- ${money(bill.settlementsPaid)}'),
                 if (bill.settlementsReceived > 0)
                   LabelValueRow(l.settlementReceived,
                       '- ${money(bill.settlementsReceived)}'),

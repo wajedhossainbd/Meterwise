@@ -31,31 +31,39 @@ class InvoiceMeta {
   final DateTime? finalizedAt;
   final String? tariffVersionLabel;
   final String billingMethodLabel;
-
-  /// Distribution utility (DPDC, DESCO, …).
   final String? providerName;
 }
 
-/// Builds a modern, soft-toned invoice PDF for one tenant and one month.
+/// Builds a print-ready invoice that mirrors the app's "Soft Modern" language:
+/// a warm orange gradient hero, clean white/neutral cards and distinct accents.
 ///
 /// Pure with respect to Flutter widgets — plain data in, bytes out — so it can
 /// be unit-tested and reused for share / print / save without change.
 class InvoicePdf {
   const InvoicePdf._();
 
-  // ---- palette -------------------------------------------------------------
-  static const _blue = PdfColor.fromInt(0xFF2962FF);
-  static const _ink = PdfColor.fromInt(0xFF1D2433);
-  static const _muted = PdfColor.fromInt(0xFF6B7280);
-  static const _tintBlue = PdfColor.fromInt(0xFFEEF3FF);
-  static const _tintGrey = PdfColor.fromInt(0xFFF5F6FA);
-  static const _zebra = PdfColor.fromInt(0xFFF8FAFF);
-  static const _green = PdfColor.fromInt(0xFF2E9E5B);
-  static const _tintGreen = PdfColor.fromInt(0xFFEAF6EF);
-  static const _red = PdfColor.fromInt(0xFFE8553C);
-  static const _tintRed = PdfColor.fromInt(0xFFFDEEEA);
+  // ---- palette: matches the app's theme ------------------------------------
+  static const _orangeLight = PdfColor.fromInt(0xFFFFB85C);
+  static const _orange = PdfColor.fromInt(0xFFF78837);
+  static const _orangeDeep = PdfColor.fromInt(0xFFE8622E);
+  static const _ink = PdfColor.fromInt(0xFF253247);
+  static const _muted = PdfColor.fromInt(0xFF5C6B80);
+  static const _tintOrange = PdfColor.fromInt(0xFFFFF3E4);
+  static const _tintGrey = PdfColor.fromInt(0xFFEDF1F7);
+  static const _zebra = PdfColor.fromInt(0xFFF8FAFD);
+  static const _line = PdfColor.fromInt(0xFFD8DEEC);
+  static const _green = PdfColor.fromInt(0xFF2F8A5E);
+  static const _tintGreen = PdfColor.fromInt(0xFFE7F5EE);
+  static const _red = PdfColor.fromInt(0xFFC85A48);
+  static const _tintRed = PdfColor.fromInt(0xFFFCEDEA);
   static const _amber = PdfColor.fromInt(0xFF8A6D00);
   static const _tintAmber = PdfColor.fromInt(0xFFFFF3CD);
+
+  static pw.LinearGradient get _heroGradient => pw.LinearGradient(
+        colors: [_orangeLight, _orange, _orangeDeep],
+        begin: pw.Alignment.topLeft,
+        end: pw.Alignment.bottomRight,
+      );
 
   // Cached Unicode fonts so currency symbols (৳ € £ $) and Bengali text render.
   static pw.Font? _regular;
@@ -99,7 +107,7 @@ class InvoicePdf {
             _headerBanner(meta, monthLabel),
             if (!meta.finalized) ...[
               pw.SizedBox(height: 10),
-              _draftBanner(),
+              _draftBanner(l),
             ],
             pw.SizedBox(height: 12),
             _metaChips(meta, monthLabel, l),
@@ -138,13 +146,12 @@ class InvoicePdf {
     return pw.Container(
       padding: const pw.EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: pw.BoxDecoration(
-        color: _blue,
+        gradient: _heroGradient,
         borderRadius: pw.BorderRadius.circular(14),
       ),
       child: pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.center,
         children: [
-          // Logo mark.
           pw.Container(
             width: 40,
             height: 40,
@@ -156,7 +163,7 @@ class InvoicePdf {
             child: pw.Text(
               'M',
               style: pw.TextStyle(
-                color: _blue,
+                color: _orangeDeep,
                 fontWeight: pw.FontWeight.bold,
                 fontSize: 20,
               ),
@@ -177,7 +184,7 @@ class InvoicePdf {
               pw.Text(
                 'Electricity Invoice',
                 style: const pw.TextStyle(
-                    color: PdfColor.fromInt(0xCCFFFFFF), fontSize: 10),
+                    color: PdfColor.fromInt(0xEEFFFFFF), fontSize: 10),
               ),
             ],
           ),
@@ -197,15 +204,15 @@ class InvoicePdf {
                         color: PdfColor.fromInt(0xCCFFFFFF), fontSize: 9)),
               pw.SizedBox(height: 4),
               pw.Container(
-                padding: const pw.EdgeInsets.symmetric(
-                    horizontal: 8, vertical: 3),
+                padding:
+                    const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: pw.BoxDecoration(
-                  color: const PdfColor.fromInt(0x33FFFFFF),
+                  color: PdfColors.white,
                   borderRadius: pw.BorderRadius.circular(8),
                 ),
                 child: pw.Text(monthLabel,
                     style: pw.TextStyle(
-                        color: PdfColors.white,
+                        color: _orangeDeep,
                         fontSize: 10,
                         fontWeight: pw.FontWeight.bold)),
               ),
@@ -216,7 +223,7 @@ class InvoicePdf {
     );
   }
 
-  static pw.Widget _draftBanner() {
+  static pw.Widget _draftBanner(AppLocalizations l) {
     return pw.Container(
       width: double.infinity,
       padding: const pw.EdgeInsets.symmetric(vertical: 7, horizontal: 12),
@@ -225,9 +232,9 @@ class InvoicePdf {
         borderRadius: pw.BorderRadius.circular(8),
       ),
       child: pw.Text(
-        'DRAFT INVOICE — not yet finalized. Figures may change.',
-        style: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: _amber,
-            fontSize: 10),
+        l.invoiceDraftNotice,
+        style: pw.TextStyle(
+            fontWeight: pw.FontWeight.bold, color: _amber, fontSize: 10),
       ),
     );
   }
@@ -236,8 +243,7 @@ class InvoicePdf {
       InvoiceMeta meta, String monthLabel, AppLocalizations l) {
     pw.Widget chip(String label, String value, {PdfColor? color}) =>
         pw.Container(
-          padding:
-              const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: pw.BoxDecoration(
             color: _tintGrey,
             borderRadius: pw.BorderRadius.circular(8),
@@ -263,13 +269,13 @@ class InvoicePdf {
       spacing: 6,
       runSpacing: 6,
       children: [
-        chip('Status', meta.finalized ? l.statusFinalized : l.statusDraft,
+        chip(l.invoiceStatus, meta.finalized ? l.statusFinalized : l.statusDraft,
             color: meta.finalized ? _green : _amber),
-        if (meta.providerName != null) chip('Provider', meta.providerName!),
+        if (meta.providerName != null) chip(l.invoiceProvider, meta.providerName!),
         if (meta.tariffVersionLabel != null)
-          chip('Tariff', meta.tariffVersionLabel!),
+          chip(l.invoiceTariff, meta.tariffVersionLabel!),
         chip(l.invoiceBillingMode, meta.billingMethodLabel),
-        chip('Generated', Formatters.date(DateTime.now())),
+        chip(l.invoiceGenerated, Formatters.date(DateTime.now())),
         if (meta.finalizedAt != null)
           chip(l.statusFinalized, Formatters.date(meta.finalizedAt!)),
       ],
@@ -281,7 +287,7 @@ class InvoicePdf {
     return pw.Container(
       padding: const pw.EdgeInsets.all(12),
       decoration: pw.BoxDecoration(
-        color: _tintBlue,
+        color: _tintOrange,
         borderRadius: pw.BorderRadius.circular(10),
       ),
       child: pw.Row(
@@ -289,7 +295,7 @@ class InvoicePdf {
           pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Text('BILLED TO',
+              pw.Text(l.invoiceBilledTo,
                   style: const pw.TextStyle(fontSize: 8, color: _muted)),
               pw.SizedBox(height: 2),
               pw.Text(bill.tenantName,
@@ -313,7 +319,7 @@ class InvoicePdf {
                 style: pw.TextStyle(
                     fontSize: 12,
                     fontWeight: pw.FontWeight.bold,
-                    color: _blue),
+                    color: _orangeDeep),
               ),
             ],
           ),
@@ -366,8 +372,7 @@ class InvoicePdf {
             bool right = false,
             PdfColor color = _ink}) =>
         pw.Padding(
-          padding:
-              const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+          padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 5),
           child: pw.Text(
             text,
             textAlign: right ? pw.TextAlign.right : pw.TextAlign.left,
@@ -382,7 +387,7 @@ class InvoicePdf {
     return pw.Container(
       decoration: pw.BoxDecoration(
         borderRadius: pw.BorderRadius.circular(10),
-        border: pw.Border.all(color: const PdfColor.fromInt(0xFFE3E8F4)),
+        border: pw.Border.all(color: _line),
       ),
       child: pw.ClipRRect(
         horizontalRadius: 10,
@@ -396,7 +401,7 @@ class InvoicePdf {
           },
           children: [
             pw.TableRow(
-              decoration: const pw.BoxDecoration(color: _blue),
+              decoration: const pw.BoxDecoration(color: _orangeDeep),
               children: [
                 cell(l.invoiceTariffBreakdown,
                     bold: true, color: PdfColors.white),
@@ -488,8 +493,9 @@ class InvoicePdf {
           '${bill.sharedAdjustment >= 0 ? '+ ' : '- '}'
           '${money(bill.sharedAdjustment.abs())}',
         ),
-      pw.Divider(color: const PdfColor.fromInt(0xFFD8DEEC), height: 8),
-      _kv(l.invoiceTotalBill, money(bill.totalBill), bold: true, color: _blue),
+      pw.Divider(color: _line, height: 8),
+      _kv(l.invoiceTotalBill, money(bill.totalBill),
+          bold: true, color: _orangeDeep),
     ]);
   }
 
@@ -501,12 +507,11 @@ class InvoicePdf {
       if (bill.rechargeFeesPaid > 0)
         _kv(l.invoiceRechargeFees, money(bill.rechargeFeesPaid)),
       if (bill.settlementsPaid > 0)
-        _kv(l.settlementPaid, '+ ${money(bill.settlementsPaid)}'),
+        _kv(l.settlementPaid, '- ${money(bill.settlementsPaid)}'),
       if (bill.settlementsReceived > 0)
-        _kv(l.settlementReceived, '- ${money(bill.settlementsReceived)}'),
-      pw.Divider(color: const PdfColor.fromInt(0xFFD8DEEC), height: 8),
-      _kv(l.invoiceAvailableBalance, money(bill.availableBalance),
-          bold: true),
+        _kv(l.settlementReceived, '+ ${money(bill.settlementsReceived)}'),
+      pw.Divider(color: _line, height: 8),
+      _kv(l.invoiceAvailableBalance, money(bill.availableBalance), bold: true),
     ]);
   }
 
@@ -515,8 +520,7 @@ class InvoicePdf {
     final isCredit = bill.isCredit;
     return pw.Container(
       width: double.infinity,
-      padding:
-          const pw.EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      padding: const pw.EdgeInsets.symmetric(horizontal: 14, vertical: 11),
       decoration: pw.BoxDecoration(
         color: isCredit ? _tintGreen : _tintRed,
         borderRadius: pw.BorderRadius.circular(10),
@@ -526,19 +530,17 @@ class InvoicePdf {
           pw.Text(
             isCredit ? l.invoiceCarryForward : l.invoiceAmountDue,
             style: pw.TextStyle(
-              fontWeight: pw.FontWeight.bold,
-              fontSize: 12,
-              color: isCredit ? _green : _red,
-            ),
+                fontWeight: pw.FontWeight.bold,
+                fontSize: 12,
+                color: isCredit ? _green : _red),
           ),
           pw.Spacer(),
           pw.Text(
             money(bill.balance.abs()),
             style: pw.TextStyle(
-              fontWeight: pw.FontWeight.bold,
-              fontSize: 16,
-              color: isCredit ? _green : _red,
-            ),
+                fontWeight: pw.FontWeight.bold,
+                fontSize: 16,
+                color: isCredit ? _green : _red),
           ),
         ],
       ),
@@ -555,8 +557,7 @@ class InvoicePdf {
           height: 52,
           alignment: pw.Alignment.center,
           decoration: pw.BoxDecoration(
-            border:
-                pw.Border.all(color: const PdfColor.fromInt(0xFFCBD2E0)),
+            border: pw.Border.all(color: _line),
             borderRadius: pw.BorderRadius.circular(8),
           ),
           child: pw.Text('QR',
@@ -565,10 +566,7 @@ class InvoicePdf {
         pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.center,
           children: [
-            pw.Container(
-                width: 160,
-                height: 0.7,
-                color: const PdfColor.fromInt(0xFF9AA3B5)),
+            pw.Container(width: 160, height: 0.7, color: _muted),
             pw.SizedBox(height: 4),
             pw.Text(l.invoiceSignature,
                 style: const pw.TextStyle(fontSize: 9, color: _muted)),

@@ -189,18 +189,20 @@ class _SessionTile extends StatelessWidget {
         ..showSnackBar(
           SnackBar(
             content: Text(l.readingDeleted),
-            action: SnackBarAction(
-              label: l.actionUndo,
-              onPressed: () {
-                ref.read(readingRepositoryProvider).addSession(
-                      mainMeterId: meter.id,
-                      date: session.date,
-                      mainReading: session.mainReading ?? 0,
-                      tenantReadings: session.tenantReadings,
-                      notes: session.notes,
-                    );
-              },
-            ),
+            action: session.mainReading == null
+                ? null
+                : SnackBarAction(
+                    label: l.actionUndo,
+                    onPressed: () {
+                      ref.read(readingRepositoryProvider).addSession(
+                            mainMeterId: meter.id,
+                            date: session.date,
+                            mainReading: session.mainReading!,
+                            tenantReadings: session.tenantReadings,
+                            notes: session.notes,
+                          );
+                    },
+                  ),
           ),
         );
     }

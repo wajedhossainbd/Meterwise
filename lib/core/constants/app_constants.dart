@@ -10,7 +10,7 @@ class AppConstants {
   static const String appName = 'MeterWise';
 
   /// User-facing version. Keep in sync with `version:` in pubspec.yaml.
-  static const String appVersion = '4.4.0';
+  static const String appVersion = '4.5.0';
 
   /// GitHub in-app updater is for sideload APK builds only. The Play Store AAB
   /// is built with `--dart-define=METERWISE_GITHUB_UPDATER=false` because Play
@@ -39,7 +39,7 @@ class AppConstants {
   /// v9: persisted theme mode (AppSettings.themeMode).
   /// v10: invoice language preference (AppSettings.invoiceLanguage).
   /// v11: tenant roles + meter code join (AppSettings app role/code fields).
-  static const int databaseSchemaVersion = 11;
+  static const int databaseSchemaVersion = 12;
 
   /// Fallback currency used when a property does not specify one.
   static const String defaultCurrencyCode = 'BDT';

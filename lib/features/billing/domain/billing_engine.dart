@@ -165,12 +165,19 @@ class BillingEngine {
     }
 
     // ---- 6/7. Recharge credits & settlements --------------------------------
-    double rechargePaidOf(String name) => input.recharges
-        .where((r) => input.poolAllRecharges || _payerMatches(r.paidBy, name))
+    bool payerMatches(RechargeInput r, int id, String name) {
+      if (r.paidByTenantId != null) return r.paidByTenantId == id;
+      return _payerMatches(r.paidBy, name);
+    }
+    double rechargePaidOf(int id, String name) => input.recharges
+        .where((r) =>
+            input.poolAllRecharges || payerMatches(r, id, name))
         .fold<double>(0, (a, b) => a + b.actualPaid);
-    double rechargeFeesOf(String name) => input.recharges
-        .where((r) => input.poolAllRecharges || _payerMatches(r.paidBy, name))
+    double rechargeFeesOf(int id, String name) => input.recharges
+        .where((r) =>
+            input.poolAllRecharges || payerMatches(r, id, name))
         .fold<double>(0, (a, b) => a + b.fees);
+    /// `fromTenantId` is the payer (money out); `toTenantId` the receiver.
     double settlementsPaidOf(int id) => input.settlements
         .where((s) => s.fromTenantId == id)
         .fold<double>(0, (a, b) => a + b.amount);
@@ -225,8 +232,8 @@ class BillingEngine {
           vat: c.vat,
           rebate: c.rebate,
           totalBill: totalBill,
-          rechargePaid: rechargePaidOf(t.tenantName),
-          rechargeFeesPaid: rechargeFeesOf(t.tenantName),
+          rechargePaid: rechargePaidOf(t.tenantId, t.tenantName),
+          rechargeFeesPaid: rechargeFeesOf(t.tenantId, t.tenantName),
           previousBalance: input.openingBalances[t.tenantId] ?? 0,
           settlementsPaid: settlementsPaidOf(t.tenantId),
           settlementsReceived: settlementsReceivedOf(t.tenantId),

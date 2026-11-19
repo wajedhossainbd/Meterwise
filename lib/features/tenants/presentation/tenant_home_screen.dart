@@ -125,7 +125,9 @@ class TenantHomeScreen extends ConsumerWidget {
         error: (_, _) => Center(child: Text(l.commonSomethingWrong)),
         data: (view) {
           final bill = view.bill?.tenantBills
-              .where((b) => b.tenantName == identity.name)
+              .where((b) => identity.id != null
+                  ? b.tenantId == identity.id
+                  : b.tenantName == identity.name)
               .cast<TenantBill?>()
               .firstOrNull;
           if (bill == null) {
@@ -165,8 +167,8 @@ class TenantHomeScreen extends ConsumerWidget {
                           ),
                           child: Icon(
                             bill.isCredit
-                                ? Icons.savings_outlined
-                                : Icons.account_balance_wallet_outlined,
+                                ? Icons.account_balance_wallet_outlined
+                                : Icons.receipt_long_outlined,
                             size: AppTokens.iconMedium,
                             color: Colors.white,
                           ),

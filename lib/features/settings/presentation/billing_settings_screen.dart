@@ -56,8 +56,13 @@ class _BillingSettingsScreenState
                   children: [
                     RadioGroup<bool>(
                       groupValue: s.multiTenant,
-                      onChanged: (v) {
-                        if (v != null) _update(multiTenant: v);
+                      onChanged: (v) async {
+                        if (v == null || v == s.multiTenant) return;
+                        if (!v &&
+                            !await _confirmSingleMode(context, l)) {
+                          return;
+                        }
+                        await _update(multiTenant: v);
                       },
                       child: Column(
                         children: [
@@ -157,4 +162,26 @@ class _BillingSettingsScreenState
       ),
     );
   }
+
+  Future<bool> _confirmSingleMode(BuildContext context, AppLocalizations l) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l.billingModeSingle),
+        content: Text(l.billingModeSwitchWarning),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l.actionSave),
+          ),
+        ],
+      ),
+    );
+    return ok == true;
+  }
+
 }

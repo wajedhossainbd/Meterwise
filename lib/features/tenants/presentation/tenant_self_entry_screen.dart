@@ -56,8 +56,9 @@ class _TenantSelfEntryScreenState extends ConsumerState<TenantSelfEntryScreen> {
     if (amount == null || amount <= 0) return;
     final identity = ref.read(tenantIdentityProvider);
     final tenants = ref.read(tenantListProvider).value ?? const [];
-    final me = tenants
-        .where((t) => t.name == identity.name)
+    final me = (identity.id == null
+            ? tenants.where((t) => t.name == identity.name)
+            : tenants.where((t) => t.id == identity.id))
         .cast<Tenant>()
         .firstOrNull;
     final meter = await ref.read(currentMainMeterProvider.future);
@@ -101,6 +102,7 @@ class _TenantSelfEntryScreenState extends ConsumerState<TenantSelfEntryScreen> {
                   agentFee: 0,
                   otherExpenses: 0,
                   paidBy: identity.name,
+                  paidByTenantId: me.id,
                   tokenNumber: null,
                   notes: null,
                   receiptPath: null,

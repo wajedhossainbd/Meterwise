@@ -3,6 +3,35 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [4.5.0+35] — 2026-11-19
+
+### Added / redesigned
+- **Invoice PDF redesigned** in both generators (`invoice_pdf.dart` vector and
+  `invoice_html.dart` WebView path): warm orange gradient hero, white/neutral
+  cards, clarified draft notice and a readable month chip.
+
+### Fixed (found in a full product audit)
+- Recharge credits are tied to a tenant **ID** (schema v12) instead of a typed
+  name; a typo or rename can no longer silently lose money. Existing rows are
+  back-filled from names. The payer is now chosen from a dropdown.
+- Tenant identity also carries an ID; self-entry, bills, entries and Drive
+  write-back resolve by ID with a name fallback.
+- **Settlement direction corrected**: payer (`from`) loses balance, receiver
+  (`to`) gains it. PDF and detail screens show the right +/- signs.
+- Reading entry now rejects zero, equal-to-previous and back-dated values that
+  exceed the next reading; undo no longer invents a zero main reading.
+- Unlocking a month cascades to later finalized months; finalizing an earlier
+  draft month is blocked with an explanation.
+- Join screen accepts a typed name even without a synced roster; landlord
+  approval now travels in the Drive packet.
+- Settlement deletion asks for confirmation; "mark paid" is labelled as a
+  note-only reminder and hidden for credits.
+- Switching from multi to single tenant mode warns about hidden data;
+  onboarding failures show an error instead of hanging.
+
+### Preserved
+- Billing arithmetic, finalized snapshots, localization and all integrations.
+
 ## [4.4.0+34] — 2026-11-19
 
 ### Changed

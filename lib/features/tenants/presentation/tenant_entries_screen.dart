@@ -25,8 +25,9 @@ class TenantEntriesScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final identity = ref.watch(tenantIdentityProvider);
     final tenants = ref.watch(tenantListProvider).value ?? const [];
-    final me = tenants
-        .where((t) => t.name == identity.name)
+    final me = (identity.id == null
+            ? tenants.where((t) => t.name == identity.name)
+            : tenants.where((t) => t.id == identity.id))
         .cast<Tenant>()
         .firstOrNull;
     final meId = me?.id;
@@ -45,7 +46,9 @@ class TenantEntriesScreen extends ConsumerWidget {
         r.readingDate,
       ));
     }
-    for (final r in recharges.where((r) => r.paidBy == identity.name)) {
+    for (final r in recharges.where((r) => identity.id != null
+        ? r.paidByTenantId == identity.id
+        : r.paidBy == identity.name)) {
       entries.add(_Entry(
         Icons.bolt_outlined,
         l.tenantAddRecharge,

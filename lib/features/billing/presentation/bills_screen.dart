@@ -443,18 +443,21 @@ class _TenantBillCard extends ConsumerWidget {
                     ),
                   ),
                   const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      final repo = ref.read(billPaymentRepositoryProvider);
-                      if (paid) {
-                        repo.unmark(bill.tenantId, monthKey);
-                      } else {
-                        HapticFeedback.lightImpact();
-                        repo.markPaid(bill.tenantId, monthKey);
-                      }
-                    },
-                    child: Text(paid ? l.billsUnmark : l.billsMarkPaid),
-                  ),
+                  // A credit needs no settlement note — only a real due does.
+                  if (paid || !bill.isCredit)
+                    TextButton(
+                      onPressed: () {
+                        final repo = ref.read(billPaymentRepositoryProvider);
+                        if (paid) {
+                          repo.unmark(bill.tenantId, monthKey);
+                        } else {
+                          HapticFeedback.lightImpact();
+                          repo.markPaid(bill.tenantId, monthKey);
+                        }
+                      },
+                      child:
+                          Text(paid ? l.billsUnmark : l.billsMarkSettledNote),
+                    ),
                 ],
               ),
             ],

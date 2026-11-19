@@ -39,10 +39,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Future<void> _choose({required bool multiTenant}) async {
     setState(() => _saving = true);
-    await ref
-        .read(settingsRepositoryProvider)
-        .update(multiTenant: multiTenant, onboarded: true);
-    // The root widget watches `onboarded` and swaps to the main app.
+    try {
+      await ref
+          .read(settingsRepositoryProvider)
+          .update(multiTenant: multiTenant, onboarded: true);
+    } on Object {
+      // The root widget watches `onboarded` and swaps to the main app.
+      if (mounted) {
+        setState(() => _saving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context).commonSomethingWrong)),
+        );
+      }
+    }
   }
 
   @override

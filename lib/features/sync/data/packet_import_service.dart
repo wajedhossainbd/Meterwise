@@ -96,6 +96,8 @@ class PacketImportService {
       final date = DateTime.parse(map['date'] as String);
       final amount = (map['amount'] as num).toDouble();
       final paidBy = map['paidBy'] as String?;
+      final paidByTenantId = (map['paidByTenantId'] as num?)?.toInt() ??
+          await _tenantIdForName(paidBy);
       final duplicate = await (_db.select(_db.recharges)
             ..where((x) =>
                 x.rechargeDate.equals(date) &
@@ -112,9 +114,11 @@ class PacketImportService {
             otherExpenses:
                 Value((map['otherExpenses'] as num?)?.toDouble() ?? 0),
             paidBy: Value(paidBy),
+            paidByTenantId: Value(paidByTenantId),
           ));
       added++;
     }
+    await _applyApproval(packet);
     return added;
   }
 
@@ -171,11 +175,38 @@ class PacketImportService {
               otherExpenses:
                   Value((map['otherExpenses'] as num?)?.toDouble() ?? 0),
               paidBy: Value(name),
+              paidByTenantId: Value(tenant.id),
             ));
         added++;
       }
     }
     return added;
+  }
+
+  Future<int?> _tenantIdForName(String? name) async {
+    if (name == null) return null;
+    final rows = await (_db.select(_db.tenants)
+          ..where((t) => t.name.equals(name))
+          ..limit(1))
+        .get();
+    return rows.firstOrNull?.id;
+  }
+
+  /// Applies the landlord's approval decision to this tenant device.
+  Future<void> _applyApproval(Map<String, dynamic> packet) async {
+    final approval = packet['tenantApproval'] as Map<String, dynamic>?;
+    if (approval == null) return;
+    final approvedId = (approval['tenantId'] as num?)?.toInt();
+    if (approvedId == null) return;
+    final local = await (_db.select(_db.appSettings)
+          ..where((t) => t.id.equals(1)))
+        .getSingleOrNull();
+    if (local == null || local.tenantId != approvedId) return;
+    final approved = approval['approved'] == true;
+    if (local.tenantApproved == approved) return;
+    await (_db.update(_db.appSettings)..where((t) => t.id.equals(1))).write(
+      AppSettingsCompanion(tenantApproved: Value(approved)),
+    );
   }
 
   String? _tenantNameFor(Map<String, dynamic> packet, dynamic id) {

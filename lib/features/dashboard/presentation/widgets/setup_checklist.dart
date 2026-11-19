@@ -1,7 +1,7 @@
 // Extracted dashboard section; shares the library imports.
 part of '../dashboard_screen.dart';
 
-class _SetupChecklist extends StatelessWidget {
+class _SetupChecklist extends ConsumerWidget {
   const _SetupChecklist({
     required this.hasProperty,
     required this.hasMeter,
@@ -13,7 +13,7 @@ class _SetupChecklist extends StatelessWidget {
   final int tenantCount;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -28,8 +28,9 @@ class _SetupChecklist extends StatelessWidget {
             '${AppRoutes.settings}/${AppRoutes.property}'),
         _step(context, l.stepMeter, hasMeter,
             '${AppRoutes.settings}/${AppRoutes.mainMeter}'),
-        _step(context, l.stepTenants, tenantCount > 0,
-            '${AppRoutes.settings}/${AppRoutes.tenants}'),
+        if (ref.watch(isMultiTenantProvider))
+          _step(context, l.stepTenants, tenantCount > 0,
+              '${AppRoutes.settings}/${AppRoutes.tenants}'),
       ],
     );
   }

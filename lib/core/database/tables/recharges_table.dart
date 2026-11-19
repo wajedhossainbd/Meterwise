@@ -28,8 +28,12 @@ class Recharges extends Table {
   RealColumn get agentFee => real().withDefault(const Constant(0))();
   RealColumn get otherExpenses => real().withDefault(const Constant(0))();
 
-  /// Free-text name of the person who paid (for per-payer reconciliation).
+  /// Free-text name of the person who paid (display only).
   TextColumn get paidBy => text().nullable()();
+
+  /// The tenant this recharge is credited to. Stored as an ID so a rename or a
+  /// typo in [paidBy] can never silently lose the credit.
+  IntColumn get paidByTenantId => integer().nullable()();
 
   TextColumn get tokenNumber => text().nullable()();
 

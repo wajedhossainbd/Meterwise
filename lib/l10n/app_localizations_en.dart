@@ -1348,4 +1348,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tenantCheckStatus => 'Check approval status';
+
+  @override
+  String get invoiceDraftNotice => 'Draft invoice — figures may change';
+
+  @override
+  String get rechargeCreditedTo => 'Credited to tenant';
+
+  @override
+  String get rechargePayerOther => 'Other / landlord';
+
+  @override
+  String get rechargePayerHint =>
+      'Pick a tenant so this payment is credited to their balance.';
+
+  @override
+  String get commonMustBePositive => 'Enter an amount greater than zero';
+
+  @override
+  String get tenantJoinNameHint =>
+      'Type your name exactly as the landlord has it in the roster. Sync their data first if you do not see it below.';
+
+  @override
+  String get readingMainMustBePositive =>
+      'Main reading must be greater than zero';
+
+  @override
+  String readingMainHigher(Object value, Object next) {
+    return 'Main reading ($value) is higher than the next reading ($next).';
+  }
+
+  @override
+  String get settlementDeleteConfirm =>
+      'Delete this settlement? This changes two tenants\' balances.';
+
+  @override
+  String get billsMarkSettledNote => 'Mark settled (note only)';
+
+  @override
+  String get validateEarlierDraft =>
+      'Finalize the earlier draft month first — later months depend on its carry-forward.';
+
+  @override
+  String get billingModeSwitchWarning =>
+      'Switching to single-tenant mode hides all tenants and their readings from billing. Their records stay saved and return if you switch back. Continue?';
 }

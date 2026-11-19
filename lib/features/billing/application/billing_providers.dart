@@ -390,6 +390,7 @@ class BillingContext {
           amount: r.amount,
           fees: r.agentFee + r.otherExpenses,
           paidBy: r.paidBy,
+          paidByTenantId: r.paidByTenantId,
         ),
     ];
     final periodSettlements = [

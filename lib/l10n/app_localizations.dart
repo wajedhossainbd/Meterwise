@@ -2587,6 +2587,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Check approval status'**
   String get tenantCheckStatus;
+
+  /// No description provided for @invoiceDraftNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft invoice — figures may change'**
+  String get invoiceDraftNotice;
+
+  /// No description provided for @rechargeCreditedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Credited to tenant'**
+  String get rechargeCreditedTo;
+
+  /// No description provided for @rechargePayerOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other / landlord'**
+  String get rechargePayerOther;
+
+  /// No description provided for @rechargePayerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a tenant so this payment is credited to their balance.'**
+  String get rechargePayerHint;
+
+  /// No description provided for @commonMustBePositive.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount greater than zero'**
+  String get commonMustBePositive;
+
+  /// No description provided for @tenantJoinNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your name exactly as the landlord has it in the roster. Sync their data first if you do not see it below.'**
+  String get tenantJoinNameHint;
+
+  /// Validation for main meter reading
+  ///
+  /// In en, this message translates to:
+  /// **'Main reading must be greater than zero'**
+  String get readingMainMustBePositive;
+
+  /// No description provided for @readingMainHigher.
+  ///
+  /// In en, this message translates to:
+  /// **'Main reading ({value}) is higher than the next reading ({next}).'**
+  String readingMainHigher(Object value, Object next);
+
+  /// No description provided for @settlementDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this settlement? This changes two tenants\' balances.'**
+  String get settlementDeleteConfirm;
+
+  /// No description provided for @billsMarkSettledNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark settled (note only)'**
+  String get billsMarkSettledNote;
+
+  /// No description provided for @validateEarlierDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Finalize the earlier draft month first — later months depend on its carry-forward.'**
+  String get validateEarlierDraft;
+
+  /// No description provided for @billingModeSwitchWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Switching to single-tenant mode hides all tenants and their readings from billing. Their records stay saved and return if you switch back. Continue?'**
+  String get billingModeSwitchWarning;
 }
 
 class _AppLocalizationsDelegate

@@ -3548,6 +3548,17 @@ class $RechargesTable extends Recharges
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _paidByTenantIdMeta = const VerificationMeta(
+    'paidByTenantId',
+  );
+  @override
+  late final GeneratedColumn<int> paidByTenantId = GeneratedColumn<int>(
+    'paid_by_tenant_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _tokenNumberMeta = const VerificationMeta(
     'tokenNumber',
   );
@@ -3617,6 +3628,7 @@ class $RechargesTable extends Recharges
     agentFee,
     otherExpenses,
     paidBy,
+    paidByTenantId,
     tokenNumber,
     notes,
     receiptPath,
@@ -3722,6 +3734,15 @@ class $RechargesTable extends Recharges
         paidBy.isAcceptableOrUnknown(data['paid_by']!, _paidByMeta),
       );
     }
+    if (data.containsKey('paid_by_tenant_id')) {
+      context.handle(
+        _paidByTenantIdMeta,
+        paidByTenantId.isAcceptableOrUnknown(
+          data['paid_by_tenant_id']!,
+          _paidByTenantIdMeta,
+        ),
+      );
+    }
     if (data.containsKey('token_number')) {
       context.handle(
         _tokenNumberMeta,
@@ -3815,6 +3836,10 @@ class $RechargesTable extends Recharges
         DriftSqlType.string,
         data['${effectivePrefix}paid_by'],
       ),
+      paidByTenantId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}paid_by_tenant_id'],
+      ),
       tokenNumber: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}token_number'],
@@ -3859,8 +3884,12 @@ class Recharge extends DataClass implements Insertable<Recharge> {
   final double agentFee;
   final double otherExpenses;
 
-  /// Free-text name of the person who paid (for per-payer reconciliation).
+  /// Free-text name of the person who paid (display only).
   final String? paidBy;
+
+  /// The tenant this recharge is credited to. Stored as an ID so a rename or a
+  /// typo in [paidBy] can never silently lose the credit.
+  final int? paidByTenantId;
   final String? tokenNumber;
   final String? notes;
 
@@ -3881,6 +3910,7 @@ class Recharge extends DataClass implements Insertable<Recharge> {
     required this.agentFee,
     required this.otherExpenses,
     this.paidBy,
+    this.paidByTenantId,
     this.tokenNumber,
     this.notes,
     this.receiptPath,
@@ -3903,6 +3933,9 @@ class Recharge extends DataClass implements Insertable<Recharge> {
     map['other_expenses'] = Variable<double>(otherExpenses);
     if (!nullToAbsent || paidBy != null) {
       map['paid_by'] = Variable<String>(paidBy);
+    }
+    if (!nullToAbsent || paidByTenantId != null) {
+      map['paid_by_tenant_id'] = Variable<int>(paidByTenantId);
     }
     if (!nullToAbsent || tokenNumber != null) {
       map['token_number'] = Variable<String>(tokenNumber);
@@ -3934,6 +3967,9 @@ class Recharge extends DataClass implements Insertable<Recharge> {
       paidBy: paidBy == null && nullToAbsent
           ? const Value.absent()
           : Value(paidBy),
+      paidByTenantId: paidByTenantId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(paidByTenantId),
       tokenNumber: tokenNumber == null && nullToAbsent
           ? const Value.absent()
           : Value(tokenNumber),
@@ -3966,6 +4002,7 @@ class Recharge extends DataClass implements Insertable<Recharge> {
       agentFee: serializer.fromJson<double>(json['agentFee']),
       otherExpenses: serializer.fromJson<double>(json['otherExpenses']),
       paidBy: serializer.fromJson<String?>(json['paidBy']),
+      paidByTenantId: serializer.fromJson<int?>(json['paidByTenantId']),
       tokenNumber: serializer.fromJson<String?>(json['tokenNumber']),
       notes: serializer.fromJson<String?>(json['notes']),
       receiptPath: serializer.fromJson<String?>(json['receiptPath']),
@@ -3989,6 +4026,7 @@ class Recharge extends DataClass implements Insertable<Recharge> {
       'agentFee': serializer.toJson<double>(agentFee),
       'otherExpenses': serializer.toJson<double>(otherExpenses),
       'paidBy': serializer.toJson<String?>(paidBy),
+      'paidByTenantId': serializer.toJson<int?>(paidByTenantId),
       'tokenNumber': serializer.toJson<String?>(tokenNumber),
       'notes': serializer.toJson<String?>(notes),
       'receiptPath': serializer.toJson<String?>(receiptPath),
@@ -4010,6 +4048,7 @@ class Recharge extends DataClass implements Insertable<Recharge> {
     double? agentFee,
     double? otherExpenses,
     Value<String?> paidBy = const Value.absent(),
+    Value<int?> paidByTenantId = const Value.absent(),
     Value<String?> tokenNumber = const Value.absent(),
     Value<String?> notes = const Value.absent(),
     Value<String?> receiptPath = const Value.absent(),
@@ -4028,6 +4067,9 @@ class Recharge extends DataClass implements Insertable<Recharge> {
     agentFee: agentFee ?? this.agentFee,
     otherExpenses: otherExpenses ?? this.otherExpenses,
     paidBy: paidBy.present ? paidBy.value : this.paidBy,
+    paidByTenantId: paidByTenantId.present
+        ? paidByTenantId.value
+        : this.paidByTenantId,
     tokenNumber: tokenNumber.present ? tokenNumber.value : this.tokenNumber,
     notes: notes.present ? notes.value : this.notes,
     receiptPath: receiptPath.present ? receiptPath.value : this.receiptPath,
@@ -4058,6 +4100,9 @@ class Recharge extends DataClass implements Insertable<Recharge> {
           ? data.otherExpenses.value
           : this.otherExpenses,
       paidBy: data.paidBy.present ? data.paidBy.value : this.paidBy,
+      paidByTenantId: data.paidByTenantId.present
+          ? data.paidByTenantId.value
+          : this.paidByTenantId,
       tokenNumber: data.tokenNumber.present
           ? data.tokenNumber.value
           : this.tokenNumber,
@@ -4085,6 +4130,7 @@ class Recharge extends DataClass implements Insertable<Recharge> {
           ..write('agentFee: $agentFee, ')
           ..write('otherExpenses: $otherExpenses, ')
           ..write('paidBy: $paidBy, ')
+          ..write('paidByTenantId: $paidByTenantId, ')
           ..write('tokenNumber: $tokenNumber, ')
           ..write('notes: $notes, ')
           ..write('receiptPath: $receiptPath, ')
@@ -4108,6 +4154,7 @@ class Recharge extends DataClass implements Insertable<Recharge> {
     agentFee,
     otherExpenses,
     paidBy,
+    paidByTenantId,
     tokenNumber,
     notes,
     receiptPath,
@@ -4130,6 +4177,7 @@ class Recharge extends DataClass implements Insertable<Recharge> {
           other.agentFee == this.agentFee &&
           other.otherExpenses == this.otherExpenses &&
           other.paidBy == this.paidBy &&
+          other.paidByTenantId == this.paidByTenantId &&
           other.tokenNumber == this.tokenNumber &&
           other.notes == this.notes &&
           other.receiptPath == this.receiptPath &&
@@ -4150,6 +4198,7 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
   final Value<double> agentFee;
   final Value<double> otherExpenses;
   final Value<String?> paidBy;
+  final Value<int?> paidByTenantId;
   final Value<String?> tokenNumber;
   final Value<String?> notes;
   final Value<String?> receiptPath;
@@ -4168,6 +4217,7 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
     this.agentFee = const Value.absent(),
     this.otherExpenses = const Value.absent(),
     this.paidBy = const Value.absent(),
+    this.paidByTenantId = const Value.absent(),
     this.tokenNumber = const Value.absent(),
     this.notes = const Value.absent(),
     this.receiptPath = const Value.absent(),
@@ -4187,6 +4237,7 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
     this.agentFee = const Value.absent(),
     this.otherExpenses = const Value.absent(),
     this.paidBy = const Value.absent(),
+    this.paidByTenantId = const Value.absent(),
     this.tokenNumber = const Value.absent(),
     this.notes = const Value.absent(),
     this.receiptPath = const Value.absent(),
@@ -4208,6 +4259,7 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
     Expression<double>? agentFee,
     Expression<double>? otherExpenses,
     Expression<String>? paidBy,
+    Expression<int>? paidByTenantId,
     Expression<String>? tokenNumber,
     Expression<String>? notes,
     Expression<String>? receiptPath,
@@ -4227,6 +4279,7 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
       if (agentFee != null) 'agent_fee': agentFee,
       if (otherExpenses != null) 'other_expenses': otherExpenses,
       if (paidBy != null) 'paid_by': paidBy,
+      if (paidByTenantId != null) 'paid_by_tenant_id': paidByTenantId,
       if (tokenNumber != null) 'token_number': tokenNumber,
       if (notes != null) 'notes': notes,
       if (receiptPath != null) 'receipt_path': receiptPath,
@@ -4248,6 +4301,7 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
     Value<double>? agentFee,
     Value<double>? otherExpenses,
     Value<String?>? paidBy,
+    Value<int?>? paidByTenantId,
     Value<String?>? tokenNumber,
     Value<String?>? notes,
     Value<String?>? receiptPath,
@@ -4267,6 +4321,7 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
       agentFee: agentFee ?? this.agentFee,
       otherExpenses: otherExpenses ?? this.otherExpenses,
       paidBy: paidBy ?? this.paidBy,
+      paidByTenantId: paidByTenantId ?? this.paidByTenantId,
       tokenNumber: tokenNumber ?? this.tokenNumber,
       notes: notes ?? this.notes,
       receiptPath: receiptPath ?? this.receiptPath,
@@ -4314,6 +4369,9 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
     if (paidBy.present) {
       map['paid_by'] = Variable<String>(paidBy.value);
     }
+    if (paidByTenantId.present) {
+      map['paid_by_tenant_id'] = Variable<int>(paidByTenantId.value);
+    }
     if (tokenNumber.present) {
       map['token_number'] = Variable<String>(tokenNumber.value);
     }
@@ -4347,6 +4405,7 @@ class RechargesCompanion extends UpdateCompanion<Recharge> {
           ..write('agentFee: $agentFee, ')
           ..write('otherExpenses: $otherExpenses, ')
           ..write('paidBy: $paidBy, ')
+          ..write('paidByTenantId: $paidByTenantId, ')
           ..write('tokenNumber: $tokenNumber, ')
           ..write('notes: $notes, ')
           ..write('receiptPath: $receiptPath, ')
@@ -4526,6 +4585,17 @@ class $AppSettingsTable extends AppSettings
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _tenantIdMeta = const VerificationMeta(
+    'tenantId',
+  );
+  @override
+  late final GeneratedColumn<int> tenantId = GeneratedColumn<int>(
+    'tenant_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _tenantApprovedMeta = const VerificationMeta(
     'tenantApproved',
   );
@@ -4571,6 +4641,7 @@ class $AppSettingsTable extends AppSettings
     meterCode,
     joinedMeterCode,
     tenantName,
+    tenantId,
     tenantApproved,
     onboarded,
   ];
@@ -4682,6 +4753,12 @@ class $AppSettingsTable extends AppSettings
         tenantName.isAcceptableOrUnknown(data['tenant_name']!, _tenantNameMeta),
       );
     }
+    if (data.containsKey('tenant_id')) {
+      context.handle(
+        _tenantIdMeta,
+        tenantId.isAcceptableOrUnknown(data['tenant_id']!, _tenantIdMeta),
+      );
+    }
     if (data.containsKey('tenant_approved')) {
       context.handle(
         _tenantApprovedMeta,
@@ -4758,6 +4835,10 @@ class $AppSettingsTable extends AppSettings
         DriftSqlType.string,
         data['${effectivePrefix}tenant_name'],
       ),
+      tenantId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}tenant_id'],
+      ),
       tenantApproved: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}tenant_approved'],
@@ -4825,6 +4906,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
 
   /// Which roster entry this tenant chose as their identity.
   final String? tenantName;
+  final int? tenantId;
 
   /// Landlord's approval of a join request (v11).
   final bool tenantApproved;
@@ -4845,6 +4927,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     this.meterCode,
     this.joinedMeterCode,
     this.tenantName,
+    this.tenantId,
     required this.tenantApproved,
     required this.onboarded,
   });
@@ -4872,6 +4955,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     if (!nullToAbsent || tenantName != null) {
       map['tenant_name'] = Variable<String>(tenantName);
     }
+    if (!nullToAbsent || tenantId != null) {
+      map['tenant_id'] = Variable<int>(tenantId);
+    }
     map['tenant_approved'] = Variable<bool>(tenantApproved);
     map['onboarded'] = Variable<bool>(onboarded);
     return map;
@@ -4898,6 +4984,9 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       tenantName: tenantName == null && nullToAbsent
           ? const Value.absent()
           : Value(tenantName),
+      tenantId: tenantId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tenantId),
       tenantApproved: Value(tenantApproved),
       onboarded: Value(onboarded),
     );
@@ -4924,6 +5013,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       meterCode: serializer.fromJson<String?>(json['meterCode']),
       joinedMeterCode: serializer.fromJson<String?>(json['joinedMeterCode']),
       tenantName: serializer.fromJson<String?>(json['tenantName']),
+      tenantId: serializer.fromJson<int?>(json['tenantId']),
       tenantApproved: serializer.fromJson<bool>(json['tenantApproved']),
       onboarded: serializer.fromJson<bool>(json['onboarded']),
     );
@@ -4947,6 +5037,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       'meterCode': serializer.toJson<String?>(meterCode),
       'joinedMeterCode': serializer.toJson<String?>(joinedMeterCode),
       'tenantName': serializer.toJson<String?>(tenantName),
+      'tenantId': serializer.toJson<int?>(tenantId),
       'tenantApproved': serializer.toJson<bool>(tenantApproved),
       'onboarded': serializer.toJson<bool>(onboarded),
     };
@@ -4966,6 +5057,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     Value<String?> meterCode = const Value.absent(),
     Value<String?> joinedMeterCode = const Value.absent(),
     Value<String?> tenantName = const Value.absent(),
+    Value<int?> tenantId = const Value.absent(),
     bool? tenantApproved,
     bool? onboarded,
   }) => AppSetting(
@@ -4985,6 +5077,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
         ? joinedMeterCode.value
         : this.joinedMeterCode,
     tenantName: tenantName.present ? tenantName.value : this.tenantName,
+    tenantId: tenantId.present ? tenantId.value : this.tenantId,
     tenantApproved: tenantApproved ?? this.tenantApproved,
     onboarded: onboarded ?? this.onboarded,
   );
@@ -5019,6 +5112,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
       tenantName: data.tenantName.present
           ? data.tenantName.value
           : this.tenantName,
+      tenantId: data.tenantId.present ? data.tenantId.value : this.tenantId,
       tenantApproved: data.tenantApproved.present
           ? data.tenantApproved.value
           : this.tenantApproved,
@@ -5042,6 +5136,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           ..write('meterCode: $meterCode, ')
           ..write('joinedMeterCode: $joinedMeterCode, ')
           ..write('tenantName: $tenantName, ')
+          ..write('tenantId: $tenantId, ')
           ..write('tenantApproved: $tenantApproved, ')
           ..write('onboarded: $onboarded')
           ..write(')'))
@@ -5063,6 +5158,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
     meterCode,
     joinedMeterCode,
     tenantName,
+    tenantId,
     tenantApproved,
     onboarded,
   );
@@ -5083,6 +5179,7 @@ class AppSetting extends DataClass implements Insertable<AppSetting> {
           other.meterCode == this.meterCode &&
           other.joinedMeterCode == this.joinedMeterCode &&
           other.tenantName == this.tenantName &&
+          other.tenantId == this.tenantId &&
           other.tenantApproved == this.tenantApproved &&
           other.onboarded == this.onboarded);
 }
@@ -5101,6 +5198,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   final Value<String?> meterCode;
   final Value<String?> joinedMeterCode;
   final Value<String?> tenantName;
+  final Value<int?> tenantId;
   final Value<bool> tenantApproved;
   final Value<bool> onboarded;
   const AppSettingsCompanion({
@@ -5117,6 +5215,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.meterCode = const Value.absent(),
     this.joinedMeterCode = const Value.absent(),
     this.tenantName = const Value.absent(),
+    this.tenantId = const Value.absent(),
     this.tenantApproved = const Value.absent(),
     this.onboarded = const Value.absent(),
   });
@@ -5134,6 +5233,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     this.meterCode = const Value.absent(),
     this.joinedMeterCode = const Value.absent(),
     this.tenantName = const Value.absent(),
+    this.tenantId = const Value.absent(),
     this.tenantApproved = const Value.absent(),
     this.onboarded = const Value.absent(),
   });
@@ -5151,6 +5251,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Expression<String>? meterCode,
     Expression<String>? joinedMeterCode,
     Expression<String>? tenantName,
+    Expression<int>? tenantId,
     Expression<bool>? tenantApproved,
     Expression<bool>? onboarded,
   }) {
@@ -5169,6 +5270,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       if (meterCode != null) 'meter_code': meterCode,
       if (joinedMeterCode != null) 'joined_meter_code': joinedMeterCode,
       if (tenantName != null) 'tenant_name': tenantName,
+      if (tenantId != null) 'tenant_id': tenantId,
       if (tenantApproved != null) 'tenant_approved': tenantApproved,
       if (onboarded != null) 'onboarded': onboarded,
     });
@@ -5188,6 +5290,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     Value<String?>? meterCode,
     Value<String?>? joinedMeterCode,
     Value<String?>? tenantName,
+    Value<int?>? tenantId,
     Value<bool>? tenantApproved,
     Value<bool>? onboarded,
   }) {
@@ -5206,6 +5309,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
       meterCode: meterCode ?? this.meterCode,
       joinedMeterCode: joinedMeterCode ?? this.joinedMeterCode,
       tenantName: tenantName ?? this.tenantName,
+      tenantId: tenantId ?? this.tenantId,
       tenantApproved: tenantApproved ?? this.tenantApproved,
       onboarded: onboarded ?? this.onboarded,
     );
@@ -5255,6 +5359,9 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
     if (tenantName.present) {
       map['tenant_name'] = Variable<String>(tenantName.value);
     }
+    if (tenantId.present) {
+      map['tenant_id'] = Variable<int>(tenantId.value);
+    }
     if (tenantApproved.present) {
       map['tenant_approved'] = Variable<bool>(tenantApproved.value);
     }
@@ -5280,6 +5387,7 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
           ..write('meterCode: $meterCode, ')
           ..write('joinedMeterCode: $joinedMeterCode, ')
           ..write('tenantName: $tenantName, ')
+          ..write('tenantId: $tenantId, ')
           ..write('tenantApproved: $tenantApproved, ')
           ..write('onboarded: $onboarded')
           ..write(')'))
@@ -10646,6 +10754,7 @@ typedef $$RechargesTableCreateCompanionBuilder =
       Value<double> agentFee,
       Value<double> otherExpenses,
       Value<String?> paidBy,
+      Value<int?> paidByTenantId,
       Value<String?> tokenNumber,
       Value<String?> notes,
       Value<String?> receiptPath,
@@ -10666,6 +10775,7 @@ typedef $$RechargesTableUpdateCompanionBuilder =
       Value<double> agentFee,
       Value<double> otherExpenses,
       Value<String?> paidBy,
+      Value<int?> paidByTenantId,
       Value<String?> tokenNumber,
       Value<String?> notes,
       Value<String?> receiptPath,
@@ -10756,6 +10866,11 @@ class $$RechargesTableFilterComposer
 
   ColumnFilters<String> get paidBy => $composableBuilder(
     column: $table.paidBy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get paidByTenantId => $composableBuilder(
+    column: $table.paidByTenantId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10872,6 +10987,11 @@ class $$RechargesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get paidByTenantId => $composableBuilder(
+    column: $table.paidByTenantId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get tokenNumber => $composableBuilder(
     column: $table.tokenNumber,
     builder: (column) => ColumnOrderings(column),
@@ -10971,6 +11091,11 @@ class $$RechargesTableAnnotationComposer
   GeneratedColumn<String> get paidBy =>
       $composableBuilder(column: $table.paidBy, builder: (column) => column);
 
+  GeneratedColumn<int> get paidByTenantId => $composableBuilder(
+    column: $table.paidByTenantId,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get tokenNumber => $composableBuilder(
     column: $table.tokenNumber,
     builder: (column) => column,
@@ -11054,6 +11179,7 @@ class $$RechargesTableTableManager
                 Value<double> agentFee = const Value.absent(),
                 Value<double> otherExpenses = const Value.absent(),
                 Value<String?> paidBy = const Value.absent(),
+                Value<int?> paidByTenantId = const Value.absent(),
                 Value<String?> tokenNumber = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<String?> receiptPath = const Value.absent(),
@@ -11072,6 +11198,7 @@ class $$RechargesTableTableManager
                 agentFee: agentFee,
                 otherExpenses: otherExpenses,
                 paidBy: paidBy,
+                paidByTenantId: paidByTenantId,
                 tokenNumber: tokenNumber,
                 notes: notes,
                 receiptPath: receiptPath,
@@ -11092,6 +11219,7 @@ class $$RechargesTableTableManager
                 Value<double> agentFee = const Value.absent(),
                 Value<double> otherExpenses = const Value.absent(),
                 Value<String?> paidBy = const Value.absent(),
+                Value<int?> paidByTenantId = const Value.absent(),
                 Value<String?> tokenNumber = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<String?> receiptPath = const Value.absent(),
@@ -11110,6 +11238,7 @@ class $$RechargesTableTableManager
                 agentFee: agentFee,
                 otherExpenses: otherExpenses,
                 paidBy: paidBy,
+                paidByTenantId: paidByTenantId,
                 tokenNumber: tokenNumber,
                 notes: notes,
                 receiptPath: receiptPath,
@@ -11198,6 +11327,7 @@ typedef $$AppSettingsTableCreateCompanionBuilder =
       Value<String?> meterCode,
       Value<String?> joinedMeterCode,
       Value<String?> tenantName,
+      Value<int?> tenantId,
       Value<bool> tenantApproved,
       Value<bool> onboarded,
     });
@@ -11216,6 +11346,7 @@ typedef $$AppSettingsTableUpdateCompanionBuilder =
       Value<String?> meterCode,
       Value<String?> joinedMeterCode,
       Value<String?> tenantName,
+      Value<int?> tenantId,
       Value<bool> tenantApproved,
       Value<bool> onboarded,
     });
@@ -11291,6 +11422,11 @@ class $$AppSettingsTableFilterComposer
 
   ColumnFilters<String> get tenantName => $composableBuilder(
     column: $table.tenantName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get tenantId => $composableBuilder(
+    column: $table.tenantId,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -11379,6 +11515,11 @@ class $$AppSettingsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get tenantId => $composableBuilder(
+    column: $table.tenantId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<bool> get tenantApproved => $composableBuilder(
     column: $table.tenantApproved,
     builder: (column) => ColumnOrderings(column),
@@ -11454,6 +11595,9 @@ class $$AppSettingsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<int> get tenantId =>
+      $composableBuilder(column: $table.tenantId, builder: (column) => column);
+
   GeneratedColumn<bool> get tenantApproved => $composableBuilder(
     column: $table.tenantApproved,
     builder: (column) => column,
@@ -11507,6 +11651,7 @@ class $$AppSettingsTableTableManager
                 Value<String?> meterCode = const Value.absent(),
                 Value<String?> joinedMeterCode = const Value.absent(),
                 Value<String?> tenantName = const Value.absent(),
+                Value<int?> tenantId = const Value.absent(),
                 Value<bool> tenantApproved = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
               }) => AppSettingsCompanion(
@@ -11523,6 +11668,7 @@ class $$AppSettingsTableTableManager
                 meterCode: meterCode,
                 joinedMeterCode: joinedMeterCode,
                 tenantName: tenantName,
+                tenantId: tenantId,
                 tenantApproved: tenantApproved,
                 onboarded: onboarded,
               ),
@@ -11541,6 +11687,7 @@ class $$AppSettingsTableTableManager
                 Value<String?> meterCode = const Value.absent(),
                 Value<String?> joinedMeterCode = const Value.absent(),
                 Value<String?> tenantName = const Value.absent(),
+                Value<int?> tenantId = const Value.absent(),
                 Value<bool> tenantApproved = const Value.absent(),
                 Value<bool> onboarded = const Value.absent(),
               }) => AppSettingsCompanion.insert(
@@ -11557,6 +11704,7 @@ class $$AppSettingsTableTableManager
                 meterCode: meterCode,
                 joinedMeterCode: joinedMeterCode,
                 tenantName: tenantName,
+                tenantId: tenantId,
                 tenantApproved: tenantApproved,
                 onboarded: onboarded,
               ),

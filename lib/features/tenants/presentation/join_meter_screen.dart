@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
+import '../../../core/database/app_database.dart';
+import '../../../core/theme/soft_ui.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../settings/data/settings_repository.dart';
 import '../data/tenant_repository.dart';
 
-/// Tenant-side join: scan the landlord's QR or type the meter code, then pick
-/// the roster name the landlord already created. Approval follows on the
-/// landlord's device (Invite tenant screen).
+/// Tenant-side join: scan the landlord's QR or type the meter code, then enter
+/// the roster name the landlord created. A name can always be typed even when
+/// the roster has not been synced to this device yet.
 class JoinMeterScreen extends ConsumerStatefulWidget {
   const JoinMeterScreen({super.key});
 
@@ -18,16 +20,19 @@ class JoinMeterScreen extends ConsumerStatefulWidget {
 
 class _JoinMeterScreenState extends ConsumerState<JoinMeterScreen> {
   final _code = TextEditingController();
+  final _name = TextEditingController();
   final _scanner = MobileScannerController(
     detectionSpeed: DetectionSpeed.noDuplicates,
     formats: const [BarcodeFormat.qrCode],
   );
   bool _scanning = true;
   bool _busy = false;
+  int? _chosenTenantId;
 
   @override
   void dispose() {
     _code.dispose();
+    _name.dispose();
     _scanner.dispose();
     super.dispose();
   }
@@ -40,9 +45,10 @@ class _JoinMeterScreenState extends ConsumerState<JoinMeterScreen> {
     _scanner.stop();
   }
 
-  Future<void> _join(String name) async {
+  Future<void> _join() async {
     final l = AppLocalizations.of(context);
     final code = _code.text.trim().toUpperCase();
+    final name = _name.text.trim();
     if (code.isEmpty || name.isEmpty) return;
     setState(() => _busy = true);
     // Prototype: accept any well-formed code so a tenant on a different device
@@ -57,9 +63,11 @@ class _JoinMeterScreenState extends ConsumerState<JoinMeterScreen> {
       }
       return;
     }
-    await ref
-        .read(settingsRepositoryProvider)
-        .joinMeter(code: code, name: name);
+    await ref.read(settingsRepositoryProvider).joinMeter(
+          code: code,
+          name: name,
+          tenantId: _chosenTenantId,
+        );
     if (mounted) Navigator.of(context).pop(true);
   }
 
@@ -68,8 +76,6 @@ class _JoinMeterScreenState extends ConsumerState<JoinMeterScreen> {
     final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final tenants = ref.watch(tenantListProvider).value ?? const [];
-    final selected = tenants.isEmpty ? null : tenants.first.name;
-    String? chosenName = selected;
 
     return Scaffold(
       appBar: AppBar(title: Text(l.tenantJoinTitle)),
@@ -103,7 +109,8 @@ class _JoinMeterScreenState extends ConsumerState<JoinMeterScreen> {
               }
               setState(() => _scanning = !_scanning);
             },
-            icon: Icon(_scanning ? Icons.keyboard_outlined : Icons.qr_code_scanner),
+            icon: Icon(
+                _scanning ? Icons.keyboard_outlined : Icons.qr_code_scanner),
             label: Text(_scanning ? l.tenantEnterCode : l.tenantScanQr),
           ),
           const SizedBox(height: 24),
@@ -111,24 +118,46 @@ class _JoinMeterScreenState extends ConsumerState<JoinMeterScreen> {
               style: theme.textTheme.titleMedium
                   ?.copyWith(fontWeight: FontWeight.w600)),
           const SizedBox(height: 8),
-          if (tenants.isEmpty)
-            Text(l.commonSomethingWrong, style: theme.textTheme.bodyMedium)
-          else
-            StatefulBuilder(
-              builder: (context, setLocal) => DropdownButtonFormField<String>(
-                initialValue: chosenName,
-                items: [
-                  for (final t in tenants)
-                    DropdownMenuItem(value: t.name, child: Text(t.name)),
-                ],
-                onChanged: (v) {
-                  setLocal(() => chosenName = v);
-                },
-              ),
+          SoftInset(
+            padding: const EdgeInsets.all(12),
+            child: Text(l.tenantJoinNameHint,
+                style: theme.textTheme.bodySmall
+                    ?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _name,
+            textCapitalization: TextCapitalization.words,
+            decoration: InputDecoration(labelText: l.rechargePaidByName),
+          ),
+          if (tenants.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            DropdownButtonFormField<int>(
+              initialValue: _chosenTenantId,
+              decoration:
+                  InputDecoration(labelText: l.rechargeCreditedTo),
+              items: [
+                for (final t in tenants)
+                  DropdownMenuItem<int>(
+                    value: t.id,
+                    child: Text(t.name),
+                  ),
+              ],
+              onChanged: (v) {
+                setState(() {
+                  _chosenTenantId = v;
+                  final match = tenants
+                      .where((t) => t.id == v)
+                      .cast<Tenant>()
+                      .firstOrNull;
+                  if (match != null) _name.text = match.name;
+                });
+              },
             ),
+          ],
           const SizedBox(height: 24),
           FilledButton(
-            onPressed: _busy ? null : () => _join(chosenName ?? ''),
+            onPressed: _busy || _name.text.trim().isEmpty ? null : _join,
             child: _busy
                 ? const SizedBox(
                     height: 20,

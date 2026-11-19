@@ -57,6 +57,8 @@ void main() {
     raw.execute('ALTER TABLE app_settings DROP COLUMN joined_meter_code');
     raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_name');
     raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_approved');
+    raw.execute('ALTER TABLE recharges DROP COLUMN paid_by_tenant_id');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_id');
     raw.execute('PRAGMA user_version = 3');
 
     // 3. Re-open: drift runs onUpgrade(3 → 4), recreating the new tables.
@@ -124,6 +126,8 @@ void main() {
     raw.execute(
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, language_code, onboarded) '
         "VALUES (1, 1, 1, 9.5, 'en', 1)");
+    raw.execute('ALTER TABLE recharges DROP COLUMN paid_by_tenant_id');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_id');
     raw.execute('PRAGMA user_version = 6');
 
     // Re-open → onUpgrade(6 → 7) runs.
@@ -180,6 +184,8 @@ void main() {
     raw.execute('ALTER TABLE app_settings DROP COLUMN joined_meter_code');
     raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_name');
     raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_approved');
+    raw.execute('ALTER TABLE recharges DROP COLUMN paid_by_tenant_id');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_id');
     raw.execute('PRAGMA user_version = 4');
 
     final upgraded = AppDatabase.forTesting(
@@ -221,6 +227,8 @@ void main() {
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
         'language_code, onboarded, fixed_charge_distribution) '
         "VALUES (1, 1, 0, 8, 'en', 1, 'equal')");
+    raw.execute('ALTER TABLE recharges DROP COLUMN paid_by_tenant_id');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_id');
     raw.execute('PRAGMA user_version = 7');
 
     final upgraded = AppDatabase.forTesting(
@@ -256,6 +264,8 @@ void main() {
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
         'language_code, onboarded, fixed_charge_distribution, billing_calc_mode) '
         "VALUES (1, 1, 0, 8, 'en', 1, 'equal', 'sharedSlab')");
+    raw.execute('ALTER TABLE recharges DROP COLUMN paid_by_tenant_id');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_id');
     raw.execute('PRAGMA user_version = 8');
 
     final upgraded = AppDatabase.forTesting(
@@ -292,6 +302,8 @@ void main() {
         'INSERT INTO app_settings (id, multi_tenant, fixed_rate, fixed_unit_price, '
         'language_code, onboarded, fixed_charge_distribution, billing_calc_mode, theme_mode) '
         "VALUES (1, 1, 0, 8, 'en', 1, 'equal', 'sharedSlab', 'system')");
+    raw.execute('ALTER TABLE recharges DROP COLUMN paid_by_tenant_id');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_id');
     raw.execute('PRAGMA user_version = 9');
 
     final upgraded = AppDatabase.forTesting(
@@ -332,6 +344,8 @@ void main() {
         'language_code, onboarded, fixed_charge_distribution, billing_calc_mode, '
         'theme_mode, invoice_language) '
         "VALUES (1, 1, 0, 8, 'en', 1, 'equal', 'sharedSlab', 'system', 'auto')");
+    raw.execute('ALTER TABLE recharges DROP COLUMN paid_by_tenant_id');
+    raw.execute('ALTER TABLE app_settings DROP COLUMN tenant_id');
     raw.execute('PRAGMA user_version = 10');
 
     final upgraded = AppDatabase.forTesting(

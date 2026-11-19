@@ -39,6 +39,7 @@ class _RechargeEditScreenState extends ConsumerState<RechargeEditScreen> {
   late final TextEditingController _notes;
 
   late DateTime _date;
+  int? _paidByTenantId;
   String? _receiptPath;
   bool _saving = false;
 
@@ -59,6 +60,7 @@ class _RechargeEditScreenState extends ConsumerState<RechargeEditScreen> {
     _agentFee = _ctrl(r?.agentFee);
     _other = _ctrl(r?.otherExpenses);
     _paidBy = TextEditingController(text: r?.paidBy ?? '');
+    _paidByTenantId = r?.paidByTenantId;
     _token = TextEditingController(text: r?.tokenNumber ?? '');
     _notes = TextEditingController(text: r?.notes ?? '');
   }
@@ -130,6 +132,7 @@ class _RechargeEditScreenState extends ConsumerState<RechargeEditScreen> {
       agentFee: _num(_agentFee),
       otherExpenses: _num(_other),
       paidBy: _nn(_paidBy),
+      paidByTenantId: _paidByTenantId,
       tokenNumber: _nn(_token),
       notes: _nn(_notes),
       receiptPath: _receiptPath,
@@ -189,6 +192,35 @@ class _RechargeEditScreenState extends ConsumerState<RechargeEditScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  DropdownButtonFormField<int?>(
+                    initialValue: _paidByTenantId,
+                    decoration: InputDecoration(
+                      labelText: l.rechargeCreditedTo,
+                      helperText: l.rechargePayerHint,
+                    ),
+                    items: [
+                      DropdownMenuItem<int?>(
+                        value: null,
+                        child: Text(l.rechargePayerOther),
+                      ),
+                      for (final t in tenants)
+                        DropdownMenuItem<int?>(
+                          value: t.id,
+                          child: Text(t.name),
+                        ),
+                    ],
+                    onChanged: (v) {
+                      setState(() {
+                        _paidByTenantId = v;
+                        final match = tenants
+                            .where((t) => t.id == v)
+                            .cast<Tenant>()
+                            .firstOrNull;
+                        if (match != null) _paidBy.text = match.name;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8),
                   TextFormField(
                     controller: _paidBy,
                     textCapitalization: TextCapitalization.words,
@@ -197,20 +229,6 @@ class _RechargeEditScreenState extends ConsumerState<RechargeEditScreen> {
                       helperText: l.rechargePaidByHelp,
                     ),
                   ),
-                  if (tenants.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      children: [
-                        for (final t in tenants)
-                          ActionChip(
-                            label: Text(t.name),
-                            onPressed: () => setState(
-                                () => _paidBy.text = t.name),
-                          ),
-                      ],
-                    ),
-                  ],
                 ],
               ),
             ),
@@ -291,7 +309,11 @@ class _RechargeEditScreenState extends ConsumerState<RechargeEditScreen> {
         final l = AppLocalizations.of(context);
         if (!required && (v == null || v.trim().isEmpty)) return null;
         if (v == null || v.trim().isEmpty) return l.commonRequired;
-        if (double.tryParse(v.trim()) == null) return l.commonEnterNumber;
+        final value = double.tryParse(v.trim());
+        if (value == null) return l.commonEnterNumber;
+        if (value < 0 || (required && value <= 0)) {
+          return l.commonMustBePositive;
+        }
         return null;
       },
     );

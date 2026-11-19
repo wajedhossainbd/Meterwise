@@ -107,8 +107,25 @@ class BillingPeriodRepository {
     );
   }
 
-  Future<void> unlock(int id) {
-    return (_db.update(_db.billingPeriods)..where((t) => t.id.equals(id))).write(
+  Future<void> unlock(int id) async {
+    final row = await (_db.select(_db.billingPeriods)
+          ..where((t) => t.id.equals(id)))
+        .getSingleOrNull();
+    if (row == null) return;
+    // Reopening an earlier month invalidates every later finalized snapshot,
+    // whose opening balance came from it. Cascade them all back to draft so
+    // the ledger cannot contain two contradictory carry-forwards.
+    final all = await (_db.select(_db.billingPeriods)
+          ..where((t) => t.propertyId.equals(row.propertyId)))
+        .get();
+    final ids = <int>[id];
+    for (final p in all) {
+      if (p.status != 'finalized') continue;
+      final later = p.year > row.year ||
+          (p.year == row.year && p.month > row.month);
+      if (later) ids.add(p.id);
+    }
+    await (_db.update(_db.billingPeriods)..where((t) => t.id.isIn(ids))).write(
       BillingPeriodsCompanion(
         status: const Value('draft'),
         finalizedAt: const Value(null),

@@ -48,6 +48,7 @@ class SettingsRepository {
     String? meterCode,
     String? joinedMeterCode,
     String? tenantName,
+    int? tenantId,
     bool? tenantApproved,
   }) async {
     await _ensureRow();
@@ -79,6 +80,7 @@ class SettingsRepository {
             : Value(joinedMeterCode),
         tenantName:
             tenantName == null ? const Value.absent() : Value(tenantName),
+        tenantId: tenantId == null ? const Value.absent() : Value(tenantId),
         tenantApproved: tenantApproved == null
             ? const Value.absent()
             : Value(tenantApproved),
@@ -108,11 +110,16 @@ class SettingsRepository {
   Future<void> setRole(String role) => update(appRole: role);
 
   /// Tenant joins a meter by code and picks their name from the landlord's roster.
-  Future<void> joinMeter({required String code, required String name}) =>
+  Future<void> joinMeter({
+    required String code,
+    required String name,
+    int? tenantId,
+  }) =>
       update(
         appRole: 'tenant',
         joinedMeterCode: code.trim().toUpperCase(),
         tenantName: name.trim(),
+        tenantId: tenantId,
         tenantApproved: false,
       );
 
@@ -124,6 +131,7 @@ class SettingsRepository {
         appRole: 'landlord',
         joinedMeterCode: null,
         tenantName: null,
+        tenantId: null,
         tenantApproved: false,
       );
 }
@@ -153,12 +161,13 @@ final appRoleProvider = Provider<String>(
 );
 
 /// The tenant identity chosen after joining a meter.
-final tenantIdentityProvider = Provider<({String? code, String? name, bool approved})>(
+final tenantIdentityProvider = Provider<({String? code, String? name, int? id, bool approved})>(
   (ref) {
     final s = ref.watch(appSettingsProvider).value;
     return (
       code: s?.joinedMeterCode,
       name: s?.tenantName,
+      id: s?.tenantId,
       approved: s?.tenantApproved ?? false,
     );
   },

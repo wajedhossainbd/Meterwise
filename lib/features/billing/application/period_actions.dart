@@ -32,6 +32,11 @@ class PeriodActions {
 
     final property = await _ref.read(currentPropertyProvider.future);
     if (property == null) return [l.validateNoProperty];
+    if (await _ref
+        .read(billingPeriodRepositoryProvider)
+        .hasEarlierDraft(property.id, month.year, month.month)) {
+      errors.add(l.validateEarlierDraft);
+    }
     final mainMeter = await _ref.read(currentMainMeterProvider.future);
     if (mainMeter == null) return [l.validateNoMeter];
 

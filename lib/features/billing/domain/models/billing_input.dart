@@ -112,6 +112,7 @@ abstract class RechargeInput with _$RechargeInput {
     required double amount,
     @Default(0) double fees,
     String? paidBy,
+    int? paidByTenantId,
   }) = _RechargeInput;
 
   /// What actually left the payer's pocket.

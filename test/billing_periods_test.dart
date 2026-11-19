@@ -230,6 +230,7 @@ void main() {
           agentFee: 0,
           otherExpenses: 0,
           paidBy: null,
+          paidByTenantId: null,
           tokenNumber: null,
           notes: null,
           receiptPath: null,

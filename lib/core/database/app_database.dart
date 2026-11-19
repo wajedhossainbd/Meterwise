@@ -112,6 +112,23 @@ class AppDatabase extends _$AppDatabase {
             await m.addColumn(appSettings, appSettings.tenantName);
             await m.addColumn(appSettings, appSettings.tenantApproved);
           }
+          if (from < 12) {
+            // Tie recharge credits and tenant identity to IDs, never free text.
+            await m.addColumn(recharges, recharges.paidByTenantId);
+            await m.addColumn(appSettings, appSettings.tenantId);
+            // Best-effort backfill from existing names.
+            await customStatement(
+              'UPDATE recharges SET paid_by_tenant_id = ('
+              'SELECT t.id FROM tenants t WHERE lower(trim(t.name)) = '
+              'lower(trim(recharges.paid_by))) WHERE paid_by IS NOT NULL',
+            );
+            await customStatement(
+              'UPDATE app_settings SET tenant_id = ('
+              'SELECT t.id FROM tenants t WHERE lower(trim(t.name)) = '
+              'lower(trim(app_settings.tenant_name))) '
+              'WHERE tenant_name IS NOT NULL',
+            );
+          }
         },
         beforeOpen: (details) async {
           // Enforce foreign-key constraints (off by default in SQLite).

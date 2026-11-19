@@ -171,6 +171,7 @@ class RechargeScreen extends ConsumerWidget {
                       agentFee: r.agentFee,
                       otherExpenses: r.otherExpenses,
                       paidBy: r.paidBy,
+                      paidByTenantId: r.paidByTenantId,
                       tokenNumber: r.tokenNumber,
                       notes: r.notes,
                       receiptPath: r.receiptPath,

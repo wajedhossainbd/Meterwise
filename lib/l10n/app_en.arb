@@ -1,13 +1,11 @@
 {
   "@@locale": "en",
   "appName": "MeterWise",
-
   "navDashboard": "Dashboard",
   "navReadings": "Readings",
   "navRecharge": "Recharge",
   "navBills": "Bills",
   "navSettings": "Settings",
-
   "actionSave": "Save",
   "actionCancel": "Cancel",
   "actionDelete": "Delete",
@@ -26,7 +24,6 @@
   "actionRemove": "Remove",
   "actionCamera": "Camera",
   "actionGallery": "Gallery",
-
   "commonNotSet": "Not set",
   "commonNotesOptional": "Notes (optional)",
   "commonNotes": "Notes",
@@ -34,7 +31,6 @@
   "commonEnterNumber": "Enter a number",
   "commonEnterPositive": "Enter a positive amount",
   "commonSomethingWrong": "Something went wrong",
-
   "onboardingQuestion": "What would you like to manage?",
   "onboardingSingle": "Single meter",
   "onboardingSingleDesc": "My own house — one electricity meter, no tenants. A personal usage & cost tracker.",
@@ -52,19 +48,25 @@
   "tourStep3Title": "Finalize & share bills",
   "tourStep3Body": "Fair slab-shared bills, locked as permanent records and shared as PDF invoices.",
   "welcomeTitle": "Welcome to {appName}",
-  "@welcomeTitle": { "placeholders": { "appName": {} } },
-
+  "@welcomeTitle": {
+    "placeholders": {
+      "appName": {}
+    }
+  },
   "setupSubtitle": "Finish a quick setup to start billing.",
   "stepProperty": "1. Add your property",
   "stepMeter": "2. Add your main meter",
   "stepTenants": "3. Add tenants",
   "finishSetupTitle": "Finish setup first",
   "finishSetupMsg": "Add your property and main meter (Settings) before recording data.",
-
   "dashAvailableBalance": "Available balance",
   "dashRemainingPrepaid": "Remaining prepaid balance",
   "dashRechargedThisMonth": "Recharged this month: {amount}",
-  "@dashRechargedThisMonth": { "placeholders": { "amount": {} } },
+  "@dashRechargedThisMonth": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
   "dashAddReading": "Add reading",
   "dashAddRecharge": "Add recharge",
   "dashViewBills": "View bills",
@@ -85,7 +87,6 @@
   "dashTenantBills": "Tenant bills",
   "dashInCredit": "in credit",
   "dashDue": "due",
-
   "settingsSetup": "Setup",
   "settingsProperty": "Property",
   "settingsMainMeter": "Main meter",
@@ -101,7 +102,6 @@
   "settingsDark": "Dark",
   "settingsCurrency": "Currency",
   "settingsLanguage": "Language",
-
   "billsTitle": "Monthly Bills",
   "billsMonthSummary": "Month summary",
   "billsTenantBills": "Tenant bills",
@@ -113,13 +113,16 @@
   "billsMarkPaid": "Mark paid",
   "billsUnmark": "Unmark",
   "billsPaid": "Paid",
-
   "statusDraft": "Draft",
   "statusFinalized": "Finalized",
   "periodFinalize": "Finalize",
   "periodUnlock": "Unlock",
   "periodFinalizedOn": "Finalized on {date}",
-  "@periodFinalizedOn": { "placeholders": { "date": {} } },
+  "@periodFinalizedOn": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "periodDraftHint": "Draft months are editable and recalculated live. Finalizing locks this month as a permanent record.",
   "periodFinalizedToast": "Month finalized and locked",
   "periodCannotFinalize": "Cannot finalize yet",
@@ -127,7 +130,6 @@
   "periodUnlockWarning": "This will allow editing finalized bills and may change historical calculations. You will need to finalize the month again afterwards.",
   "periodLockedMessage": "This billing period has been finalized. Unlock the month before making changes.",
   "periodFinalizedChip": "Finalized",
-
   "readingsTitle": "Meter Readings",
   "readingsEmptyTitle": "No readings yet",
   "readingsEmptyMsg": "Record your first main + tenant readings.",
@@ -136,7 +138,11 @@
   "readingDeleted": "Reading deleted",
   "readingDeleteTitle": "Delete reading?",
   "readingDeleteMsg": "Delete the reading from {date}?",
-  "@readingDeleteMsg": { "placeholders": { "date": {} } },
+  "@readingDeleteMsg": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "readingDate": "Date",
   "readingMainMeter": "Main meter",
   "readingCurrentReading": "Current reading",
@@ -144,13 +150,26 @@
   "readingNoTenants": "No tenants added yet.",
   "readingMeterPhoto": "Meter photo (optional)",
   "readingDuplicate": "A reading for {date} already exists. Delete it first or pick another date.",
-  "@readingDuplicate": { "placeholders": { "date": {} } },
+  "@readingDuplicate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "readingMainLower": "Main reading ({value}) is lower than the previous reading ({previous}).",
-  "@readingMainLower": { "placeholders": { "value": {}, "previous": {} } },
+  "@readingMainLower": {
+    "placeholders": {
+      "value": {},
+      "previous": {}
+    }
+  },
   "readingTenantLower": "A tenant reading ({value}) is lower than its previous reading ({previous}).",
-  "@readingTenantLower": { "placeholders": { "value": {}, "previous": {} } },
+  "@readingTenantLower": {
+    "placeholders": {
+      "value": {},
+      "previous": {}
+    }
+  },
   "readingLockedMsg": "This month is finalized. Unlock it in Bills before adding readings.",
-
   "rechargeTitle": "Recharge Log",
   "rechargeEmptyTitle": "No recharges yet",
   "rechargeEmptyMsg": "Record prepaid recharges and who paid them.",
@@ -179,8 +198,11 @@
   "rechargeToken": "Token number",
   "rechargeLockedMsg": "This month is finalized. Unlock it in Bills before editing recharges.",
   "rechargeBy": "by {name}",
-  "@rechargeBy": { "placeholders": { "name": {} } },
-
+  "@rechargeBy": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "tenantsTitle": "Tenants",
   "tenantsEmptyTitle": "No tenants yet",
   "tenantsEmptyMsg": "Tap \"Add tenant\" to add your first tenant.",
@@ -192,14 +214,22 @@
   "tenantSaved": "Tenant saved",
   "tenantDeleteTitle": "Delete tenant?",
   "tenantDeleteMsg": "Delete {name}? Their meter readings will also be removed.",
-  "@tenantDeleteMsg": { "placeholders": { "name": {} } },
+  "@tenantDeleteMsg": {
+    "placeholders": {
+      "name": {}
+    }
+  },
   "tenantName": "Name",
   "tenantApartment": "Apartment",
   "tenantSubmeter": "Sub-meter number",
   "tenantPhone": "Phone",
   "tenantEmail": "Email",
   "tenantLastReading": "Last reading: {value}",
-  "@tenantLastReading": { "placeholders": { "value": {} } },
+  "@tenantLastReading": {
+    "placeholders": {
+      "value": {}
+    }
+  },
   "tenantNoReadings": "No readings yet",
   "tenantCall": "Call",
   "tenantWhatsapp": "WhatsApp",
@@ -212,21 +242,22 @@
   "tenantFixedRateLabel": "Fixed price per unit",
   "tenantFixedRateRequired": "Enter the per-unit price",
   "tenantFixedChip": "Fixed {rate}/unit",
-  "@tenantFixedChip": { "placeholders": { "rate": {} } },
-
+  "@tenantFixedChip": {
+    "placeholders": {
+      "rate": {}
+    }
+  },
   "propertyTitle": "Property",
   "propertyName": "Property name",
   "propertyNameHint": "e.g. Rahman Villa",
   "propertyNameRequired": "Name is required",
   "propertyAddress": "Address",
-
   "meterTitle": "Main Meter",
   "meterName": "Meter name",
   "meterNameHint": "e.g. Ground Floor DPDC",
   "meterNameRequired": "Name is required",
   "meterNumber": "Meter number",
   "meterCreatePropertyFirst": "Please create a property first.",
-
   "tariffTitle": "Tariff Manager",
   "tariffPresets": "Presets",
   "tariffVersions": "Versions",
@@ -238,7 +269,11 @@
   "tariffEnterLabel": "Enter a label",
   "tariffEffectiveFrom": "Effective from",
   "tariffEffective": "Effective {date}",
-  "@tariffEffective": { "placeholders": { "date": {} } },
+  "@tariffEffective": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "tariffArchived": "Archived",
   "tariffSlabs": "Slabs (per unit rate)",
   "tariffSlabFrom": "From",
@@ -260,8 +295,11 @@
   "tariffUpdatedToast": "Version updated",
   "tariffDeleteTitle": "Delete version?",
   "tariffDeleteMsg": "Delete \"{label}\"? This cannot be undone. Finalized bills keep their own snapshot and are unaffected.",
-  "@tariffDeleteMsg": { "placeholders": { "label": {} } },
-
+  "@tariffDeleteMsg": {
+    "placeholders": {
+      "label": {}
+    }
+  },
   "billingTitle": "Billing",
   "billingMode": "Billing mode",
   "billingModeSingle": "Single meter",
@@ -304,7 +342,11 @@
   "meterProvider": "Electricity provider",
   "effectiveRateLabel": "Avg rate",
   "effectiveRateValue": "{rate}/unit",
-  "@effectiveRateValue": { "placeholders": { "rate": {} } },
+  "@effectiveRateValue": {
+    "placeholders": {
+      "rate": {}
+    }
+  },
   "invoiceBillingMode": "Billing mode",
   "invoiceExpenseShare": "Expense share",
   "invoiceSharedAdjustment": "Slab-sharing adjustment",
@@ -314,7 +356,6 @@
   "invoiceBuildingBill": "Building bill",
   "invoicePreparing": "Preparing invoice…",
   "invoiceShareFailed": "Could not create the invoice PDF. Please try again.",
-
   "settlementsTitle": "Settlements",
   "settlementsEmptyTitle": "No settlements yet",
   "settlementsEmptyMsg": "Record a direct payment between tenants.",
@@ -331,7 +372,6 @@
   "settlementSelectTenant": "Select a tenant",
   "settlementPaid": "Settlement paid",
   "settlementReceived": "Settlement received",
-
   "backupTitle": "Backup & Restore",
   "backupLocal": "Local backup",
   "backupDesc": "Save a backup file containing your database, receipts and meter photos. Keep it somewhere safe (e.g. Google Drive, email).",
@@ -344,12 +384,19 @@
   "backupChooseZip": "Please choose a MeterWise backup (.zip) file.",
   "backupNotValid": "That file does not look like a MeterWise backup.",
   "backupFailed": "Backup failed: {error}",
-  "@backupFailed": { "placeholders": { "error": {} } },
+  "@backupFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
   "backupRestoreFailed": "Restore failed: {error}",
-  "@backupRestoreFailed": { "placeholders": { "error": {} } },
+  "@backupRestoreFailed": {
+    "placeholders": {
+      "error": {}
+    }
+  },
   "backupDriveTitle": "Google Drive sync",
   "backupDriveSoon": "Coming soon",
-
   "invoiceReadings": "Meter readings",
   "invoicePrevReading": "Previous reading",
   "invoiceCurrentReading": "Current reading",
@@ -367,16 +414,36 @@
   "invoiceCarryForward": "Carry forward (credit)",
   "invoiceAmountDue": "Amount due",
   "billsCreditAmount": "Credit {amount}",
-  "@billsCreditAmount": { "placeholders": { "amount": {} } },
+  "@billsCreditAmount": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
   "billsDueAmount": "Due {amount}",
-  "@billsDueAmount": { "placeholders": { "amount": {} } },
+  "@billsDueAmount": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
   "billsRecharged": "Recharged {amount}",
-  "@billsRecharged": { "placeholders": { "amount": {} } },
+  "@billsRecharged": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
   "chartUnitsPerMonth": "Units (kWh) per month",
   "chartAmountPerMonth": "Amount ({symbol}) per month",
-  "@chartAmountPerMonth": { "placeholders": { "symbol": {} } },
+  "@chartAmountPerMonth": {
+    "placeholders": {
+      "symbol": {}
+    }
+  },
   "tenantOpenFailed": "Could not open {scheme}",
-  "@tenantOpenFailed": { "placeholders": { "scheme": {} } },
+  "@tenantOpenFailed": {
+    "placeholders": {
+      "scheme": {}
+    }
+  },
   "validationRequired": "Required",
   "validationInteger": "Enter a whole number",
   "validationNumber": "Enter a valid number",
@@ -386,12 +453,25 @@
   "validateDuplicateReading": "Duplicate main-meter readings on the same date.",
   "validateNoOpeningReading": "No opening reading found before this month — record a baseline reading in a prior month first.",
   "validateClosingNotGreater": "Closing reading ({closing}) must be greater than the opening reading ({opening}).",
-  "@validateClosingNotGreater": { "placeholders": { "closing": {}, "opening": {} } },
+  "@validateClosingNotGreater": {
+    "placeholders": {
+      "closing": {},
+      "opening": {}
+    }
+  },
   "validateTenantLowerReading": "Tenant \"{tenant}\": closing reading is lower than the previous reading.",
-  "@validateTenantLowerReading": { "placeholders": { "tenant": {} } },
+  "@validateTenantLowerReading": {
+    "placeholders": {
+      "tenant": {}
+    }
+  },
   "validateRechargeAmount": "A recharge in this month has a zero or negative amount.",
   "validateFixedRateMissing": "Tenant \"{tenant}\" is on a fixed unit rate but has no per-unit price set. Edit the tenant to set it.",
-  "@validateFixedRateMissing": { "placeholders": { "tenant": {} } },
+  "@validateFixedRateMissing": {
+    "placeholders": {
+      "tenant": {}
+    }
+  },
   "validateBillCompute": "Could not compute a bill for this month.",
   "invoiceTitle": "Electricity Invoice",
   "invoiceDraftBanner": "DRAFT",
@@ -457,5 +537,26 @@
   "updateInstall": "Download & install",
   "updateFailed": "Could not download the update. Please try again later.",
   "tenantSwitchLandlord": "Switch to landlord view",
-  "tenantCheckStatus": "Check approval status"
+  "tenantCheckStatus": "Check approval status",
+  "invoiceDraftNotice": "Draft invoice — figures may change",
+  "rechargeCreditedTo": "Credited to tenant",
+  "rechargePayerOther": "Other / landlord",
+  "rechargePayerHint": "Pick a tenant so this payment is credited to their balance.",
+  "commonMustBePositive": "Enter an amount greater than zero",
+  "tenantJoinNameHint": "Type your name exactly as the landlord has it in the roster. Sync their data first if you do not see it below.",
+  "readingMainMustBePositive": "Main reading must be greater than zero",
+  "@readingMainMustBePositive": {
+    "description": "Validation for main meter reading"
+  },
+  "readingMainHigher": "Main reading ({value}) is higher than the next reading ({next}).",
+  "@readingMainHigher": {
+    "placeholders": {
+      "value": {},
+      "next": {}
+    }
+  },
+  "settlementDeleteConfirm": "Delete this settlement? This changes two tenants' balances.",
+  "billsMarkSettledNote": "Mark settled (note only)",
+  "validateEarlierDraft": "Finalize the earlier draft month first — later months depend on its carry-forward.",
+  "billingModeSwitchWarning": "Switching to single-tenant mode hides all tenants and their readings from billing. Their records stay saved and return if you switch back. Continue?"
 }

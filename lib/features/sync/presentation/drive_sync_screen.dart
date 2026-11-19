@@ -59,6 +59,7 @@ class _DriveSyncScreenState extends ConsumerState<DriveSyncScreen> {
             tenants: tenants,
             readings: readings,
             recharges: recharges,
+          approval: await ref.read(settingsRepositoryProvider).get(),
           );
       await ref
           .read(driveSyncProvider)
@@ -101,15 +102,19 @@ class _DriveSyncScreenState extends ConsumerState<DriveSyncScreen> {
       final name = identity.name;
       if (name != null) {
         final tenants = ref.read(tenantListProvider).value ?? const [];
-        final tenant = tenants
-            .where((t) => t.name == name)
+        final tenant = (identity.id == null
+                ? tenants.where((t) => t.name == name)
+                : tenants.where((t) => t.id == identity.id))
             .cast<Tenant>()
             .firstOrNull;
+        final tenantId = identity.id ?? tenant?.id;
         final readings = (ref.read(readingListProvider).value ?? const [])
             .where((r) => tenant != null && r.tenantId == tenant.id)
             .toList();
         final recharges = (ref.read(rechargeListProvider).value ?? const [])
-            .where((r) => r.paidBy == name)
+            .where((r) => tenantId != null
+                ? r.paidByTenantId == tenantId
+                : r.paidBy == name)
             .toList();
         await ref.read(driveSyncProvider).uploadTenantPacket(
               meterCode: code,

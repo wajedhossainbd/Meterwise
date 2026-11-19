@@ -88,7 +88,7 @@ abstract class TenantBill with _$TenantBill {
 
   /// Prepaid funds available this period: carry-in + recharges + net settlement.
   double get availableBalance =>
-      previousBalance + rechargePaid + settlementsPaid - settlementsReceived;
+      previousBalance + rechargePaid - settlementsPaid + settlementsReceived;
 
   /// Effective average cost per billed unit — what this tenant actually pays.
   double get effectiveRate => billedUnits > 0 ? totalBill / billedUnits : 0;

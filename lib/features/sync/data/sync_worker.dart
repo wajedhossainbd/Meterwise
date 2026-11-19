@@ -40,6 +40,7 @@ void syncCallbackDispatcher() {
           tenants: await TenantRepository(db).getAll(),
           readings: await ReadingRepository(db).getAll(),
           recharges: await RechargeRepository(db).getAll(),
+          approval: await SettingsRepository(db).get(),
         );
         await drive.uploadPacket(meterCode: code, packet: packet);
         for (final tenantPacket

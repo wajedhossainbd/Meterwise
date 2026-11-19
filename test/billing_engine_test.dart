@@ -543,10 +543,31 @@ void main() {
       // Zero usage but fixed charges still bill (400 split 200/200).
       expect(a.settlementsReceived, 500);
       expect(b.settlementsPaid, 500);
+      // Direction matters: the payer's balance falls, the receiver's rises.
+      expect(a.balance, closeTo(1300, 1e-9)); // (1000 + 500) − 200 bill
+      expect(b.balance, closeTo(-1200, 1e-9)); // (−500 − 500) − 200 bill
       // Net across tenants is conserved: settlements shift, never create.
       final netShift = (a.availableBalance + b.availableBalance) -
           (1000 - 500); // openings only
       expect(netShift, closeTo(0, 1e-9));
+    });
+
+    test('recharge is credited by tenant ID, not typed name', () {
+      final bill = _engine.calculate(
+        BillingInput(
+          tariff: _flat10,
+          mainMeter: const MeterReadingPair(previous: 100, current: 100),
+          openingBalances: const {1: 0, 2: 0},
+          tenants: [_shared(1, 'A', 0), _shared(2, 'B', 0)],
+          recharges: const [
+            RechargeInput(amount: 1000, paidBy: 'MR. A', paidByTenantId: 1),
+          ],
+        ),
+      );
+      expect(bill.tenantBills.firstWhere((t) => t.tenantId == 1).rechargePaid,
+          closeTo(1000, 1e-9));
+      expect(bill.tenantBills.firstWhere((t) => t.tenantId == 2).rechargePaid,
+          closeTo(0, 1e-9));
     });
 
     test('carry-forward: opening balance flows into available balance', () {
