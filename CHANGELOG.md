@@ -3,6 +3,22 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [4.6.0+36] — 2026-11-19
+
+### Fixed
+- **Shared invoice PDF opened as "invalid format"** on some viewers. The native
+  WebView converter appended a `/Title` trailer whose `startxref` pointed at a
+  trailer instead of a real `xref` table, corrupting the file. Removed that
+  rewrite; the WebView PDF is now shared exactly as generated.
+- Added PDF header/trailer validation before sharing in both the native bridge
+  and the share screen — an invalid file falls back to the English vector
+  invoice instead of being shared.
+- Share filenames are now ASCII-safe (Bengali tenant names no longer produce
+  odd filenames).
+
+Reproduced the corruption locally: the old stamping made a valid PDF fail to
+open; the unmodified PDF opens correctly.
+
 ## [4.5.0+35] — 2026-11-19
 
 ### Added / redesigned

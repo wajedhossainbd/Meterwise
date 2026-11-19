@@ -15,6 +15,16 @@ class NativeInvoicePdf {
   static const MethodChannel _channel =
       MethodChannel('com.meterwise.app/invoice_pdf');
 
+  /// A WebView can write an empty or HTML error page to the .pdf path. Validate
+  /// the header and trailer so we never share a file a viewer calls "invalid".
+  static bool _looksLikePdf(Uint8List bytes) {
+    if (bytes.length < 500) return false;
+    final header = String.fromCharCodes(bytes.sublist(0, 5));
+    final tail = String.fromCharCodes(
+        bytes.sublist(bytes.length - 1024 > 0 ? bytes.length - 1024 : 0));
+    return header == '%PDF-' && tail.contains('%%EOF');
+  }
+
   static Future<Uint8List?> convert(String html, {String? title}) async {
     final dir = await getTemporaryDirectory();
     final path = '${dir.path}/invoice_${DateTime.now().microsecondsSinceEpoch}.pdf';
@@ -30,7 +40,7 @@ class NativeInvoicePdf {
       if (!await file.exists()) return null;
       final bytes = await file.readAsBytes();
       await file.delete();
-      return bytes.length > 500 ? bytes : null;
+      return _looksLikePdf(bytes) ? bytes : null;
     } on PlatformException {
       return null;
     } finally {

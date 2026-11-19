@@ -44,46 +44,6 @@ class MainActivity : FlutterActivity() {
     }
 
     /**
-     * Appends a small incremental update that adds an /Info dictionary with a
-     * document title. WebView's print PDF has no /Title, so sharing apps show
-     * "Untitled" instead of the invoice name.
-     */
-    private fun stampTitle(path: String, title: String) {
-        try {
-            val file = File(path)
-            val original = file.readBytes()
-            val text = original.toString(Charsets.ISO_8859_1)
-            val root = Regex("/Root\\s+\\d+\\s+\\d+\\s+R").find(text)?.value ?: return
-            val size = Regex("/Size\\s+(\\d+)")
-                .findAll(text).lastOrNull()?.groupValues?.get(1)?.toInt() ?: return
-            val previousStart = Regex("startxref\\s+(\\d+)")
-                .findAll(text).lastOrNull()?.groupValues?.get(1)?.toLong() ?: return
-
-            val objectNumber = size
-            // PDF literal strings here are Latin-1; keep the title ASCII-safe.
-            val escaped = title
-                .map { if (it.code in 32..126) it else '?' }
-                .joinToString("")
-                .replace("\\", "\\\\")
-                .replace("(", "\\(")
-                .replace(")", "\\)")
-            val objectPart = "$objectNumber 0 obj\n<< /Title ($escaped) >>\nendobj\n"
-            val trailerPart =
-                "trailer\n<< /Size ${objectNumber + 1} /Root $root " +
-                    "/Info $objectNumber 0 R /Prev $previousStart >>\n"
-            val startXrefPart =
-                "startxref\n${original.size.toLong() + objectPart.length}\n%%EOF\n"
-            file.appendBytes(
-                (objectPart + trailerPart + startXrefPart)
-                    .toByteArray(Charsets.ISO_8859_1)
-            )
-            Log.d("MWPDF", "stamped title: $title")
-        } catch (t: Throwable) {
-            Log.w("MWPDF", "stampTitle failed: ${t.message}")
-        }
-    }
-
-    /**
      * Renders HTML to a PDF using an owned WebView and the platform print
      * adapter. The view is kept alive for the whole job and torn down after —
      * unlike the plugin, nothing can hang on a dangling WebView reference.
@@ -109,7 +69,8 @@ class MainActivity : FlutterActivity() {
                 val error = job.failure
                 val size = if (error == null) runCatching { File(path).length() }.getOrDefault(0) else 0
                 Log.d("MWPDF", "job done: error=$error size=$size")
-                if (error == null && size > 500) stampTitle(path, title)
+                // Do not rewrite the WebView PDF. A hand-built trailer without
+                // a matching xref table makes strict viewers reject the file.
                 when {
                     error != null -> result.error("PDF_FAILED", error, null)
                     size <= 500 -> result.error("PDF_FAILED", "PDF too small ($size bytes)", null)

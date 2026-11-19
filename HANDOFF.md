@@ -4,7 +4,7 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v4.5.0+35 · DB schema v12 · 63/63 tests green ·
+> **Last state:** v4.6.0+36 · DB schema v12 · 63/63 tests green ·
 > `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
 > (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
@@ -124,7 +124,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `4.5.0+35`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `4.6.0+36`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -486,6 +486,7 @@ migration tests + additive-only migrations).
 | 3.6.0 | Design system tokens, BrandButton/BrandChip components, themed buttons/chips/inputs across the app |
 | 3.7.0 | Custom MeterGauge signature visual, haptic + press feedback, peak/end emotional design |
 | 3.7.1 | Tenant can switch to landlord view to approve locally without leaving the meter; pending state has a status-check action |
+| 4.6.0 | Fixed shared invoice PDF reported as invalid: removed unsafe PDF trailer rewriting in the native WebView converter, added PDF header/trailer validation with fallback, ASCII-safe share filename |
 | 4.5.0 | Redesigned invoice PDF (gradient hero, both vector + HTML paths); ID-based recharge/tenant attribution with v12 migration; settlement direction and balance signs corrected; reading validation, cascade unlock, join fallback, settlement confirm, mark-settled note-only, mode-switch warning |
 | 4.4.0 | White tiles preserved; warm gradient dashboard hero + green/red tenant gradient hero, gradient icon tiles, white-on-gradient typography |
 | 4.3.0 | Neutral cool-grey canvas with colourful elements: multi-hue icon tiles and coloured bottom-nav destinations, orange as accent only |

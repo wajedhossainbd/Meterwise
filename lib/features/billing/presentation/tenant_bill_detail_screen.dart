@@ -177,8 +177,11 @@ class TenantBillDetailScreen extends ConsumerWidget {
     return Localizations.localeOf(context).languageCode == 'bn';
   }
 
-  String get _fileName =>
-      'MeterWise_${bill.tenantName}_$_monthLabel.pdf'.replaceAll(' ', '_');
+  String get _fileName {
+    final raw = 'MeterWise_${bill.tenantName}_$_monthLabel.pdf';
+    // Keep the shared filename ASCII-safe so every file manager handles it.
+    return raw.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '_');
+  }
 
   /// Builds the PDF behind a blocking "preparing…" dialog. The dialog is
   /// dismissed BEFORE the native share/print sheet opens. Returns null (after
@@ -211,6 +214,11 @@ class TenantBillDetailScreen extends ConsumerWidget {
         l,
         bangla: _wantsBangla(ref, context),
       );
+      // Last line of defence: never share a file a viewer would call invalid.
+      if (!_isPdf(result.bytes)) {
+        messenger.showSnackBar(SnackBar(content: Text(l.invoiceShareFailed)));
+        return null;
+      }
       if (result.usedFallback) {
         messenger.showSnackBar(
           SnackBar(
@@ -235,6 +243,13 @@ class TenantBillDetailScreen extends ConsumerWidget {
     } finally {
       if (dialogOpen) navigator.pop();
     }
+  }
+
+  static bool _isPdf(Uint8List bytes) {
+    if (bytes.length < 500) return false;
+    if (String.fromCharCodes(bytes.sublist(0, 5)) != '%PDF-') return false;
+    final from = bytes.length - 2048 > 0 ? bytes.length - 2048 : 0;
+    return String.fromCharCodes(bytes.sublist(from)).contains('%%EOF');
   }
 
   Future<void> _share(
