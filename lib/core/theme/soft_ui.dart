@@ -20,6 +20,9 @@ class Soft {
 
   static Color base(BuildContext context) =>
       isDark(context) ? AppColors.baseDark : AppColors.baseLight;
+  /// The tile colour — a warm cream that lifts off the orange-tinted canvas.
+  static Color surface(BuildContext context) =>
+      isDark(context) ? AppColors.baseDark : AppColors.surfaceLight;
   static Color inset(BuildContext context) =>
       isDark(context) ? AppColors.insetDark : AppColors.insetLight;
   static Color lightShadow(BuildContext context) =>
@@ -133,7 +136,8 @@ class SoftSurface extends StatelessWidget {
   Widget build(BuildContext context) {
     final radius = borderRadius ??
         BorderRadius.circular(AppTokens.radiusCard);
-    final background = color ?? (inset ? Soft.inset(context) : Soft.base(context));
+    final background = color ??
+        (inset ? Soft.inset(context) : Soft.surface(context));
 
     Widget content = child;
     if (onTap != null) {
@@ -285,16 +289,17 @@ class SoftIconTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final inner = size - AppTokens.s4;
+    final tileColor = color ?? Soft.accentInk(context);
     return SoftSurface(
-      inset: true,
       depth: SoftDepth.subtle,
+      color: tileColor,
       borderRadius: circular
           ? Soft.circle
           : BorderRadius.circular(AppTokens.radiusControl),
       child: SizedBox(
         width: inner,
         height: inner,
-        child: Icon(icon, size: iconSize, color: color ?? Soft.accentInk(context)),
+        child: Icon(icon, size: iconSize, color: Colors.white),
       ),
     );
   }

@@ -18,6 +18,7 @@ class AppTheme {
   static ThemeData _build(Brightness brightness) {
     final isLight = brightness == Brightness.light;
     final base = isLight ? AppColors.baseLight : AppColors.baseDark;
+    final surface = isLight ? AppColors.surfaceLight : AppColors.baseDark;
     final inset = isLight ? AppColors.insetLight : AppColors.insetDark;
     final accent = isLight ? AppColors.seed : AppColors.seedDark;
     final text = isLight ? AppColors.textLight : AppColors.textDark;
@@ -25,7 +26,7 @@ class AppTheme {
     final shadow = isLight
         ? AppColors.darkShadowLight
         : AppColors.darkShadowDark;
-    final onAccent = AppColors.onAccent;
+    final onAccent = isLight ? AppColors.onAccent : AppColors.textLight;
     final accentInk = isLight ? AppColors.accentInk : AppColors.seedDark;
 
     final colorScheme = ColorScheme.fromSeed(
@@ -42,7 +43,7 @@ class AppTheme {
       onSecondaryContainer: accentInk,
       tertiary: AppColors.accentTeal,
       onTertiary: Colors.white,
-      surface: base,
+      surface: surface,
       onSurface: text,
       surfaceContainerLowest: base,
       surfaceContainerLow: base,
@@ -79,19 +80,19 @@ class AppTheme {
         centerTitle: false,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: base,
-        foregroundColor: text,
-        iconTheme: IconThemeData(color: accent),
+        backgroundColor: accent,
+        foregroundColor: onAccent,
+        iconTheme: IconThemeData(color: onAccent),
         titleTextStyle: TextStyle(
           fontSize: AppTokens.textHeading,
           fontWeight: AppTokens.weightSemibold,
-          color: text,
+          color: onAccent,
           letterSpacing: -0.3,
         ),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
-        color: base,
+        color: surface,
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         margin: EdgeInsets.zero,
@@ -175,7 +176,7 @@ class AppTheme {
         height: 76,
         backgroundColor: base,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: accent.withValues(alpha: isLight ? 0.12 : 0.20),
+        indicatorColor: isLight ? AppColors.seed : AppColors.seedDark,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => TextStyle(
@@ -183,12 +184,12 @@ class AppTheme {
             fontWeight: states.contains(WidgetState.selected)
                 ? AppTokens.weightSemibold
                 : AppTokens.weightMedium,
-            color: states.contains(WidgetState.selected) ? accentInk : muted,
+            color: states.contains(WidgetState.selected) ? onAccent : muted,
           ),
         ),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
-            color: states.contains(WidgetState.selected) ? accentInk : muted,
+            color: states.contains(WidgetState.selected) ? onAccent : muted,
             size: AppTokens.iconLarge,
           ),
         ),
@@ -223,7 +224,7 @@ class AppTheme {
         contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
       ),
       dialogTheme: DialogThemeData(
-        backgroundColor: base,
+        backgroundColor: surface,
         surfaceTintColor: Colors.transparent,
         elevation: 12,
         shape: RoundedRectangleBorder(
@@ -236,7 +237,7 @@ class AppTheme {
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: base,
+        backgroundColor: surface,
         elevation: 12,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -249,7 +250,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppTokens.radiusChip),
         ),
         side: BorderSide.none,
-        backgroundColor: accent.withValues(alpha: 0.12),
+        backgroundColor: accent.withValues(alpha: 0.18),
         labelStyle: const TextStyle(
           fontSize: AppTokens.textCaption,
           fontWeight: AppTokens.weightSemibold,

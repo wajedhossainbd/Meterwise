@@ -4,7 +4,7 @@
 > without reading prior conversations. Companion docs: `BILLING.md` (formula
 > spec), `~/.claude/.../memory/` (session memory, mirrors this).
 >
-> **Last state:** v4.1.0+31 · DB schema v11 · 63/63 tests green ·
+> **Last state:** v4.2.0+32 · DB schema v11 · 63/63 tests green ·
 > `flutter analyze` clean · signed release APK, device-verified on Samsung S9+
 > (SM-G965F / Android 10): Bangla invoice renders, native PDF ~0.5 s, no UI freeze.
 > Git history holds the revamp phases; baseline `1ba118a`. Read [README.md](README.md) first.
@@ -124,7 +124,7 @@ encoded as exact unit tests. His live data backups exist at
 - Release: `flutter build apk --release` → copy from
   `build/app/outputs/flutter-apk/app-release.apk`, name it
   `archive/apks/MeterWise-vX.Y.Z-<slug>.apk` (older builds archived there in
-  Phase 0). Bump `version:` in pubspec first (currently `4.1.0+31`) **and**
+  Phase 0). Bump `version:` in pubspec first (currently `4.2.0+32`) **and**
   `AppConstants.appVersion` in `core/constants/app_constants.dart`.
 - `aapt` (icon/manifest checks): `$ANDROID_HOME/build-tools/35.0.0/aapt`.
 - `.gov.bd` sites fail TLS in WebFetch — use `curl -sk` or Python ssl-noverify.
@@ -486,6 +486,7 @@ migration tests + additive-only migrations).
 | 3.6.0 | Design system tokens, BrandButton/BrandChip components, themed buttons/chips/inputs across the app |
 | 3.7.0 | Custom MeterGauge signature visual, haptic + press feedback, peak/end emotional design |
 | 3.7.1 | Tenant can switch to landlord view to approve locally without leaving the meter; pending state has a status-check action |
+| 4.2.0 | Warm orange-forward canvas, cream tiles and a solid orange app-bar band; the washed-out white look is removed |
 | 4.1.0 | Light-orange electricity accent on cool white tiles; deeper icon inks and stronger shadows fix low-visibility icons/mini-stats |
 | 4.0.0 | Complete app-wide "Soft Modern" redesign: monochromatic neumorphic palette, paired light/dark shadows, reusable SoftSurface/SoftCard/SoftInset/SoftIconTile/SoftIconButton components, recessed meter dial, soft inputs/navigation/chips, light + dark; all existing features preserved |
 
