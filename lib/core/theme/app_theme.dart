@@ -25,7 +25,8 @@ class AppTheme {
     final shadow = isLight
         ? AppColors.darkShadowLight
         : AppColors.darkShadowDark;
-    final onAccent = isLight ? Colors.white : AppColors.baseDark;
+    final onAccent = AppColors.onAccent;
+    final accentInk = isLight ? AppColors.accentInk : AppColors.seedDark;
 
     final colorScheme = ColorScheme.fromSeed(
       seedColor: AppColors.seed,
@@ -34,11 +35,11 @@ class AppTheme {
       primary: accent,
       onPrimary: onAccent,
       primaryContainer: accent.withValues(alpha: 0.14),
-      onPrimaryContainer: accent,
+      onPrimaryContainer: accentInk,
       secondary: accent,
       onSecondary: onAccent,
       secondaryContainer: accent.withValues(alpha: 0.10),
-      onSecondaryContainer: accent,
+      onSecondaryContainer: accentInk,
       tertiary: AppColors.accentTeal,
       onTertiary: Colors.white,
       surface: base,
@@ -158,7 +159,7 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppTokens.radiusControl),
-          borderSide: BorderSide(color: accent.withValues(alpha: 0.6), width: 1.5),
+          borderSide: BorderSide(color: accentInk.withValues(alpha: 0.75), width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppTokens.radiusControl),
@@ -182,12 +183,12 @@ class AppTheme {
             fontWeight: states.contains(WidgetState.selected)
                 ? AppTokens.weightSemibold
                 : AppTokens.weightMedium,
-            color: states.contains(WidgetState.selected) ? accent : muted,
+            color: states.contains(WidgetState.selected) ? accentInk : muted,
           ),
         ),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
-            color: states.contains(WidgetState.selected) ? accent : muted,
+            color: states.contains(WidgetState.selected) ? accentInk : muted,
             size: AppTokens.iconLarge,
           ),
         ),
@@ -196,12 +197,12 @@ class AppTheme {
         backgroundColor: base,
         elevation: 0,
         indicatorColor: accent.withValues(alpha: isLight ? 0.12 : 0.20),
-        selectedIconTheme: IconThemeData(color: accent),
+        selectedIconTheme: IconThemeData(color: accentInk),
         unselectedIconTheme: IconThemeData(color: muted),
         selectedLabelTextStyle: TextStyle(
           fontSize: 12,
           fontWeight: AppTokens.weightSemibold,
-          color: accent,
+          color: accentInk,
         ),
         unselectedLabelTextStyle: TextStyle(fontSize: 12, color: muted),
       ),

@@ -22,7 +22,7 @@ class _BalanceHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final accent = Soft.accent(context);
+    final accent = Soft.accentInk(context);
 
     return SoftCard(
       depth: SoftDepth.strong,

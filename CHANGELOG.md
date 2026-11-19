@@ -3,6 +3,25 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
+## [4.1.0+31] — 2026-11-19
+
+### Changed
+- Palette shifted to a **light-orange electricity accent** on **cool near-white
+  tiles/background** (`#F7F9FC`), keeping the soft-UI depth model.
+- Split the accent into a light **fill** orange (`#F4A24C`) for buttons,
+  selection and the meter arc, and a deep **ink** orange (`#C96A12`) for icons
+  and small text so they stay legible on white tiles.
+- Deepened utility/semantic inks (cyan, teal, violet, amber, green, red) and
+  darkened secondary text; strengthened paired shadows for clearer tile edges.
+- Selected bottom-nav state, chip labels, focus rings and mini-stat labels now
+  use the deeper inks — fixes the low-visibility elements in the dashboard.
+- Launcher and launch-screen colours aligned with the new palette; screenshots
+  refreshed across the README gallery.
+
+### Preserved
+- Soft-UI components, layout, billing logic, sync, roles and localization
+  unchanged.
+
 ## [4.0.0+30] — 2026-11-19
 
 ### Changed

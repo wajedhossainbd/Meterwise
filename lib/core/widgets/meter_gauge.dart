@@ -16,7 +16,7 @@ class MeterGauge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = Soft.accent(context);
+    final accent = Soft.accentInk(context);
     final track = Soft.isDark(context)
         ? AppColors.lightShadowDark
         : AppColors.darkShadowLight;

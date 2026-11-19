@@ -24,7 +24,7 @@ class BrandChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = switch (tone) {
       BrandChipTone.neutral => Soft.muted(context),
-      BrandChipTone.brand => Soft.accent(context),
+      BrandChipTone.brand => Soft.accentInk(context),
       BrandChipTone.success => Soft.success(context),
       BrandChipTone.warning => AppColors.accentOrange,
       BrandChipTone.danger => Soft.danger(context),

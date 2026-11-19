@@ -32,6 +32,9 @@ class Soft {
       isDark(context) ? AppColors.textMutedDark : AppColors.textMutedLight;
   static Color accent(BuildContext context) =>
       isDark(context) ? AppColors.seedDark : AppColors.seed;
+  /// Deeper orange for icons and small text on light surfaces.
+  static Color accentInk(BuildContext context) =>
+      isDark(context) ? AppColors.accentInkDark : AppColors.accentInk;
   static Color success(BuildContext context) =>
       isDark(context) ? AppColors.creditDark : AppColors.credit;
   static Color danger(BuildContext context) =>
@@ -249,7 +252,7 @@ class _SoftIconButtonState extends State<SoftIconButton> {
             child: Icon(
               widget.icon,
               size: widget.iconSize,
-              color: widget.color ?? Soft.accent(context),
+              color: widget.color ?? Soft.accentInk(context),
             ),
           ),
         ),
@@ -291,7 +294,7 @@ class SoftIconTile extends StatelessWidget {
       child: SizedBox(
         width: inner,
         height: inner,
-        child: Icon(icon, size: iconSize, color: color ?? Soft.accent(context)),
+        child: Icon(icon, size: iconSize, color: color ?? Soft.accentInk(context)),
       ),
     );
   }

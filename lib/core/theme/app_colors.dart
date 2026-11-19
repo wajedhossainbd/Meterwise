@@ -1,61 +1,68 @@
 import 'package:flutter/material.dart';
 
-/// Monochromatic soft-UI palette.
+/// Light-orange electricity palette on a cool near-white base.
 ///
-/// "Soft Modern" uses a single neutral base for both the app background and its
-/// surfaces — depth comes from paired light/dark shadows, not colour or
-/// gradients. Accents are used sparingly and only where they carry meaning.
-/// Every token is brightness-aware via [Soft] in `soft_ui.dart`.
+/// The dominant accent is a warm light orange (the bolt); utility and semantic
+/// inks are deliberately deeper so icons and small labels stay legible on the
+/// white, cool-toned tiles. Depth still comes from paired shadows, not colour.
 class AppColors {
   const AppColors._();
 
-  // ---- Soft base: light ----
-  static const Color baseLight = Color(0xFFE6EBF2);
+  // ---- Soft base: cool near-white ----
+  static const Color baseLight = Color(0xFFF7F9FC);
   static const Color lightShadowLight = Color(0xFFFFFFFF);
-  static const Color darkShadowLight = Color(0xFFB4C0D0);
-  static const Color insetLight = Color(0xFFDDE3EC);
+  static const Color darkShadowLight = Color(0xFFD2DBE6);
+  static const Color insetLight = Color(0xFFE9EEF5);
 
-  // ---- Soft base: dark ----
-  static const Color baseDark = Color(0xFF242B38);
-  static const Color lightShadowDark = Color(0xFF323B4B);
-  static const Color darkShadowDark = Color(0xFF141922);
-  static const Color insetDark = Color(0xFF1C222E);
+  // ---- Soft base: cool dark ----
+  static const Color baseDark = Color(0xFF232A35);
+  static const Color lightShadowDark = Color(0xFF313A48);
+  static const Color darkShadowDark = Color(0xFF151A22);
+  static const Color insetDark = Color(0xFF1C222C);
 
   // ---- Text ----
-  static const Color textLight = Color(0xFF2B3547);
-  static const Color textMutedLight = Color(0xFF6C7A90);
+  static const Color textLight = Color(0xFF253247);
+  static const Color textMutedLight = Color(0xFF5C6B80);
   static const Color textDark = Color(0xFFE7ECF5);
-  static const Color textMutedDark = Color(0xFF9AA7BC);
+  static const Color textMutedDark = Color(0xFFA7B4C6);
 
-  // ---- Accents (restrained, monochromatic-friendly) ----
-  /// Primary accent — a calm indigo.
-  static const Color seed = Color(0xFF5866D8);
-  /// Brighter primary accent for dark surfaces.
-  static const Color seedDark = Color(0xFF94A0FF);
-  static const Color accentTeal = Color(0xFF2E9C8E);
-  static const Color accentOrange = Color(0xFFD08A3E);
-  static const Color powerYellow = Color(0xFFC9A445);
+  // ---- Light-orange accent ----
+  /// Dominant fill accent — light orange (primary buttons, selection, dial).
+  static const Color seed = Color(0xFFF4A24C);
+  /// Brighter accent for dark surfaces.
+  static const Color seedDark = Color(0xFFFFBC70);
+  /// Deep orange ink for icons and text on light surfaces.
+  static const Color accentInk = Color(0xFFC96A12);
+  static const Color accentInkDark = Color(0xFFFFC78A);
+
+  // ---- Utility inks (deeper for visibility) ----
+  static const Color accentOrange = Color(0xFFD97A22);
+  static const Color powerYellow = Color(0xFFC9962E);
+  static const Color cyan = Color(0xFF4E86A8);
+  static const Color teal = Color(0xFF268A7E);
+  static const Color accentTeal = teal;
+  static const Color violet = Color(0xFF6C59B8);
+  static const Color lightBlue = Color(0xFF4E86A8);
 
   // ---- Semantic ----
-  static const Color credit = Color(0xFF3E9E73);
+  static const Color credit = Color(0xFF2F8A5E);
   static const Color creditDark = Color(0xFF63C79C);
-  static const Color due = Color(0xFFD96A5E);
+  static const Color due = Color(0xFFC85A48);
   static const Color dueDark = Color(0xFFF08E80);
-  static const Color info = seed;
-  static const Color warning = accentOrange;
+  static const Color info = accentInk;
+  static const Color warning = Color(0xFFC97A22);
 
-  // ---- Compatibility aliases (kept so call sites keep compiling) ----
-  static const Color violet = Color(0xFF7E6BD1);
-  static const Color teal = accentTeal;
-  static const Color cyan = Color(0xFF4B9CC7);
+  /// Dark ink used on the light-orange filled buttons.
+  static const Color onAccent = Color(0xFF33240F);
+
+  // ---- Compatibility aliases ----
   static const Color lightGrey = baseLight;
-  static const Color lightBlue = seed;
 
-  /// Ordered palette for multi-series charts — all muted, no neon.
+  /// Muted multi-series palette: orange leads, cool tones support.
   static const List<Color> chartPalette = <Color>[
-    seed,
-    accentTeal,
-    accentOrange,
+    accentInk,
+    teal,
+    lightBlue,
     powerYellow,
     violet,
     due,

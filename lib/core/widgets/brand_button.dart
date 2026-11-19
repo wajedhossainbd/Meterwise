@@ -81,7 +81,10 @@ class _BrandButtonState extends State<BrandButton> {
       case BrandButtonVariant.danger:
         button = FilledButton(
           onPressed: enabled ? _handleTap : null,
-          style: FilledButton.styleFrom(backgroundColor: AppColors.due),
+          style: FilledButton.styleFrom(
+            backgroundColor: AppColors.due,
+            foregroundColor: Colors.white,
+          ),
           child: child,
         );
     }

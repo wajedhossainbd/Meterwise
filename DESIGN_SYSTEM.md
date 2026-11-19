@@ -12,7 +12,7 @@ for new screens.
 
 ## 1. Brand idea
 
-A utility you trust with money. The character is **precise, calm, tactile**.
+A utility you trust with money. The character is **precise, calm, tactile**, with a warm light-orange bolt as the signature accent on cool white tiles.
 Depth comes from light and shadow, never from hue gradients. The mark is a soft
 raised disc with a recessed dial holding the brand bolt — used on splash and
 onboarding. No gradients, glows, sparkles or emoji as icons.
@@ -23,16 +23,21 @@ Everything sits on **one neutral base** shared by the scaffold and all surfaces:
 
 | Role | Light | Dark |
 |---|---|---|
-| Base / surface | `#E6EBF2` | `#242B38` |
+| Base / tile | `#F7F9FC` (cool white) | `#232A35` |
 | Light shadow | `#FFFFFF` | lighter navy |
-| Dark shadow | `#B4C0D0` | `#141922` |
-| Inset well | `#DDE3EC` | `#1C222E` |
-| Ink primary | `#2B3547` | `#E7ECF5` |
-| Ink secondary | `#6C7A90` | `#9AA7BC` |
-| Accent (indigo) | `#5866D8` | `#94A0FF` |
-| Success | `#3E9E73` | `#63C79C` |
-| Warning | `#D08A3E` | `#D08A3E` |
-| Danger | `#D96A5E` | `#F08E80` |
+| Dark shadow | `#D2DBE6` | `#151A22` |
+| Inset well | `#E9EEF5` | `#1C222C` |
+| Ink primary | `#253247` | `#E7ECF5` |
+| Ink secondary | `#5C6B80` | `#A7B4C6` |
+| Accent fill (light orange) | `#F4A24C` | `#FFBC70` |
+| Accent ink (icons / small text) | `#C96A12` | `#FFC78A` |
+| Success | `#2F8A5E` | `#63C79C` |
+| Warning | `#C97A22` | `#C97A22` |
+| Danger | `#C85A48` | `#F08E80` |
+
+The **fill** accent is light orange (buttons, selection, dial arc). Small icons
+and labels use the deeper **accent ink** so they stay legible on near-white
+tiles — never use the light fill orange for thin strokes or small text.
 
 Two shadow recipes, both brightness-aware, live in `Soft`:
 

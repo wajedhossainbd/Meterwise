@@ -115,7 +115,7 @@ class _SplashGateState extends State<SplashGate>
                               child: Icon(
                                 Icons.bolt,
                                 size: 54,
-                                color: Soft.accent(context),
+                                color: Soft.accentInk(context),
                               ),
                             ),
                           ),

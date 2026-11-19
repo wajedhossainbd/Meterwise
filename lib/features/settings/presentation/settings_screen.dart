@@ -42,7 +42,7 @@ class SettingsScreen extends ConsumerWidget {
         children: [
           _sectionLabel(context, l.settingsSetup),
           ListTile(
-            leading: _iconBadge(Icons.apartment_outlined, AppColors.seed),
+            leading: _iconBadge(Icons.apartment_outlined, AppColors.accentInk),
             title: Text(l.settingsProperty),
             subtitle: Text(property?.name ?? '—'),
             trailing: const Icon(Icons.chevron_right),
@@ -101,7 +101,7 @@ class SettingsScreen extends ConsumerWidget {
           const Divider(),
           _sectionLabel(context, l.tenantSwitchView),
           ListTile(
-            leading: _iconBadge(Icons.qr_code_2, AppColors.seed),
+            leading: _iconBadge(Icons.qr_code_2, AppColors.accentInk),
             title: Text(l.tenantInviteTitle),
             subtitle: Text(settings?.meterCode ?? '—'),
             trailing: const Icon(Icons.chevron_right),

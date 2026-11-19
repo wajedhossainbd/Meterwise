@@ -177,7 +177,7 @@ class _HowItWorksPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final accent = Soft.accent(context);
+    final accent = Soft.accentInk(context);
     final steps = [
       (Icons.speed, l.tourStep1Title, l.tourStep1Body),
       (Icons.bolt, l.tourStep2Title, l.tourStep2Body),
@@ -319,7 +319,7 @@ class _ChoiceCard extends StatelessWidget {
             depth: SoftDepth.subtle,
             borderRadius: BorderRadius.circular(AppTokens.radiusControl),
             padding: const EdgeInsets.all(AppTokens.s3),
-            child: Icon(icon, size: 28, color: Soft.accent(context)),
+            child: Icon(icon, size: 28, color: Soft.accentInk(context)),
           ),
           const SizedBox(width: AppTokens.s4),
           Expanded(

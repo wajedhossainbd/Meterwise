@@ -43,8 +43,8 @@ abstract final class AppTokens {
 
   // Soft-UI shadow geometry. Paired light/dark offsets create the extruded
   // look; inset shadows create the pressed / well look.
-  static const double softDistance = 5;
-  static const double softBlur = 12;
+  static const double softDistance = 6;
+  static const double softBlur = 14;
   static const double softSpread = 0;
 
   // One easing family, short for feedback.

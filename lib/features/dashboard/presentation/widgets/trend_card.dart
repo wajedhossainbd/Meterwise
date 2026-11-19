@@ -110,7 +110,7 @@ class _TrendCardState extends ConsumerState<_TrendCard> {
   Color get _color => switch (_series) {
         _Series.usage => AppColors.lightBlue,
         _Series.recharge => AppColors.powerYellow,
-        _Series.bill => AppColors.seed,
+        _Series.bill => AppColors.accentInk,
         _Series.rate => AppColors.accentOrange,
       };
 }

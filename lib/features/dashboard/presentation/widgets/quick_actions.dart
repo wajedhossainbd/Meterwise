@@ -63,7 +63,7 @@ class _ActionButton extends StatelessWidget {
                 width: AppTokens.iconButtonSize - AppTokens.s4,
                 height: AppTokens.iconButtonSize - AppTokens.s4,
                 child: Icon(icon,
-                    size: AppTokens.iconMedium, color: Soft.accent(context)),
+                    size: AppTokens.iconMedium, color: Soft.accentInk(context)),
               ),
             ),
             const SizedBox(height: AppTokens.s3),
