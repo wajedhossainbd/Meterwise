@@ -12,7 +12,7 @@ for new screens.
 
 ## 1. Brand idea
 
-A utility you trust with money. The character is **precise, calm, tactile**, with a warm orange canvas, cream tiles and a solid orange header band — the brand colour is always visible.
+A utility you trust with money. The character is **precise, calm, tactile**, on a light neutral canvas — colour lives in the icons, controls and navigation, not the background.
 Depth comes from light and shadow, never from hue gradients. The mark is a soft
 raised disc with a recessed dial holding the brand bolt — used on splash and
 onboarding. No gradients, glows, sparkles or emoji as icons.
@@ -23,15 +23,15 @@ Everything sits on **one neutral base** shared by the scaffold and all surfaces:
 
 | Role | Light | Dark |
 |---|---|---|
-| Canvas (saturated orange) | `#E07B28` | `#232A35` |
-| Tile (light orange) | `#F4A65E` | `#232A35` |
-| Light shadow | `#FFC68C` | lighter navy |
-| Dark shadow | `#A65312` | `#151A22` |
-| Inset well | `#D2732A` | `#1C222C` |
-| Ink primary | `#2E1808` | `#E7ECF5` |
-| Ink secondary | `#5E3515` | `#A7B4C6` |
-| Brand band / button | `#C25A0E` | `#FFBC70` |
-| Accent ink (icons / small text) | `#7A3305` | `#FFC78A` |
+| Canvas (cool grey-blue) | `#EDF1F7` | `#232A35` |
+| Tile (soft lifted neutral) | `#F8FAFD` | `#232A35` |
+| Light shadow | `#FFFFFF` | lighter navy |
+| Dark shadow | `#CDD6E3` | `#151A22` |
+| Inset well | `#E2E8F1` | `#1C222C` |
+| Ink primary | `#253247` | `#E7ECF5` |
+| Ink secondary | `#5C6B80` | `#A7B4C6` |
+| Brand orange (accent) | `#EE9336` | `#FFBC70` |
+| Blue / Teal / Violet / Amber | `#2E7DB8` / `#168C7E` / `#6C4FC0` / `#C88A1A` | brightened |
 | Success | `#2F8A5E` | `#63C79C` |
 | Warning | `#C97A22` | `#C97A22` |
 | Danger | `#C85A48` | `#F08E80` |

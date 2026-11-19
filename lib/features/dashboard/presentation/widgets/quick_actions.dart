@@ -13,18 +13,21 @@ class _QuickActions extends StatelessWidget {
       children: [
         _ActionButton(
           icon: Icons.add_chart_outlined,
+          color: AppColors.cyan,
           label: l.dashAddReading,
           onTap: () => context.pushNamed(AppRoutes.addReadingName),
         ),
         const SizedBox(width: AppTokens.s3),
         _ActionButton(
           icon: Icons.bolt_outlined,
+          color: AppColors.powerYellow,
           label: l.dashAddRecharge,
           onTap: () => context.pushNamed(AppRoutes.addRechargeName),
         ),
         const SizedBox(width: AppTokens.s3),
         _ActionButton(
           icon: Icons.receipt_long_outlined,
+          color: AppColors.teal,
           label: l.dashViewBills,
           onTap: () => context.go(AppRoutes.bills),
         ),
@@ -36,11 +39,13 @@ class _QuickActions extends StatelessWidget {
 class _ActionButton extends StatelessWidget {
   const _ActionButton({
     required this.icon,
+    required this.color,
     required this.label,
     required this.onTap,
   });
 
   final IconData icon;
+  final Color color;
   final String label;
   final VoidCallback onTap;
 
@@ -56,14 +61,14 @@ class _ActionButton extends StatelessWidget {
         ),
         child: Column(
           children: [
-            SoftInset(
-              radius: AppTokens.radiusControl,
-              padding: const EdgeInsets.all(AppTokens.s2),
+            SoftSurface(
+              color: color,
+              depth: SoftDepth.subtle,
+              borderRadius: BorderRadius.circular(AppTokens.radiusControl),
               child: SizedBox(
                 width: AppTokens.iconButtonSize - AppTokens.s4,
                 height: AppTokens.iconButtonSize - AppTokens.s4,
-                child: Icon(icon,
-                    size: AppTokens.iconMedium, color: Soft.accentInk(context)),
+                child: Icon(icon, size: AppTokens.iconMedium, color: Colors.white),
               ),
             ),
             const SizedBox(height: AppTokens.s3),

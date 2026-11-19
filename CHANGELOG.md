@@ -3,24 +3,23 @@
 All notable changes to MeterWise are documented here. Version format is
 `X.Y.Z+BUILD` where `BUILD` is the Android `versionCode` (from `pubspec.yaml`).
 
-## [4.2.0+32] — 2026-11-19
+## [4.3.0+33] — 2026-11-19
 
 ### Changed
-- **Bold, colourful palette — no white surfaces.** The UI now uses a saturated
-  orange canvas (`#E07B28`), light-orange tiles (`#F4A65E`) and warm paired
-  shadows, replacing the washed-out near-white look entirely.
-- **Solid deep-orange header band** on every screen with white (light theme) or
-  dark (dark theme) ink for high contrast; the brand colour is always visible.
-- **Colourful icon tiles**: list/settings icon tiles are now solid saturated
-  colours (blue, teal, violet, green, amber, brown) with white glyphs, adding
-  real colour variety across the app.
-- Selected navigation state is a solid orange block with a white/dark icon and
-  label; section labels darkened for legibility on the orange canvas.
-- Launcher and launch-screen colours updated to the saturated palette.
+- **Neutral canvas again** — a light cool grey-blue background (`#EDF1F7`) and
+  soft lifted tiles (`#F8FAFD`), with the soft-UI shadows preserved. The whole
+  canvas is no longer orange.
+- **Colourful elements**: app-bar actions, list and settings icon tiles, quick
+  actions and stat cards are solid distinct colours (blue, teal, violet, amber,
+  green, orange) with white glyphs.
+- **Each bottom-nav destination has its own colour**, so navigation is a
+  colourful strip rather than a monochrome one.
+- Brand orange remains the electricity accent (selected states, primary buttons,
+  meter dial) but no longer floods the background.
+- Launcher and launch-screen colours updated to the neutral palette.
 
 ### Preserved
-- Soft-UI component model, layout, billing logic, sync, roles and localization
-  unchanged.
+- Soft-UI component model, billing logic, sync, roles and localization unchanged.
 
 ## [4.1.0+31] — 2026-11-19
 

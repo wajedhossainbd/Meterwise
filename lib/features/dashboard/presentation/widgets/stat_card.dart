@@ -32,13 +32,14 @@ class StatCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              SoftInset(
-                radius: AppTokens.radiusControl,
-                padding: const EdgeInsets.all(AppTokens.s2),
+              SoftSurface(
+                color: color,
+                depth: SoftDepth.subtle,
+                borderRadius: BorderRadius.circular(AppTokens.radiusControl),
                 child: SizedBox(
                   width: AppTokens.iconButtonSize - AppTokens.s4,
                   height: AppTokens.iconButtonSize - AppTokens.s4,
-                  child: Icon(icon, size: AppTokens.iconMedium, color: color),
+                  child: Icon(icon, size: AppTokens.iconMedium, color: Colors.white),
                 ),
               ),
               const Spacer(),

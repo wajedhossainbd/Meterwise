@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../theme/app_colors.dart';
 import '../../features/settings/data/settings_repository.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -17,16 +18,16 @@ class AppShell extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
   static const List<_Destination> _landlordDestinations = [
-    _Destination(Icons.dashboard_outlined, Icons.dashboard, 0),
-    _Destination(Icons.speed_outlined, Icons.speed, 1),
-    _Destination(Icons.bolt_outlined, Icons.bolt, 2),
-    _Destination(Icons.receipt_long_outlined, Icons.receipt_long, 3),
-    _Destination(Icons.settings_outlined, Icons.settings, 4),
+    _Destination(Icons.dashboard_outlined, Icons.dashboard, 0, AppColors.accentInk),
+    _Destination(Icons.speed_outlined, Icons.speed, 1, AppColors.cyan),
+    _Destination(Icons.bolt_outlined, Icons.bolt, 2, AppColors.powerYellow),
+    _Destination(Icons.receipt_long_outlined, Icons.receipt_long, 3, AppColors.teal),
+    _Destination(Icons.settings_outlined, Icons.settings, 4, AppColors.violet),
   ];
 
   static const List<_Destination> _tenantDestinations = [
-    _Destination(Icons.home_outlined, Icons.home, 0),
-    _Destination(Icons.history_outlined, Icons.history, 1),
+    _Destination(Icons.home_outlined, Icons.home, 0, AppColors.accentInk),
+    _Destination(Icons.history_outlined, Icons.history, 1, AppColors.cyan),
   ];
 
   void _onTap(int index) {
@@ -63,8 +64,9 @@ class AppShell extends ConsumerWidget {
               destinations: [
                 for (var i = 0; i < destinations.length; i++)
                   NavigationRailDestination(
-                    icon: Icon(destinations[i].icon),
-                    selectedIcon: Icon(destinations[i].selectedIcon),
+                    icon: Icon(destinations[i].icon, color: destinations[i].color),
+                    selectedIcon: Icon(destinations[i].selectedIcon,
+                        color: destinations[i].color),
                     label: Text(labels[i]),
                   ),
               ],
@@ -84,8 +86,9 @@ class AppShell extends ConsumerWidget {
         destinations: [
           for (var i = 0; i < destinations.length; i++)
             NavigationDestination(
-              icon: Icon(destinations[i].icon),
-              selectedIcon: Icon(destinations[i].selectedIcon),
+              icon: Icon(destinations[i].icon, color: destinations[i].color),
+              selectedIcon: Icon(destinations[i].selectedIcon,
+                  color: destinations[i].color),
               label: labels[i],
             ),
         ],
@@ -95,8 +98,9 @@ class AppShell extends ConsumerWidget {
 }
 
 class _Destination {
-  const _Destination(this.icon, this.selectedIcon, this.index);
+  const _Destination(this.icon, this.selectedIcon, this.index, this.color);
   final IconData icon;
   final IconData selectedIcon;
   final int index;
+  final Color color;
 }

@@ -57,7 +57,7 @@ class DashboardScreen extends ConsumerWidget {
               child: Text(
                 Formatters.monthYear(month),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.88),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
               ),
             ),

@@ -80,13 +80,13 @@ class AppTheme {
         centerTitle: false,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
-        backgroundColor: accent,
-        foregroundColor: onAccent,
-        iconTheme: IconThemeData(color: onAccent),
+        backgroundColor: base,
+        foregroundColor: text,
+        iconTheme: IconThemeData(color: accentInk),
         titleTextStyle: TextStyle(
           fontSize: AppTokens.textHeading,
           fontWeight: AppTokens.weightSemibold,
-          color: onAccent,
+          color: text,
           letterSpacing: -0.3,
         ),
       ),
@@ -176,7 +176,7 @@ class AppTheme {
         height: 76,
         backgroundColor: base,
         surfaceTintColor: Colors.transparent,
-        indicatorColor: isLight ? AppColors.seed : AppColors.seedDark,
+        indicatorColor: accent.withValues(alpha: isLight ? 0.14 : 0.22),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => TextStyle(
@@ -184,12 +184,12 @@ class AppTheme {
             fontWeight: states.contains(WidgetState.selected)
                 ? AppTokens.weightSemibold
                 : AppTokens.weightMedium,
-            color: states.contains(WidgetState.selected) ? onAccent : muted,
+            color: states.contains(WidgetState.selected) ? accentInk : muted,
           ),
         ),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
-            color: states.contains(WidgetState.selected) ? onAccent : muted,
+            color: states.contains(WidgetState.selected) ? accentInk : muted,
             size: AppTokens.iconLarge,
           ),
         ),
